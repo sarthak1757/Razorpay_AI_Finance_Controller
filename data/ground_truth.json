@@ -1,0 +1,89 @@
+{
+  "clean_matches": [
+    "txn_0010",
+    "txn_0039",
+    "txn_0060",
+    "txn_0017",
+    "txn_0032",
+    "txn_0040",
+    "txn_0015",
+    "txn_0012",
+    "txn_0034",
+    "txn_0008",
+    "txn_0016",
+    "txn_0011",
+    "txn_0031"
+  ],
+  "timing_offset_only": [],
+  "batched_into": {
+    "txn_0055": "stl_0002",
+    "txn_0058": "stl_0002",
+    "txn_0052": "stl_0002",
+    "txn_0013": "stl_0003",
+    "txn_0023": "stl_0003",
+    "txn_0049": "stl_0004",
+    "txn_0051": "stl_0004",
+    "txn_0059": "stl_0005",
+    "txn_0002": "stl_0005",
+    "txn_0005": "stl_0006",
+    "txn_0026": "stl_0006",
+    "txn_0007": "stl_0009",
+    "txn_0054": "stl_0009",
+    "txn_0046": "stl_0010",
+    "txn_0053": "stl_0010",
+    "txn_0025": "stl_0011",
+    "txn_0024": "stl_0011",
+    "txn_0009": "stl_0012",
+    "txn_0028": "stl_0012",
+    "txn_0041": "stl_0012",
+    "txn_0045": "stl_0014",
+    "txn_0036": "stl_0014",
+    "txn_0021": "stl_0014",
+    "txn_0056": "stl_0016",
+    "txn_0048": "stl_0016",
+    "txn_0042": "stl_0017",
+    "txn_0037": "stl_0017",
+    "txn_0006": "stl_0018",
+    "txn_0014": "stl_0018",
+    "txn_0050": "stl_0019",
+    "txn_0033": "stl_0019",
+    "txn_0029": "stl_0021",
+    "txn_0020": "stl_0021",
+    "txn_0001": "stl_0021",
+    "txn_0047": "stl_0023",
+    "txn_0022": "stl_0023",
+    "txn_0057": "stl_0025",
+    "txn_0019": "stl_0025",
+    "txn_0003": "stl_0025",
+    "txn_0043": "stl_0027",
+    "txn_0030": "stl_0027",
+    "txn_0035": "stl_0031",
+    "txn_0038": "stl_0031"
+  },
+  "partial_refund": [
+    "txn_0003",
+    "txn_0019",
+    "txn_0026",
+    "txn_0037"
+  ],
+  "fee_mismatch": [
+    "stl_0008",
+    "stl_0012",
+    "stl_0017",
+    "stl_0032"
+  ],
+  "duplicate_entry": [
+    "txn_0059_dup",
+    "txn_0030_dup",
+    "txn_0058_dup"
+  ],
+  "missing_settlement": [
+    "txn_0004",
+    "txn_0018",
+    "txn_0027",
+    "txn_0044"
+  ],
+  "orphan_settlement": [
+    "stl_0033"
+  ]
+}
