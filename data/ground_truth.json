@@ -73,9 +73,9 @@
     "stl_0032"
   ],
   "duplicate_entry": [
+    "txn_0058_dup",
     "txn_0059_dup",
-    "txn_0030_dup",
-    "txn_0058_dup"
+    "txn_0030_dup"
   ],
   "missing_settlement": [
     "txn_0004",
