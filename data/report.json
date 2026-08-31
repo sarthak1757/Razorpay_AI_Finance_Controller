@@ -1,0 +1,129 @@
+{
+  "throughput": {
+    "total_records_processed": 96,
+    "transactions": 63,
+    "settlements": 33,
+    "processing_time_seconds": 7.2592,
+    "records_per_second": 13.2
+  },
+  "accuracy": {
+    "settlement_match_rate": 0.8485,
+    "settlements_matched": 28,
+    "settlements_total": 33,
+    "transaction_settlement_rate": 0.9333,
+    "transactions_settled": 56,
+    "transactions_total_excl_duplicates": 60,
+    "duplicate_entries_flagged": 3
+  },
+  "money_flagged": {
+    "amount_at_risk_unsettled": 31904.48,
+    "amount_flagged_mismatch": 74.49,
+    "currency": "INR"
+  },
+  "exceptions": [
+    {
+      "kind": "AMOUNT_MISMATCH",
+      "settlement_id": "stl_0008",
+      "expected_amount": 4598.54,
+      "actual_amount": 4586.08,
+      "diff": -12.46,
+      "included_transactions": [
+        "txn_0060"
+      ],
+      "explanation": "The amount you expected was $4,598.54, but the system recorded $4,586.08 because a $12.46 fee was deducted from the transaction. This is a common difference when the payment processor takes its fee.",
+      "likely_cause": "transaction_fee_difference",
+      "confidence": "high",
+      "recommended_action": "Check the fee details for txn_0060 in your merchant dashboard to confirm if a fee of $12.46 was applied."
+    },
+    {
+      "kind": "AMOUNT_MISMATCH",
+      "settlement_id": "stl_0012",
+      "expected_amount": 35672.28,
+      "actual_amount": 35638.68,
+      "diff": -33.6,
+      "included_transactions": [
+        "txn_0009",
+        "txn_0028",
+        "txn_0041"
+      ],
+      "explanation": "The total you expected was higher than what was actually settled because a fee was deducted from the combined amount of the listed transactions.",
+      "likely_cause": "transaction_fee",
+      "confidence": "high",
+      "recommended_action": "Review the settlement statement to confirm the fee applied and verify it matches your fee schedule."
+    },
+    {
+      "kind": "AMOUNT_MISMATCH",
+      "settlement_id": "stl_0017",
+      "expected_amount": 9095.16,
+      "actual_amount": 9078.49,
+      "diff": -16.67,
+      "included_transactions": [
+        "txn_0042",
+        "txn_0037"
+      ],
+      "explanation": "The settlement amount is lower by about $16.67, which usually happens when a fee or tax that should have been added to the total was omitted or miscalculated.",
+      "likely_cause": "missing_fee",
+      "confidence": "medium",
+      "recommended_action": "Review the individual transaction details for any missing fees or taxes and adjust the settlement amount accordingly."
+    },
+    {
+      "kind": "AMOUNT_MISMATCH",
+      "settlement_id": "stl_0032",
+      "expected_amount": 10389.56,
+      "actual_amount": 10377.8,
+      "diff": -11.76,
+      "included_transactions": [
+        "txn_0031"
+      ],
+      "explanation": "The amount on the settlement is $11.76 lower than expected, likely because a small fee or adjustment was applied to the single transaction that wasn\u2019t included in the expected total. This can happen when the payment processor adds a service fee or a rounding adjustment after the transaction is posted.",
+      "likely_cause": "transaction_fee_difference",
+      "confidence": "high",
+      "recommended_action": "Review the details of txn_0031 in your payment processor\u2019s dashboard to see if a fee or adjustment was applied that accounts for the $11.76 difference."
+    },
+    {
+      "kind": "ORPHAN",
+      "settlement_id": "stl_0033",
+      "actual_amount": 4851.0,
+      "included_transactions": [
+        "txn_9999"
+      ],
+      "explanation": "The system flagged transaction txn_9999 as orphaned because it couldn\u2019t be matched to any settlement, even though settlement stl_0033 shows an amount of $4,851. This usually happens when the transaction record is missing the settlement reference or has a mismatched ID.",
+      "likely_cause": "missing_settlement_reference",
+      "confidence": "high",
+      "recommended_action": "Verify that txn_9999 includes the correct settlement_id (stl_0033) in its record; if missing, update the transaction and re\u2011process it so it can be matched to the settlement."
+    },
+    {
+      "kind": "MISSING_SETTLEMENT",
+      "transaction_id": "txn_0004",
+      "explanation": "The payment for transaction txn_0004 hasn't been transferred to your account yet, which usually means the bank or payment processor hasn't completed the settlement process.",
+      "likely_cause": "settlement_not_received",
+      "confidence": "high",
+      "recommended_action": "Contact your bank or payment processor to confirm the settlement status and verify that your account details are correct."
+    },
+    {
+      "kind": "MISSING_SETTLEMENT",
+      "transaction_id": "txn_0018",
+      "explanation": "The system couldn\u2019t find a settlement record for this transaction, which usually means the bank hasn\u2019t processed or posted the settlement yet or the settlement file was missing from the feed.",
+      "likely_cause": "settlement_delay",
+      "confidence": "high",
+      "recommended_action": "Check your bank statement for the transaction or wait 24\u201148 hours; if it still isn\u2019t settled, contact your bank\u2019s settlement department."
+    },
+    {
+      "kind": "MISSING_SETTLEMENT",
+      "transaction_id": "txn_0027",
+      "explanation": "The payment went through, but the bank or payment processor hasn\u2019t yet posted the settlement for this transaction, so the matcher can\u2019t find a matching record.",
+      "likely_cause": "settlement_delay",
+      "confidence": "high",
+      "recommended_action": "Check your bank or payment processor portal for the settlement of txn_0027; if it\u2019s still missing after 48 hours, contact support for assistance."
+    },
+    {
+      "kind": "MISSING_SETTLEMENT",
+      "transaction_id": "txn_0044",
+      "explanation": "The system couldn\u2019t find a settlement record for this transaction, which usually means the payment hasn\u2019t been posted to your account yet\u2014often due to a bank processing delay or a pending transfer.",
+      "likely_cause": "settlement_not_received",
+      "confidence": "high",
+      "recommended_action": "Check your bank statement or merchant portal for the settlement, and if still missing, contact your payment processor support."
+    }
+  ],
+  "reasoner_used": "groq"
+}
