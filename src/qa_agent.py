@@ -26,19 +26,34 @@ from matcher import load_data, match
 from reasoner import get_reasoner
 
 
-def build_context(settlement_results, transaction_results):
+def build_context(transactions, settlements, refunds, settlement_results, transaction_results):
     """Compact, full-detail context - small enough at this batch size to
-    just hand the model everything rather than retrieve a subset."""
+    just hand the model everything rather than retrieve a subset.
+
+    Includes BOTH layers: the matcher's derived analysis (status, diff,
+    reason - what's wrong) and the raw source records (amount, fee, gst,
+    net_amount - why it's wrong). Without the raw records the model can see
+    that stl_0008 is off by Rs 12.46 but can't trace which fee or refund
+    caused it - it can only guess. With them, it can actually look up
+    txn_0060's razorpay_fee/gst_on_fee/net_amount and reason about the gap."""
     return json.dumps({
-        "settlements": settlement_results,
-        "transactions": transaction_results,
+        "raw_transactions": transactions,
+        "raw_settlements": settlements,
+        "raw_refunds": refunds,
+        "settlement_analysis": settlement_results,
+        "transaction_analysis": transaction_results,
     }, indent=2, default=str)
 
 
 def answer(question: str, context: str, reasoner) -> str:
     prompt = f"""You are a settlement Q&A assistant for a merchant using Razorpay.
-You have the full reconciliation results below - every settlement and
-transaction, already matched/classified by a deterministic system.
+You have two layers of data below: the raw source records (individual
+transactions with their amount/fee/GST/net_amount, bank settlements, and
+refunds) and the deterministic matcher's analysis (which settlements/
+transactions were flagged, and why). Use the raw records to trace exact
+numbers - e.g. if a settlement is flagged as short by some amount, look up
+the underlying transaction's razorpay_fee, gst_on_fee, and any refund to
+see if they explain the gap.
 
 RECONCILIATION DATA:
 {context}
@@ -55,7 +70,7 @@ of guessing. Reference specific IDs and amounts where relevant."""
 def main():
     transactions, settlements, refunds = load_data()
     settlement_results, transaction_results = match(transactions, settlements, refunds)
-    context = build_context(settlement_results, transaction_results)
+    context = build_context(transactions, settlements, refunds, settlement_results, transaction_results)
     reasoner = get_reasoner()
 
     print(f"Settlement Q&A agent ready (reasoner: {reasoner.name})")
