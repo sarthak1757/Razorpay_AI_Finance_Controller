@@ -87,6 +87,10 @@ class MockReasoner:
             "recommended_action": "Manual review required.",
         }
 
+    def chat(self, prompt: str) -> str:
+        return ("[mock reasoner has no free-form Q&A - it only knows the canned "
+                "exception explanations above. Add a real API key to use the Q&A agent.]")
+
 
 class AnthropicReasoner:
     """Real LLM reasoning via the Anthropic API. Requires ANTHROPIC_API_KEY."""
@@ -127,6 +131,13 @@ Respond ONLY with valid JSON: {{"explanation": "...", "likely_cause": "...", "co
                 "confidence": "low",
                 "recommended_action": "Manual review required (model response wasn't valid JSON).",
             }
+
+    def chat(self, prompt: str) -> str:
+        resp = self.client.messages.create(
+            model=self.model, max_tokens=500,
+            messages=[{"role": "user", "content": prompt}],
+        )
+        return resp.content[0].text.strip()
 
 
 class GeminiReasoner:
@@ -179,6 +190,10 @@ Respond ONLY with valid JSON: {{"explanation": "...", "likely_cause": "...", "co
                 "confidence": "low",
                 "recommended_action": "Manual review required (model response wasn't valid JSON).",
             }
+
+    def chat(self, prompt: str) -> str:
+        resp = self.client.models.generate_content(model=self.model_name, contents=prompt)
+        return resp.text.strip()
 
 
 class GroqReasoner:
@@ -233,6 +248,14 @@ Respond ONLY with valid JSON: {{"explanation": "...", "likely_cause": "...", "co
                 "confidence": "low",
                 "recommended_action": "Manual review required (model response wasn't valid JSON).",
             }
+
+    def chat(self, prompt: str) -> str:
+        resp = self.client.chat.completions.create(
+            model=self.model_name,
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.3,
+        )
+        return resp.choices[0].message.content.strip()
 
 
 def get_reasoner():
