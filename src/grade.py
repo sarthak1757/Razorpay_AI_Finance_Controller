@@ -344,7 +344,13 @@ def run_hard_case_mode(seeds, sizes, sleep_between):
 
     print(f"Grading {len(hard)} baseline-failure cases with {reasoner.name}:")
     correct = 0
+    infra_failures = 0
     detail = []
+    # Answers we never actually received - empty content, unreadable output, a
+    # failed call. Scoring these as "the model got it wrong" would report our
+    # own bugs as findings about model quality, so they're counted separately
+    # and excluded from the accuracy denominator.
+    NON_ANSWERS = {"empty_response", "unparsed", "api_error", "off_taxonomy"}
     for i, item in enumerate(hard, 1):
         try:
             result = reasoner.explain(item["case"])
@@ -352,32 +358,45 @@ def run_hard_case_mode(seeds, sizes, sleep_between):
             result = {"likely_cause": "api_error", "confidence": "low",
                       "explanation": f"[{type(e).__name__}: {e}]"}
         predicted = result.get("likely_cause")
-        is_right = predicted == item["true_cause"]
+        answered = predicted not in NON_ANSWERS
+        is_right = answered and predicted == item["true_cause"]
         correct += int(is_right)
+        infra_failures += int(not answered)
         detail.append({**{k: v for k, v in item.items() if k != "case"},
                        "llm_predicted": predicted,
+                       "llm_answered": answered,
                        "llm_confidence": result.get("confidence"),
                        "llm_explanation": result.get("explanation"),
                        "llm_correct": is_right})
-        print(f"  [{i:>2}/{len(hard)}] {'OK ' if is_right else 'MISS'} "
+        mark = "OK " if is_right else ("FAIL" if not answered else "MISS")
+        print(f"  [{i:>2}/{len(hard)}] {mark} "
               f"{item['label']} {item['case_id']:<12} "
               f"true={item['true_cause']:<22} baseline={item['baseline_predicted']:<22} "
               f"llm={predicted:<22} conf={result.get('confidence')}", flush=True)
         if sleep_between and i < len(hard):
             time.sleep(sleep_between)
 
+    answered = len(hard) - infra_failures
     print("\n" + "=" * 66)
     print("ADVERSARIAL SAMPLE: cases the rule baseline got wrong")
     print("=" * 66)
     print(f"  baseline accuracy on these, by definition: 0/{len(hard)} = 0.000")
-    print(f"  LLM accuracy on the same cases:            {correct}/{len(hard)} = "
+    print(f"  LLM accuracy (of cases it answered):       {correct}/{answered} = "
+          f"{(correct / answered if answered else 0):.3f}")
+    if infra_failures:
+        print(f"  excluded - no usable answer returned:      {infra_failures}"
+              f"  (empty/unparseable/API error, not a wrong answer)")
+    print(f"  LLM accuracy (counting non-answers wrong): {correct}/{len(hard)} = "
           f"{correct / len(hard):.3f}")
     return {
         "hard_cases_found": len(hard),
         "total_scoreable_cases_swept": total_cases,
         "baseline_failure_rate": round(len(hard) / total_cases, 4),
         "llm_correct_on_baseline_failures": correct,
-        "llm_accuracy_on_baseline_failures": round(correct / len(hard), 4),
+        "llm_cases_answered": answered,
+        "llm_infrastructure_failures": infra_failures,
+        "llm_accuracy_of_answered": round(correct / answered, 4) if answered else None,
+        "llm_accuracy_strict": round(correct / len(hard), 4),
         "reasoner": reasoner.name,
         "detail": detail,
     }

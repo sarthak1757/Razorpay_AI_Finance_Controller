@@ -17,6 +17,7 @@ This mirrors the mock_client.py pattern already in your orchestrator repo.
 
 import os
 import json
+import re
 
 from causes import (
     CAUSES_BY_KIND,
@@ -81,24 +82,52 @@ Respond ONLY with valid JSON:
 
 
 def parse_explanation(text: str, allowed_causes) -> dict:
-    """Parse a model's JSON reply, tolerating markdown fences, and refuse to
-    silently accept a cause outside the taxonomy - an unparseable or
-    off-menu answer is recorded as such rather than quietly scored."""
-    text = text.strip()
+    """Parse a model's JSON reply and refuse to silently accept a cause
+    outside the taxonomy.
+
+    Distinguishes three different failures that must NOT be scored the same
+    way, because conflating them turns an infrastructure bug into a false
+    finding about model quality:
+      - empty_response: we got nothing back at all (token budget exhausted by
+        the model's internal reasoning, truncation, a dropped call). The model
+        never answered, so this is our bug, not its mistake.
+      - unparsed: it answered, but not in JSON we can read.
+      - off_taxonomy: it answered with a cause outside the allowed set.
+    """
+    text = (text or "").strip()
+    if not text:
+        return {
+            "explanation": "",
+            "likely_cause": "empty_response",
+            "confidence": "low",
+            "recommended_action": "Retry - the model returned no content.",
+        }
+
     if text.startswith("```"):
         text = text.strip("`")
         if text.startswith("json"):
             text = text[4:]
         text = text.strip()
+
     try:
         parsed = json.loads(text)
     except json.JSONDecodeError:
-        return {
-            "explanation": text,
-            "likely_cause": "unparsed",
-            "confidence": "low",
-            "recommended_action": "Manual review required (model response wasn't valid JSON).",
-        }
+        # Models often wrap valid JSON in prose or a reasoning preamble.
+        # Pull out the first balanced object rather than giving up on it.
+        match = re.search(r"\{.*\}", text, re.DOTALL)
+        parsed = None
+        if match:
+            try:
+                parsed = json.loads(match.group(0))
+            except json.JSONDecodeError:
+                parsed = None
+        if parsed is None:
+            return {
+                "explanation": text,
+                "likely_cause": "unparsed",
+                "confidence": "low",
+                "recommended_action": "Manual review required (model response wasn't valid JSON).",
+            }
 
     cause = parsed.get("likely_cause")
     if cause not in allowed_causes:
@@ -305,15 +334,54 @@ class GroqReasoner:
         self.client = Groq(api_key=os.environ["GROQ_API_KEY"])
         self.model_name = model or os.environ.get("GROQ_MODEL", "openai/gpt-oss-20b")
 
+    def _complete(self, prompt: str, json_mode: bool, max_tokens: int) -> str:
+        """One call, with graceful degradation for parameters this particular
+        model/tier may not support (json mode, reasoning_effort). Unsupported
+        params raise rather than being ignored, so we retry without them."""
+        kwargs = {
+            "model": self.model_name,
+            "messages": [{"role": "user", "content": prompt}],
+            "temperature": 0.3,
+            "max_tokens": max_tokens,
+        }
+        if json_mode:
+            kwargs["response_format"] = {"type": "json_object"}
+        try:
+            resp = self.client.chat.completions.create(**kwargs)
+        except Exception:
+            kwargs.pop("response_format", None)
+            resp = self.client.chat.completions.create(**kwargs)
+
+        message = resp.choices[0].message
+        content = (message.content or "").strip()
+        if not content:
+            # Reasoning-style models (gpt-oss) can put everything in a separate
+            # reasoning channel and return empty content. The answer may still
+            # be in there.
+            content = (getattr(message, "reasoning", None) or "").strip()
+        return content
+
     def explain(self, case: dict) -> dict:
-        resp = self.client.chat.completions.create(
-            model=self.model_name,
-            messages=[{"role": "user", "content": build_explain_prompt(case)}],
-            temperature=0.3,
-        )
-        return parse_explanation(
-            resp.choices[0].message.content, CAUSES_BY_KIND.get(case["kind"], [])
-        )
+        """Retries an EMPTY response before scoring it.
+
+        This mattered: gpt-oss-20b silently returned empty content on ~38% of
+        a hard-case run because it spent its (unset, therefore default) token
+        budget on internal reasoning. Those were being recorded as wrong
+        answers, which would have understated the model badly and turned our
+        own missing max_tokens into a published finding about AI accuracy.
+        """
+        prompt = build_explain_prompt(case)
+        allowed = CAUSES_BY_KIND.get(case["kind"], [])
+
+        for attempt, (json_mode, max_tokens) in enumerate(
+            [(True, 1200), (False, 2000), (False, 3000)], start=1
+        ):
+            text = self._complete(prompt, json_mode=json_mode, max_tokens=max_tokens)
+            result = parse_explanation(text, allowed)
+            if result["likely_cause"] not in ("empty_response", "unparsed"):
+                return result
+            last = result
+        return last
 
     def chat(self, prompt: str) -> str:
         resp = self.client.chat.completions.create(

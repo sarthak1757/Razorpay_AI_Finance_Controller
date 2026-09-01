@@ -1,0 +1,142 @@
+{
+  "hard_case_evaluation": {
+    "hard_cases_found": 13,
+    "total_scoreable_cases_swept": 585,
+    "baseline_failure_rate": 0.0222,
+    "llm_correct_on_baseline_failures": 4,
+    "llm_accuracy_on_baseline_failures": 0.3077,
+    "reasoner": "groq",
+    "detail": [
+      {
+        "label": "seed=1 n=300",
+        "case_id": "stl_0050",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unrecorded_refund",
+        "llm_confidence": "high",
+        "llm_explanation": "The settlement is short by $1,720.43, which is exactly 11.1% of transaction txn_0192\u2019s net amount ($15,566.74). That matches the refund amount recorded for that transaction, indicating the bank didn\u2019t pay the refund that was logged in the ledger.",
+        "llm_correct": true
+      },
+      {
+        "label": "seed=2 n=300",
+        "case_id": "stl_0144",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "fee_or_gst_error",
+        "llm_confidence": "medium",
+        "llm_explanation": "The settlement is 1,076.58 less than expected, which is about 5% of each of the two transactions\u2019 net amounts. This pattern suggests the platform fee or GST was calculated incorrectly for these payments.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=4 n=300",
+        "case_id": "stl_0029",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "fee_or_gst_error",
+        "llm_confidence": "medium",
+        "llm_explanation": "The bank paid $22,474.41 instead of the expected $23,939.99, a shortfall of $1,465.58 which is about 6.1% of the transaction amount. This pattern indicates a likely mis\u2011calculation of the platform fee or GST applied to txn_0280.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=5 n=300",
+        "case_id": "stl_0036",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unparsed",
+        "llm_confidence": "low",
+        "llm_explanation": "",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=6 n=300",
+        "case_id": "stl_0069",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unrecorded_refund",
+        "llm_confidence": "medium",
+        "llm_explanation": "The settlement is short by $1,217.01, which is about 82.9% of the net amount of transaction txn_0192 ($1,467.50). This suggests a refund of that portion was issued but not recorded in the refunds data, so the bank paid less than the ledger expected.",
+        "llm_correct": true
+      },
+      {
+        "label": "seed=8 n=300",
+        "case_id": "stl_0159",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unparsed",
+        "llm_confidence": "low",
+        "llm_explanation": "",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=11 n=300",
+        "case_id": "stl_0117",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unparsed",
+        "llm_confidence": "low",
+        "llm_explanation": "{\"explanation\":\"The bank paid only $3,037.57 instead of the expected $10,107.84. The missing $7,070.27 is about 54% of the net amount of transaction txn_0106, indicating a refund that was issued but not recorded in the system, so the bank settled less than it should have.\",\"likely_cause\":\"unrecorded_refund\",\"confidence\":\"medium\",\"",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=12 n=300",
+        "case_id": "stl_0037",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "fee_or_gst_error",
+        "llm_confidence": "medium",
+        "llm_explanation": "The bank paid $3,576.83 less than expected, a shortfall of about 3.1% of the settlement amount. This gap isn\u2019t tied to any single transaction and isn\u2019t a small discrepancy, suggesting a mis\u2011calculation of the platform fee or GST applied to the batch.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=12 n=300",
+        "case_id": "stl_0112",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unparsed",
+        "llm_confidence": "low",
+        "llm_explanation": "",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=13 n=300",
+        "case_id": "stl_0004",
+        "true_cause": "fee_or_gst_error",
+        "baseline_predicted": "unrecorded_refund",
+        "llm_predicted": "unrecorded_refund",
+        "llm_confidence": "high",
+        "llm_explanation": "The settlement is 141.69 less than expected because a refund of that amount was issued for transaction txn_0259 but was never recorded. The expected amount was 33,324.80, the actual paid was 33,183.11, leaving a 141.69 shortfall that matches 28.7% of txn_0259\u2019s net 494.48.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=13 n=300",
+        "case_id": "stl_0140",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unrecorded_refund",
+        "llm_confidence": "high",
+        "llm_explanation": "The bank paid $4,321.64 but we expected $12,619.04 for transaction txn_0008. The $8,297.40 shortfall is about 42.7% of that transaction\u2019s net amount, indicating a refund was processed but not recorded in the system.",
+        "llm_correct": true
+      },
+      {
+        "label": "seed=14 n=300",
+        "case_id": "stl_0101",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unrecorded_refund",
+        "llm_confidence": "medium",
+        "llm_explanation": "The bank paid $14,791.08 instead of the expected $22,318.31 because a refund of $7,527.23 was applied to transaction txn_0039 (32.9% of its $22,860.28 net). The settlement amount did not account for this refund, so the ledger shows a mismatch.",
+        "llm_correct": true
+      },
+      {
+        "label": "seed=15 n=300",
+        "case_id": "stl_0067",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unparsed",
+        "llm_confidence": "low",
+        "llm_explanation": "",
+        "llm_correct": false
+      }
+    ]
+  }
+}
