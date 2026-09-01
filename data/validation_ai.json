@@ -1,0 +1,1606 @@
+{
+  "summary": {
+    "datasets_graded": 5,
+    "total_records": 478,
+    "structural": {
+      "datasets_with_zero_errors": 5,
+      "true_positives": 60,
+      "false_positives": 0,
+      "false_negatives": 0,
+      "precision": 1.0,
+      "recall": 1.0
+    },
+    "match_records_per_second": {
+      "min": 71524,
+      "max": 185075
+    },
+    "baseline": {
+      "reasoner": "rule_baseline",
+      "cases_scored": 40,
+      "cases_correct": 40,
+      "attribution_accuracy": 1.0,
+      "by_confidence": {
+        "high": {
+          "total": 28,
+          "correct": 28,
+          "accuracy": 1.0
+        },
+        "medium": {
+          "total": 12,
+          "correct": 12,
+          "accuracy": 1.0
+        }
+      }
+    },
+    "ai": {
+      "reasoner": "groq",
+      "cases_scored": 40,
+      "cases_correct": 40,
+      "attribution_accuracy": 1.0,
+      "by_confidence": {
+        "high": {
+          "total": 38,
+          "correct": 38,
+          "accuracy": 1.0
+        },
+        "medium": {
+          "total": 2,
+          "correct": 2,
+          "accuracy": 1.0
+        }
+      }
+    }
+  },
+  "runs": [
+    {
+      "label": "seed=1 n=60",
+      "seed": 1,
+      "n": 60,
+      "records": 96,
+      "transactions": 63,
+      "settlements": 33,
+      "match_seconds": 0.000611,
+      "match_records_per_second": 157173,
+      "structural": {
+        "per_category": {
+          "AMOUNT_MISMATCH": {
+            "expected": 4,
+            "detected": 4,
+            "true_positives": 4,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "ORPHAN": {
+            "expected": 1,
+            "detected": 1,
+            "true_positives": 1,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "expected": 4,
+            "detected": 4,
+            "true_positives": 4,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "DUPLICATE": {
+            "expected": 3,
+            "detected": 3,
+            "true_positives": 3,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          }
+        },
+        "totals": {
+          "true_positives": 12,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "perfect": true
+        }
+      },
+      "exceptions_flagged": 9,
+      "baseline": {
+        "reasoner": "rule_baseline",
+        "cases_scored": 8,
+        "cases_correct": 8,
+        "attribution_accuracy": 1.0,
+        "orphan_cases_excluded": 1,
+        "interrupted": false,
+        "api_errors": 0,
+        "seconds": 0.0,
+        "avg_seconds_per_case": 0.0,
+        "by_kind": {
+          "AMOUNT_MISMATCH": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          }
+        },
+        "by_confidence": {
+          "medium": {
+            "total": 2,
+            "correct": 2,
+            "accuracy": 1.0
+          },
+          "high": {
+            "total": 6,
+            "correct": 6,
+            "accuracy": 1.0
+          }
+        },
+        "detail": [
+          {
+            "case_id": "stl_0004",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "Settlement stl_0004 is short by Rs 91.97, which isn't tied to any single transaction's amount - consistent with a fee/GST calculation error.",
+            "recommended_action": "Route to finance for a fee/GST recalculation check."
+          },
+          {
+            "case_id": "stl_0005",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "missing_txn_in_batch",
+            "predicted_cause": "missing_txn_in_batch",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The Rs 18177.83 gap is exactly what txn_0017 should have contributed, so that payment appears not to have been paid out.",
+            "recommended_action": "Query txn_0017 with the settlements team."
+          },
+          {
+            "case_id": "stl_0015",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "overpayment_duplicate_payout",
+            "predicted_cause": "overpayment_duplicate_payout",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Settlement stl_0015 came in Rs +12612.39 ABOVE what was owed.",
+            "recommended_action": "Confirm with the bank before spending - overpayments get clawed back."
+          },
+          {
+            "case_id": "stl_0019",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "unrecorded_refund",
+            "predicted_cause": "unrecorded_refund",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "The Rs 2054.16 gap is 11.9% of txn_0049's net - refund-shaped, but no refund is recorded.",
+            "recommended_action": "Check for an unrecorded refund against txn_0049."
+          },
+          {
+            "case_id": "stl_0033",
+            "kind": "ORPHAN",
+            "true_cause": "orphan_reference",
+            "predicted_cause": "orphan_reference",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Settlement stl_0033 references transaction(s) that don't exist anywhere in the ledger.",
+            "recommended_action": "Escalate to data engineering - likely a sync gap between ledger and settlement feed."
+          },
+          {
+            "case_id": "txn_0003",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0003 was due to settle by 2026-08-05 and still has no settlement 2 day(s) later.",
+            "recommended_action": "Flag to the settlements team - payout appears stuck."
+          },
+          {
+            "case_id": "txn_0024",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0024 was due to settle by 2026-08-05 and still has no settlement 2 day(s) later.",
+            "recommended_action": "Flag to the settlements team - payout appears stuck."
+          },
+          {
+            "case_id": "txn_0059",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0059 was captured on 2026-08-07 02:00:00 and isn't due to settle until 2026-08-09, after this reporting window closes.",
+            "recommended_action": "No action needed - not yet due under the T+2 cycle."
+          },
+          {
+            "case_id": "txn_0060",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0060 was captured on 2026-08-07 19:00:00 and isn't due to settle until 2026-08-09, after this reporting window closes.",
+            "recommended_action": "No action needed - not yet due under the T+2 cycle."
+          }
+        ]
+      },
+      "ai": {
+        "reasoner": "groq",
+        "cases_scored": 8,
+        "cases_correct": 8,
+        "attribution_accuracy": 1.0,
+        "orphan_cases_excluded": 1,
+        "interrupted": false,
+        "api_errors": 0,
+        "seconds": 41.203,
+        "avg_seconds_per_case": 4.578,
+        "by_kind": {
+          "AMOUNT_MISMATCH": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          }
+        },
+        "by_confidence": {
+          "medium": {
+            "total": 1,
+            "correct": 1,
+            "accuracy": 1.0
+          },
+          "high": {
+            "total": 7,
+            "correct": 7,
+            "accuracy": 1.0
+          }
+        },
+        "detail": [
+          {
+            "case_id": "stl_0004",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "The settlement is short by $91.97, which is about 0.8% of the single transaction\u2019s net amount (11983.60). This small percentage gap suggests a mis\u2011calculation of the platform fee or GST rather than a missing transaction or refund.",
+            "recommended_action": "Check the fee/GST calculation for txn_0004 \u2013 confirm the fee rate applied and adjust the settlement amount if the fee was mis\u2011computed."
+          },
+          {
+            "case_id": "stl_0005",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "missing_txn_in_batch",
+            "predicted_cause": "missing_txn_in_batch",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement was supposed to pay two transactions: txn_0017 for $18,177.83 and txn_0001 for $13,957.37, totaling $32,135.20. The bank only paid $13,957.37, which matches txn_0001\u2019s amount, so txn_0017 was omitted from the payout.",
+            "recommended_action": "Check the payout records to confirm that txn_0017 was not included in this settlement. If it was omitted, request a second payout for the missing $18,177.83 and update the ledger accordingly."
+          },
+          {
+            "case_id": "stl_0015",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "overpayment_duplicate_payout",
+            "predicted_cause": "overpayment_duplicate_payout",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The bank paid an extra $12,612.39, which is exactly the full amount of transaction txn_0031. This indicates that txn_0031 was likely paid twice, causing the settlement to exceed the expected amount of $28,887.88.",
+            "recommended_action": "Check the bank\u2019s payment records or the payment processor\u2019s payout logs to confirm whether txn_0031 was paid twice. If a duplicate payment is found, reverse the extra amount or adjust the ledger accordingly; if not, investigate further for any other source of the overpayment."
+          },
+          {
+            "case_id": "stl_0019",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "unrecorded_refund",
+            "predicted_cause": "unrecorded_refund",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement is $2,054.16 short of the expected $17,194.64, which is exactly 11.9% of the single transaction\u2019s net amount. No refund has been recorded for txn_0049, so the missing amount likely represents an unrecorded refund that was sent to the customer.",
+            "recommended_action": "Check the refund records for txn_0049 to confirm whether a refund was issued but not logged; if so, record the refund and adjust the settlement. If no refund exists, investigate why the bank paid less than expected."
+          },
+          {
+            "case_id": "stl_0033",
+            "kind": "ORPHAN",
+            "true_cause": "orphan_reference",
+            "predicted_cause": "orphan_reference",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement stl_0033 claims it covers transaction txn_9999, but that transaction is not present in our ledger, so the system can\u2019t match the amounts (actual_amount 4008.85).",
+            "recommended_action": "Check whether txn_9999 should exist (e.g., a missing import or sync error). If it\u2019s a data gap, re\u2011import the transaction; if it\u2019s a bad reference, update or delete the settlement to point to the correct transaction."
+          },
+          {
+            "case_id": "txn_0003",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The $15,956.42 payment was due on August\u202f5 (T+2 after the August\u202f3 transaction), but by the end of the reporting window on August\u202f8 it was still 2 days overdue, indicating no settlement has been received.",
+            "recommended_action": "Contact the bank to confirm whether the settlement was processed; if not, initiate a manual reconciliation or dispute."
+          },
+          {
+            "case_id": "txn_0024",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment of $21,564.66 was scheduled to settle on 2026\u201108\u201105 (T+2). By the end of the reporting window on 2026\u201108\u201108 the due date had already passed by 2 days, and no settlement has been received, so the amount is genuinely overdue.",
+            "recommended_action": "Contact the bank to confirm whether the settlement has been processed; if not, initiate a follow\u2011up or dispute to recover the missing amount."
+          },
+          {
+            "case_id": "txn_0059",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment was scheduled to settle on 2026\u201108\u201109, but our reporting window closed on 2026\u201108\u201108, so the settlement date is still two days away. No settlement is expected yet.",
+            "recommended_action": "No action required; monitor the next reporting period for the expected settlement."
+          },
+          {
+            "case_id": "txn_0060",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment is scheduled to settle on 2026\u201108\u201109, but our reporting window ended on 2026\u201108\u201108, so the settlement date hasn\u2019t passed yet. The net amount of $15,455.49 is therefore still pending but not overdue.",
+            "recommended_action": "No action needed now; simply wait until the next reporting period to verify the settlement arrives."
+          }
+        ]
+      }
+    },
+    {
+      "label": "seed=2 n=60",
+      "seed": 2,
+      "n": 60,
+      "records": 96,
+      "transactions": 63,
+      "settlements": 33,
+      "match_seconds": 0.000519,
+      "match_records_per_second": 185075,
+      "structural": {
+        "per_category": {
+          "AMOUNT_MISMATCH": {
+            "expected": 4,
+            "detected": 4,
+            "true_positives": 4,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "ORPHAN": {
+            "expected": 1,
+            "detected": 1,
+            "true_positives": 1,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "expected": 4,
+            "detected": 4,
+            "true_positives": 4,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "DUPLICATE": {
+            "expected": 3,
+            "detected": 3,
+            "true_positives": 3,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          }
+        },
+        "totals": {
+          "true_positives": 12,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "perfect": true
+        }
+      },
+      "exceptions_flagged": 9,
+      "baseline": {
+        "reasoner": "rule_baseline",
+        "cases_scored": 8,
+        "cases_correct": 8,
+        "attribution_accuracy": 1.0,
+        "orphan_cases_excluded": 1,
+        "interrupted": false,
+        "api_errors": 0,
+        "seconds": 0.0,
+        "avg_seconds_per_case": 0.0,
+        "by_kind": {
+          "AMOUNT_MISMATCH": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          }
+        },
+        "by_confidence": {
+          "medium": {
+            "total": 2,
+            "correct": 2,
+            "accuracy": 1.0
+          },
+          "high": {
+            "total": 6,
+            "correct": 6,
+            "accuracy": 1.0
+          }
+        },
+        "detail": [
+          {
+            "case_id": "stl_0006",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "Settlement stl_0006 is short by Rs 187.53, which isn't tied to any single transaction's amount - consistent with a fee/GST calculation error.",
+            "recommended_action": "Route to finance for a fee/GST recalculation check."
+          },
+          {
+            "case_id": "stl_0010",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "unrecorded_refund",
+            "predicted_cause": "unrecorded_refund",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "The Rs 4696.72 gap is 20.1% of txn_0028's net - refund-shaped, but no refund is recorded.",
+            "recommended_action": "Check for an unrecorded refund against txn_0028."
+          },
+          {
+            "case_id": "stl_0021",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "overpayment_duplicate_payout",
+            "predicted_cause": "overpayment_duplicate_payout",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Settlement stl_0021 came in Rs +409.60 ABOVE what was owed.",
+            "recommended_action": "Confirm with the bank before spending - overpayments get clawed back."
+          },
+          {
+            "case_id": "stl_0026",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "missing_txn_in_batch",
+            "predicted_cause": "missing_txn_in_batch",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The Rs 14546.53 gap is exactly what txn_0017 should have contributed, so that payment appears not to have been paid out.",
+            "recommended_action": "Query txn_0017 with the settlements team."
+          },
+          {
+            "case_id": "stl_0033",
+            "kind": "ORPHAN",
+            "true_cause": "orphan_reference",
+            "predicted_cause": "orphan_reference",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Settlement stl_0033 references transaction(s) that don't exist anywhere in the ledger.",
+            "recommended_action": "Escalate to data engineering - likely a sync gap between ledger and settlement feed."
+          },
+          {
+            "case_id": "txn_0007",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0007 was due to settle by 2026-08-05 and still has no settlement 2 day(s) later.",
+            "recommended_action": "Flag to the settlements team - payout appears stuck."
+          },
+          {
+            "case_id": "txn_0056",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0056 was due to settle by 2026-08-07 and still has no settlement 0 day(s) later.",
+            "recommended_action": "Flag to the settlements team - payout appears stuck."
+          },
+          {
+            "case_id": "txn_0059",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0059 was captured on 2026-08-07 19:00:00 and isn't due to settle until 2026-08-09, after this reporting window closes.",
+            "recommended_action": "No action needed - not yet due under the T+2 cycle."
+          },
+          {
+            "case_id": "txn_0060",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0060 was captured on 2026-08-06 09:00:00 and isn't due to settle until 2026-08-08, after this reporting window closes.",
+            "recommended_action": "No action needed - not yet due under the T+2 cycle."
+          }
+        ]
+      },
+      "ai": {
+        "reasoner": "groq",
+        "cases_scored": 8,
+        "cases_correct": 8,
+        "attribution_accuracy": 1.0,
+        "orphan_cases_excluded": 1,
+        "interrupted": false,
+        "api_errors": 0,
+        "seconds": 59.794,
+        "avg_seconds_per_case": 6.644,
+        "by_kind": {
+          "AMOUNT_MISMATCH": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          }
+        },
+        "by_confidence": {
+          "high": {
+            "total": 8,
+            "correct": 8,
+            "accuracy": 1.0
+          }
+        },
+        "detail": [
+          {
+            "case_id": "stl_0006",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement was short by $187.53, which is only about 0.5% of the expected amount and does not match the full amount of either included transaction. This pattern is typical of a mis\u2011calculated platform fee or GST, rather than a missing transaction or refund.",
+            "recommended_action": "Review the fee and GST calculations for settlement stl_0006; if a mis\u2011calculation is found, adjust the ledger and notify the bank of the corrected amount."
+          },
+          {
+            "case_id": "stl_0010",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "unrecorded_refund",
+            "predicted_cause": "unrecorded_refund",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The bank paid $30,041.13 instead of the expected $34,737.85, a shortfall of $4,696.72. That amount is about 20% of transaction txn_0028\u2019s net ($23,375.44), indicating a refund of that portion was issued but never recorded in the system.",
+            "recommended_action": "Check the refund records for txn_0028; if a refund was issued, record it in the ledger or adjust the settlement to reflect the missing amount."
+          },
+          {
+            "case_id": "stl_0021",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "overpayment_duplicate_payout",
+            "predicted_cause": "overpayment_duplicate_payout",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The bank paid $819.20 while we expected $409.60, a $409.60 over\u2011payment. That extra amount matches exactly the contribution of transaction txn_0058, indicating the same payout was processed twice.",
+            "recommended_action": "Check the payout history for txn_0058 to confirm it was paid twice; if so, reverse the duplicate payment and update the ledger accordingly."
+          },
+          {
+            "case_id": "stl_0026",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "missing_txn_in_batch",
+            "predicted_cause": "missing_txn_in_batch",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The bank paid $17,120.55 but the ledger expected $31,667.08 \u2013 a shortfall of $14,546.53. That shortfall matches exactly the full amount of transaction txn_0017 ($14,546.53), meaning that transaction was omitted from the settlement.",
+            "recommended_action": "Check the payment records for txn_0017; if it was not actually paid, re\u2011process the payment or adjust the settlement to include that transaction."
+          },
+          {
+            "case_id": "stl_0033",
+            "kind": "ORPHAN",
+            "true_cause": "orphan_reference",
+            "predicted_cause": "orphan_reference",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Settlement stl_0033 lists txn_9999 as part of its payment, but that transaction ID is not present in the ledger, so the system cannot match the 1120.43 amount to any actual payment.",
+            "recommended_action": "Check the transaction database for txn_9999; if it truly does not exist, update or delete the settlement reference or create the missing transaction record."
+          },
+          {
+            "case_id": "txn_0007",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment of $22,850.14 was scheduled to settle on 2026\u201108\u201105 (T+2 from the 2026\u201108\u201103 transaction). By the end of the reporting window (2026\u201108\u201108) the due date had already passed and no settlement was recorded, so the amount is overdue.",
+            "recommended_action": "Check the bank transfer status for this transaction and, if still pending, re\u2011initiate or expedite the settlement with the bank."
+          },
+          {
+            "case_id": "txn_0056",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment of $23,432.93 was due on 2026\u201108\u201107 (T+2 after the 2026\u201108\u201105 transaction). By the end of the reporting window on 2026\u201108\u201108 the settlement had not arrived, so the payment is overdue.",
+            "recommended_action": "Review the bank\u2019s settlement logs for this transaction, contact the bank to confirm the missing payment, and flag the case for manual reconciliation."
+          },
+          {
+            "case_id": "txn_0059",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment of $1,524.17 was made on 2026\u201108\u201107 and is scheduled to settle on 2026\u201108\u201109 (T+2). Our reporting window ended on 2026\u201108\u201108, so the settlement date has not yet passed and no settlement is expected yet.",
+            "recommended_action": "No action required; verify the settlement after 2026\u201108\u201109."
+          },
+          {
+            "case_id": "txn_0060",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The transaction was made on 2026\u201108\u201106 with a settlement due on 2026\u201108\u201108. Since the reporting window also ends on 2026\u201108\u201108, the due date has not yet passed, so no settlement should have arrived yet.",
+            "recommended_action": "No action required \u2013 wait until after the settlement date to see if the payment clears."
+          }
+        ]
+      }
+    },
+    {
+      "label": "seed=3 n=60",
+      "seed": 3,
+      "n": 60,
+      "records": 95,
+      "transactions": 63,
+      "settlements": 32,
+      "match_seconds": 0.001019,
+      "match_records_per_second": 93229,
+      "structural": {
+        "per_category": {
+          "AMOUNT_MISMATCH": {
+            "expected": 4,
+            "detected": 4,
+            "true_positives": 4,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "ORPHAN": {
+            "expected": 1,
+            "detected": 1,
+            "true_positives": 1,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "expected": 4,
+            "detected": 4,
+            "true_positives": 4,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "DUPLICATE": {
+            "expected": 3,
+            "detected": 3,
+            "true_positives": 3,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          }
+        },
+        "totals": {
+          "true_positives": 12,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "perfect": true
+        }
+      },
+      "exceptions_flagged": 9,
+      "baseline": {
+        "reasoner": "rule_baseline",
+        "cases_scored": 8,
+        "cases_correct": 8,
+        "attribution_accuracy": 1.0,
+        "orphan_cases_excluded": 1,
+        "interrupted": false,
+        "api_errors": 0,
+        "seconds": 0.0,
+        "avg_seconds_per_case": 0.0,
+        "by_kind": {
+          "AMOUNT_MISMATCH": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          }
+        },
+        "by_confidence": {
+          "medium": {
+            "total": 3,
+            "correct": 3,
+            "accuracy": 1.0
+          },
+          "high": {
+            "total": 5,
+            "correct": 5,
+            "accuracy": 1.0
+          }
+        },
+        "detail": [
+          {
+            "case_id": "stl_0009",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "Settlement stl_0009 is short by Rs 88.18, which isn't tied to any single transaction's amount - consistent with a fee/GST calculation error.",
+            "recommended_action": "Route to finance for a fee/GST recalculation check."
+          },
+          {
+            "case_id": "stl_0020",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "Settlement stl_0020 is short by Rs 24.73, which isn't tied to any single transaction's amount - consistent with a fee/GST calculation error.",
+            "recommended_action": "Route to finance for a fee/GST recalculation check."
+          },
+          {
+            "case_id": "stl_0026",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "overpayment_duplicate_payout",
+            "predicted_cause": "overpayment_duplicate_payout",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Settlement stl_0026 came in Rs +19874.09 ABOVE what was owed.",
+            "recommended_action": "Confirm with the bank before spending - overpayments get clawed back."
+          },
+          {
+            "case_id": "stl_0029",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "unrecorded_refund",
+            "predicted_cause": "unrecorded_refund",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "The Rs 12589.24 gap is 59.8% of txn_0040's net - refund-shaped, but no refund is recorded.",
+            "recommended_action": "Check for an unrecorded refund against txn_0040."
+          },
+          {
+            "case_id": "stl_0032",
+            "kind": "ORPHAN",
+            "true_cause": "orphan_reference",
+            "predicted_cause": "orphan_reference",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Settlement stl_0032 references transaction(s) that don't exist anywhere in the ledger.",
+            "recommended_action": "Escalate to data engineering - likely a sync gap between ledger and settlement feed."
+          },
+          {
+            "case_id": "txn_0033",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0033 was due to settle by 2026-08-05 and still has no settlement 2 day(s) later.",
+            "recommended_action": "Flag to the settlements team - payout appears stuck."
+          },
+          {
+            "case_id": "txn_0048",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0048 was due to settle by 2026-08-03 and still has no settlement 4 day(s) later.",
+            "recommended_action": "Flag to the settlements team - payout appears stuck."
+          },
+          {
+            "case_id": "txn_0059",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0059 was captured on 2026-08-06 20:00:00 and isn't due to settle until 2026-08-08, after this reporting window closes.",
+            "recommended_action": "No action needed - not yet due under the T+2 cycle."
+          },
+          {
+            "case_id": "txn_0060",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0060 was captured on 2026-08-06 16:00:00 and isn't due to settle until 2026-08-08, after this reporting window closes.",
+            "recommended_action": "No action needed - not yet due under the T+2 cycle."
+          }
+        ]
+      },
+      "ai": {
+        "reasoner": "groq",
+        "cases_scored": 8,
+        "cases_correct": 8,
+        "attribution_accuracy": 1.0,
+        "orphan_cases_excluded": 1,
+        "interrupted": false,
+        "api_errors": 0,
+        "seconds": 74.705,
+        "avg_seconds_per_case": 8.301,
+        "by_kind": {
+          "AMOUNT_MISMATCH": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          }
+        },
+        "by_confidence": {
+          "high": {
+            "total": 7,
+            "correct": 7,
+            "accuracy": 1.0
+          },
+          "medium": {
+            "total": 1,
+            "correct": 1,
+            "accuracy": 1.0
+          }
+        },
+        "detail": [
+          {
+            "case_id": "stl_0009",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement should have paid $10,510.43 but only $10,422.25 was received \u2013 a shortfall of $88.18, which is about 0.8% of the transaction\u2019s net amount. This pattern matches a mis\u2011calculated platform fee or GST rather than a missing transaction or refund.",
+            "recommended_action": "Re\u2011calculate the fee/GST for txn_0030, compare the ledger amount to the bank statement, and adjust the settlement record if the fee was over\u2011 or under\u2011charged."
+          },
+          {
+            "case_id": "stl_0020",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "The bank paid $24.73 less than expected, which is only about 0.2% of the $13,141.49 transaction \u2013 a tiny gap that usually points to a mis\u2011calculated fee or GST on that transaction.",
+            "recommended_action": "Review the fee and GST calculation for txn_0036 against the bank statement and adjust the ledger if a mis\u2011calculation is found."
+          },
+          {
+            "case_id": "stl_0026",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "overpayment_duplicate_payout",
+            "predicted_cause": "overpayment_duplicate_payout",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The bank paid an extra $19,874.09, which is exactly the full amount of transaction txn_0058, so the settlement is $20,874.09 higher than expected. This indicates a duplicate payout of that transaction.",
+            "recommended_action": "Check the bank statement for a duplicate payment of txn_0058 and, if confirmed, reverse the extra amount or adjust the ledger to match the expected settlement."
+          },
+          {
+            "case_id": "stl_0029",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "unrecorded_refund",
+            "predicted_cause": "unrecorded_refund",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The bank paid $28,931.72 instead of the expected $41,520.96, missing $12,589.24. That missing amount is exactly 59.8% of the net amount of transaction txn_0040 ($21,054.53), indicating a refund of that size was likely issued but not recorded in the refunds data.",
+            "recommended_action": "Verify whether a refund of $12,589.24 was issued for txn_0040 and, if so, record it in the refunds data; if no refund exists, investigate why the bank settled only the remaining portion."
+          },
+          {
+            "case_id": "stl_0032",
+            "kind": "ORPHAN",
+            "true_cause": "orphan_reference",
+            "predicted_cause": "orphan_reference",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement stl_0032 lists txn_9999 as part of its payment, but that transaction ID is not present in the ledger, so the system cannot match the amount of 3,870.34 to any real transaction.",
+            "recommended_action": "Verify whether txn_9999 exists in the transaction ledger; if it is missing, correct the settlement reference or re\u2011process the settlement once the transaction is added."
+          },
+          {
+            "case_id": "txn_0033",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment was due on 2026\u201108\u201105, but as of the reporting window\u2019s end on 2026\u201108\u201108 it hasn\u2019t been settled \u2013 it\u2019s already 2 days overdue, so the matcher flagged a missing settlement.",
+            "recommended_action": "Check with the bank or payment processor to confirm whether the settlement has been processed; if not, initiate a follow\u2011up or dispute to recover the 21,520.34 amount."
+          },
+          {
+            "case_id": "txn_0048",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The $9,282.09 payment was due to settle on 2026\u201108\u201103 (T+2). By the end of the reporting window on 2026\u201108\u201108 the settlement was still missing, 4 days overdue, so the matcher flagged a missing settlement.",
+            "recommended_action": "Contact the bank to confirm whether the payment was processed; if not, initiate a re\u2011attempt or issue a refund to the merchant."
+          },
+          {
+            "case_id": "txn_0059",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment was scheduled to settle on 2026\u201108\u201108, which is the last day of the reporting window, so it hasn\u2019t yet been processed. No discrepancy exists.",
+            "recommended_action": "No action required; verify receipt after the settlement date passes."
+          },
+          {
+            "case_id": "txn_0060",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The transaction on 2026\u201108\u201106 is due to settle on 2026\u201108\u201108 (T+2). Since the reporting window ends on 2026\u201108\u201108 and the due date hasn\u2019t passed yet, no settlement is expected in this period.",
+            "recommended_action": "No action needed; the settlement will occur after the reporting window closes."
+          }
+        ]
+      }
+    },
+    {
+      "label": "seed=4 n=60",
+      "seed": 4,
+      "n": 60,
+      "records": 95,
+      "transactions": 63,
+      "settlements": 32,
+      "match_seconds": 0.000941,
+      "match_records_per_second": 100934,
+      "structural": {
+        "per_category": {
+          "AMOUNT_MISMATCH": {
+            "expected": 4,
+            "detected": 4,
+            "true_positives": 4,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "ORPHAN": {
+            "expected": 1,
+            "detected": 1,
+            "true_positives": 1,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "expected": 4,
+            "detected": 4,
+            "true_positives": 4,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "DUPLICATE": {
+            "expected": 3,
+            "detected": 3,
+            "true_positives": 3,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          }
+        },
+        "totals": {
+          "true_positives": 12,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "perfect": true
+        }
+      },
+      "exceptions_flagged": 9,
+      "baseline": {
+        "reasoner": "rule_baseline",
+        "cases_scored": 8,
+        "cases_correct": 8,
+        "attribution_accuracy": 1.0,
+        "orphan_cases_excluded": 1,
+        "interrupted": false,
+        "api_errors": 0,
+        "seconds": 0.0,
+        "avg_seconds_per_case": 0.0,
+        "by_kind": {
+          "AMOUNT_MISMATCH": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          }
+        },
+        "by_confidence": {
+          "medium": {
+            "total": 3,
+            "correct": 3,
+            "accuracy": 1.0
+          },
+          "high": {
+            "total": 5,
+            "correct": 5,
+            "accuracy": 1.0
+          }
+        },
+        "detail": [
+          {
+            "case_id": "stl_0002",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "Settlement stl_0002 is short by Rs 21.04, which isn't tied to any single transaction's amount - consistent with a fee/GST calculation error.",
+            "recommended_action": "Route to finance for a fee/GST recalculation check."
+          },
+          {
+            "case_id": "stl_0004",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "unrecorded_refund",
+            "predicted_cause": "unrecorded_refund",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "The Rs 420.78 gap is 33.1% of txn_0020's net - refund-shaped, but no refund is recorded.",
+            "recommended_action": "Check for an unrecorded refund against txn_0020."
+          },
+          {
+            "case_id": "stl_0026",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "overpayment_duplicate_payout",
+            "predicted_cause": "overpayment_duplicate_payout",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Settlement stl_0026 came in Rs +16529.53 ABOVE what was owed.",
+            "recommended_action": "Confirm with the bank before spending - overpayments get clawed back."
+          },
+          {
+            "case_id": "stl_0028",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "Settlement stl_0028 is short by Rs 338.83, which isn't tied to any single transaction's amount - consistent with a fee/GST calculation error.",
+            "recommended_action": "Route to finance for a fee/GST recalculation check."
+          },
+          {
+            "case_id": "stl_0032",
+            "kind": "ORPHAN",
+            "true_cause": "orphan_reference",
+            "predicted_cause": "orphan_reference",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Settlement stl_0032 references transaction(s) that don't exist anywhere in the ledger.",
+            "recommended_action": "Escalate to data engineering - likely a sync gap between ledger and settlement feed."
+          },
+          {
+            "case_id": "txn_0040",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0040 was due to settle by 2026-08-05 and still has no settlement 2 day(s) later.",
+            "recommended_action": "Flag to the settlements team - payout appears stuck."
+          },
+          {
+            "case_id": "txn_0042",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0042 was due to settle by 2026-08-04 and still has no settlement 3 day(s) later.",
+            "recommended_action": "Flag to the settlements team - payout appears stuck."
+          },
+          {
+            "case_id": "txn_0059",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0059 was captured on 2026-08-07 08:00:00 and isn't due to settle until 2026-08-09, after this reporting window closes.",
+            "recommended_action": "No action needed - not yet due under the T+2 cycle."
+          },
+          {
+            "case_id": "txn_0060",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0060 was captured on 2026-08-06 14:00:00 and isn't due to settle until 2026-08-08, after this reporting window closes.",
+            "recommended_action": "No action needed - not yet due under the T+2 cycle."
+          }
+        ]
+      },
+      "ai": {
+        "reasoner": "groq",
+        "cases_scored": 8,
+        "cases_correct": 8,
+        "attribution_accuracy": 1.0,
+        "orphan_cases_excluded": 1,
+        "interrupted": false,
+        "api_errors": 0,
+        "seconds": 69.119,
+        "avg_seconds_per_case": 7.68,
+        "by_kind": {
+          "AMOUNT_MISMATCH": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          }
+        },
+        "by_confidence": {
+          "high": {
+            "total": 8,
+            "correct": 8,
+            "accuracy": 1.0
+          }
+        },
+        "detail": [
+          {
+            "case_id": "stl_0002",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement was 21.04 less than expected, a very small gap that matches the size of a typical platform fee or GST mis\u2011calculation. The difference is not tied to a single transaction\u2019s full amount or a refund fraction, so it most likely stems from an error in the fee/GST calculation.",
+            "recommended_action": "Check the fee and GST calculations for this settlement; if a mis\u2011calculation is confirmed, adjust the ledger and notify the bank to correct the paid amount."
+          },
+          {
+            "case_id": "stl_0004",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "unrecorded_refund",
+            "predicted_cause": "unrecorded_refund",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement expected $1,270.40 but only $849.62 was paid, a shortfall of $420.78 which is exactly 33.1% of the single transaction\u2019s net amount. This matches a refund of that amount that was issued but not recorded.",
+            "recommended_action": "Check the refunds ledger for txn_0020 to confirm a $420.78 refund was issued; if so, record the refund so future settlements match the expected amount."
+          },
+          {
+            "case_id": "stl_0026",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "overpayment_duplicate_payout",
+            "predicted_cause": "overpayment_duplicate_payout",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The bank paid an extra $16,529.53, which is exactly the full amount of transaction txn_0032. This means that txn_0032 was paid twice in this settlement.",
+            "recommended_action": "Check the settlement history to confirm whether txn_0032 was already paid in a previous batch. If it was, reverse the duplicate payment or adjust the ledger to remove the extra amount."
+          },
+          {
+            "case_id": "stl_0028",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The bank paid $338.83 less than expected, which is about 1.4% of each of the two $24k\u2011plus transactions \u2013 a typical size for a mis\u2011calculated fee or GST. The gap does not match any single transaction\u2019s full amount or a refund fraction, so it points to a fee/GST error.",
+            "recommended_action": "Re\u2011calculate the platform fee and GST for txn_0048 and txn_0004, confirm the correct amounts, and adjust the settlement to match the ledger."
+          },
+          {
+            "case_id": "stl_0032",
+            "kind": "ORPHAN",
+            "true_cause": "orphan_reference",
+            "predicted_cause": "orphan_reference",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement stl_0032 lists txn_9999 as its only included transaction, but that transaction ID does not appear in the ledger, so the settlement is orphaned and the amount 3217.12 cannot be matched to any real payment.",
+            "recommended_action": "Verify that txn_9999 exists in the source ledger; if it is missing, re\u2011sync the data or correct the settlement reference to a valid transaction."
+          },
+          {
+            "case_id": "txn_0040",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The transaction was scheduled to settle on 2026\u201108\u201105 (T+2), but as of the reporting window end on 2026\u201108\u201108 we still see no payment \u2013 a 2\u2011day overdue of $4,260.76.",
+            "recommended_action": "Verify the bank statement for 2026\u201108\u201105; if the payment is missing, initiate a missing\u2011payment inquiry with the bank and flag the transaction for follow\u2011up."
+          },
+          {
+            "case_id": "txn_0042",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment was due on 2026\u201108\u201104, but by the end of the reporting window (2026\u201108\u201108) it was still 3 days overdue and no settlement was recorded. The amount of $10,433.05 was never credited to the merchant\u2019s account.",
+            "recommended_action": "Contact the bank to confirm whether the payment was sent and why it has not settled; if it was not sent, arrange for a resend or investigate any processing delay."
+          },
+          {
+            "case_id": "txn_0059",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment of $9,547.93 is scheduled to settle on 2026\u201108\u201109, but our reporting window ended on 2026\u201108\u201108, so the due date hasn\u2019t passed yet. Therefore the matcher\u2019s flag is a false positive.",
+            "recommended_action": "No action needed; monitor for settlement on or after 2026\u201108\u201109."
+          },
+          {
+            "case_id": "txn_0060",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment of $22,709.80 was scheduled to settle on 2026\u201108\u201108, which is the same day the reporting window ends. Because the due date hasn\u2019t passed yet, the matcher correctly flagged it as a missing settlement but it\u2019s actually just not yet due.",
+            "recommended_action": "No action required; the settlement will occur after the reporting window closes."
+          }
+        ]
+      }
+    },
+    {
+      "label": "seed=5 n=60",
+      "seed": 5,
+      "n": 60,
+      "records": 96,
+      "transactions": 63,
+      "settlements": 33,
+      "match_seconds": 0.001342,
+      "match_records_per_second": 71524,
+      "structural": {
+        "per_category": {
+          "AMOUNT_MISMATCH": {
+            "expected": 4,
+            "detected": 4,
+            "true_positives": 4,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "ORPHAN": {
+            "expected": 1,
+            "detected": 1,
+            "true_positives": 1,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "expected": 4,
+            "detected": 4,
+            "true_positives": 4,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          },
+          "DUPLICATE": {
+            "expected": 3,
+            "detected": 3,
+            "true_positives": 3,
+            "false_positives": [],
+            "false_negatives": [],
+            "precision": 1.0,
+            "recall": 1.0
+          }
+        },
+        "totals": {
+          "true_positives": 12,
+          "false_positives": 0,
+          "false_negatives": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "perfect": true
+        }
+      },
+      "exceptions_flagged": 9,
+      "baseline": {
+        "reasoner": "rule_baseline",
+        "cases_scored": 8,
+        "cases_correct": 8,
+        "attribution_accuracy": 1.0,
+        "orphan_cases_excluded": 1,
+        "interrupted": false,
+        "api_errors": 0,
+        "seconds": 0.0,
+        "avg_seconds_per_case": 0.0,
+        "by_kind": {
+          "AMOUNT_MISMATCH": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          }
+        },
+        "by_confidence": {
+          "high": {
+            "total": 6,
+            "correct": 6,
+            "accuracy": 1.0
+          },
+          "medium": {
+            "total": 2,
+            "correct": 2,
+            "accuracy": 1.0
+          }
+        },
+        "detail": [
+          {
+            "case_id": "stl_0003",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "missing_txn_in_batch",
+            "predicted_cause": "missing_txn_in_batch",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The Rs 7667.13 gap is exactly what txn_0021 should have contributed, so that payment appears not to have been paid out.",
+            "recommended_action": "Query txn_0021 with the settlements team."
+          },
+          {
+            "case_id": "stl_0014",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "unrecorded_refund",
+            "predicted_cause": "unrecorded_refund",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "The Rs 6372.66 gap is 38.0% of txn_0037's net - refund-shaped, but no refund is recorded.",
+            "recommended_action": "Check for an unrecorded refund against txn_0037."
+          },
+          {
+            "case_id": "stl_0021",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "medium",
+            "explanation": "Settlement stl_0021 is short by Rs 214.01, which isn't tied to any single transaction's amount - consistent with a fee/GST calculation error.",
+            "recommended_action": "Route to finance for a fee/GST recalculation check."
+          },
+          {
+            "case_id": "stl_0025",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "overpayment_duplicate_payout",
+            "predicted_cause": "overpayment_duplicate_payout",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Settlement stl_0025 came in Rs +16899.14 ABOVE what was owed.",
+            "recommended_action": "Confirm with the bank before spending - overpayments get clawed back."
+          },
+          {
+            "case_id": "stl_0033",
+            "kind": "ORPHAN",
+            "true_cause": "orphan_reference",
+            "predicted_cause": "orphan_reference",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Settlement stl_0033 references transaction(s) that don't exist anywhere in the ledger.",
+            "recommended_action": "Escalate to data engineering - likely a sync gap between ledger and settlement feed."
+          },
+          {
+            "case_id": "txn_0036",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0036 was due to settle by 2026-08-07 and still has no settlement 0 day(s) later.",
+            "recommended_action": "Flag to the settlements team - payout appears stuck."
+          },
+          {
+            "case_id": "txn_0047",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0047 was due to settle by 2026-08-06 and still has no settlement 1 day(s) later.",
+            "recommended_action": "Flag to the settlements team - payout appears stuck."
+          },
+          {
+            "case_id": "txn_0059",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0059 was captured on 2026-08-06 05:00:00 and isn't due to settle until 2026-08-08, after this reporting window closes.",
+            "recommended_action": "No action needed - not yet due under the T+2 cycle."
+          },
+          {
+            "case_id": "txn_0060",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "Transaction txn_0060 was captured on 2026-08-07 21:00:00 and isn't due to settle until 2026-08-09, after this reporting window closes.",
+            "recommended_action": "No action needed - not yet due under the T+2 cycle."
+          }
+        ]
+      },
+      "ai": {
+        "reasoner": "groq",
+        "cases_scored": 8,
+        "cases_correct": 8,
+        "attribution_accuracy": 1.0,
+        "orphan_cases_excluded": 1,
+        "interrupted": false,
+        "api_errors": 0,
+        "seconds": 76.759,
+        "avg_seconds_per_case": 8.529,
+        "by_kind": {
+          "AMOUNT_MISMATCH": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          },
+          "MISSING_SETTLEMENT": {
+            "total": 4,
+            "correct": 4,
+            "accuracy": 1.0
+          }
+        },
+        "by_confidence": {
+          "high": {
+            "total": 8,
+            "correct": 8,
+            "accuracy": 1.0
+          }
+        },
+        "detail": [
+          {
+            "case_id": "stl_0003",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "missing_txn_in_batch",
+            "predicted_cause": "missing_txn_in_batch",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement was supposed to pay $17,114.79 but only $9,447.66 arrived, a shortfall of $7,667.13. That exact amount matches the full net of transaction txn_0021, indicating the bank omitted that transaction from the payout.",
+            "recommended_action": "Check the bank statement or payment processor logs for txn_0021; if it was not paid, re\u2011initiate the payout for that transaction."
+          },
+          {
+            "case_id": "stl_0014",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "unrecorded_refund",
+            "predicted_cause": "unrecorded_refund",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement was short by $6,372.66, which is about 38% of the net amount of transaction txn_0037 ($16,790.41). The matcher flagged this as a fraction of one transaction\u2019s net, and no refund has been recorded for that portion, so it looks like a refund was issued but never entered into the system.",
+            "recommended_action": "Verify whether a refund was issued for txn_0037 (or a portion of it) and, if so, record the refund in the refunds data or adjust the settlement accordingly."
+          },
+          {
+            "case_id": "stl_0021",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "fee_or_gst_error",
+            "predicted_cause": "fee_or_gst_error",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The bank paid $23070.75 instead of the expected $23284.76, a shortfall of $214.01 (about 0.92%). This amount isn\u2019t tied to any single transaction\u2019s net, suggesting a mis\u2011calculated fee or GST rather than a missing transaction or refund.",
+            "recommended_action": "Re\u2011calculate the platform fee and GST for txn_0001 and txn_0029, compare the results to the ledger, and adjust the settlement amount if a mis\u2011calculation is found."
+          },
+          {
+            "case_id": "stl_0025",
+            "kind": "AMOUNT_MISMATCH",
+            "true_cause": "overpayment_duplicate_payout",
+            "predicted_cause": "overpayment_duplicate_payout",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement paid $45,175.11 instead of the expected $28,275.97, a $16,899.14 over\u2011payment that matches exactly the full amount of transaction txn_0002. This indicates the bank paid that transaction twice.",
+            "recommended_action": "Check the payout logs to confirm that txn_0002 was paid twice; if so, reverse the duplicate payment or issue a refund to the customer to bring the settlement back to the expected amount."
+          },
+          {
+            "case_id": "stl_0033",
+            "kind": "ORPHAN",
+            "true_cause": "orphan_reference",
+            "predicted_cause": "orphan_reference",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The settlement stl_0033 claims that txn_9999 is the only transaction that should be matched, but that transaction ID is not present in the ledger, so the amount of 3,625.80 cannot be reconciled.",
+            "recommended_action": "Verify whether txn_9999 exists in the source system; if it was omitted during a data sync, re\u2011import it, or if the ID is a typo, correct the settlement reference to the proper transaction ID."
+          },
+          {
+            "case_id": "txn_0036",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment of $17,194.18 was scheduled to settle on 2026\u201108\u201107 (T+2 from the 2026\u201108\u201105 transaction). By the end of the reporting window on 2026\u201108\u201108 the settlement had not arrived, so the amount is overdue.",
+            "recommended_action": "Contact the bank or payment processor to confirm whether the settlement was processed; if not, initiate a follow\u2011up or dispute to recover the missing amount."
+          },
+          {
+            "case_id": "txn_0047",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "unsettled_stuck",
+            "predicted_cause": "unsettled_stuck",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment was due on 2026\u201108\u201106 (T+2 after the 2026\u201108\u201104 transaction), but by the end of the reporting window on 2026\u201108\u201108 the settlement had not yet arrived, so the transaction is overdue by about a day.",
+            "recommended_action": "Contact the bank to confirm whether the settlement was processed after the reporting window; if not, flag the transaction for follow\u2011up or re\u2011initiate the payment."
+          },
+          {
+            "case_id": "txn_0059",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The transaction was made on 2026\u201108\u201106 and is scheduled to settle on 2026\u201108\u201108 (T+2). The reporting window also ends on 2026\u201108\u201108, so the settlement date has not yet passed when the window closes \u2013 the payment is simply not yet due, not missing.",
+            "recommended_action": "No action required; check the next reporting cycle to confirm the settlement arrives."
+          },
+          {
+            "case_id": "txn_0060",
+            "kind": "MISSING_SETTLEMENT",
+            "true_cause": "not_yet_due",
+            "predicted_cause": "not_yet_due",
+            "correct": true,
+            "confidence": "high",
+            "explanation": "The payment is scheduled to settle on 2026\u201108\u201109, but our reporting window ended on 2026\u201108\u201108, so the settlement date hasn\u2019t passed yet. Therefore the matcher correctly flagged it as missing, but it\u2019s not actually overdue.",
+            "recommended_action": "No action required; monitor the account after 2026\u201108\u201109 to confirm settlement."
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -273,6 +273,116 @@ def grade_dataset(data_dir, with_ai=False, max_ai_cases=None, sleep_between=0.0)
     return result
 
 
+def collect_hard_cases(seeds, sizes):
+    """Find the exceptions the rule baseline gets WRONG, across many datasets.
+
+    WHY THIS MODE EXISTS:
+    Grading the LLM on a random sample mostly measures how often it agrees
+    with us about easy cases. Our first real run scored 40/40 - and so did the
+    rule baseline, because at that dataset size the genuinely ambiguous cases
+    barely occur. Two perfect scores on an easy exam say nothing about which
+    grader is better.
+
+    So this sweeps a lot of datasets with the FREE baseline, keeps only the
+    cases it fails, and hands those to the model. It's a deliberately
+    adversarial sample: the question isn't "can the LLM do what rules already
+    do", it's "when a hand-tuned threshold breaks, does reasoning recover it?"
+    It's also cheap - the sweep costs nothing and the LLM only pays for the
+    handful of cases that actually discriminate.
+    """
+    hard = []
+    total_cases = 0
+    tmp_root = tempfile.mkdtemp(prefix="recon_hardcases_")
+    try:
+        for size in sizes:
+            for seed in seeds:
+                ds_dir = os.path.join(tmp_root, f"seed{seed}_n{size}")
+                generate(seed=seed, n_transactions=size, out_dir=ds_dir, verbose=False)
+                transactions, settlements, refunds = load_data(ds_dir)
+                with open(os.path.join(ds_dir, "ground_truth.json")) as f:
+                    ground_truth = json.load(f)
+                settlement_results, transaction_results = match(transactions, settlements, refunds)
+                cases = build_cases(settlement_results, transaction_results)
+                total_cases += len([c for c in cases if c["kind"] != "ORPHAN"])
+
+                baseline = RuleBaselineReasoner()
+                for case in cases:
+                    if case["kind"] == "ORPHAN":
+                        continue
+                    case_id = case.get("settlement_id") or case.get("transaction_id")
+                    predicted = baseline.explain(case).get("likely_cause")
+                    true_cause = ground_truth["true_causes"].get(case_id)
+                    if predicted != true_cause:
+                        hard.append({
+                            "label": f"seed={seed} n={size}",
+                            "case": case,
+                            "case_id": case_id,
+                            "true_cause": true_cause,
+                            "baseline_predicted": predicted,
+                        })
+    finally:
+        shutil.rmtree(tmp_root, ignore_errors=True)
+    return hard, total_cases
+
+
+def run_hard_case_mode(seeds, sizes, sleep_between):
+    print(f"Sweeping {len(seeds) * len(sizes)} datasets with the free rule baseline "
+          f"to find its failures...")
+    hard, total_cases = collect_hard_cases(seeds, sizes)
+    print(f"  baseline failed {len(hard)} of {total_cases} scoreable cases "
+          f"({len(hard) / total_cases * 100:.2f}%)\n")
+
+    if not hard:
+        print("No baseline failures found - nothing to discriminate on. "
+              "Try more seeds or a larger --sizes.")
+        return None
+
+    reasoner = get_reasoner()
+    if isinstance(reasoner, RuleBaselineReasoner):
+        print("No API key found - cannot grade the LLM on these. Set one in .env.")
+        return None
+
+    print(f"Grading {len(hard)} baseline-failure cases with {reasoner.name}:")
+    correct = 0
+    detail = []
+    for i, item in enumerate(hard, 1):
+        try:
+            result = reasoner.explain(item["case"])
+        except Exception as e:
+            result = {"likely_cause": "api_error", "confidence": "low",
+                      "explanation": f"[{type(e).__name__}: {e}]"}
+        predicted = result.get("likely_cause")
+        is_right = predicted == item["true_cause"]
+        correct += int(is_right)
+        detail.append({**{k: v for k, v in item.items() if k != "case"},
+                       "llm_predicted": predicted,
+                       "llm_confidence": result.get("confidence"),
+                       "llm_explanation": result.get("explanation"),
+                       "llm_correct": is_right})
+        print(f"  [{i:>2}/{len(hard)}] {'OK ' if is_right else 'MISS'} "
+              f"{item['label']} {item['case_id']:<12} "
+              f"true={item['true_cause']:<22} baseline={item['baseline_predicted']:<22} "
+              f"llm={predicted:<22} conf={result.get('confidence')}", flush=True)
+        if sleep_between and i < len(hard):
+            time.sleep(sleep_between)
+
+    print("\n" + "=" * 66)
+    print("ADVERSARIAL SAMPLE: cases the rule baseline got wrong")
+    print("=" * 66)
+    print(f"  baseline accuracy on these, by definition: 0/{len(hard)} = 0.000")
+    print(f"  LLM accuracy on the same cases:            {correct}/{len(hard)} = "
+          f"{correct / len(hard):.3f}")
+    return {
+        "hard_cases_found": len(hard),
+        "total_scoreable_cases_swept": total_cases,
+        "baseline_failure_rate": round(len(hard) / total_cases, 4),
+        "llm_correct_on_baseline_failures": correct,
+        "llm_accuracy_on_baseline_failures": round(correct / len(hard), 4),
+        "reasoner": reasoner.name,
+        "detail": detail,
+    }
+
+
 def main():
     p = argparse.ArgumentParser(description="Grade the matcher and the reasoning layer against ground truth.")
     p.add_argument("--seeds", type=int, nargs="*", default=None,
@@ -289,8 +399,24 @@ def main():
     p.add_argument("--sleep", type=float, default=0.0,
                    help="Seconds to wait between LLM calls. Use ~1-2 if you keep hitting "
                         "rate-limit backoff, which is slower than pacing yourself.")
+    p.add_argument("--hard-cases", action="store_true",
+                   help="Adversarial mode: sweep datasets with the free rule baseline, "
+                        "then grade the LLM ONLY on the cases the baseline got wrong. "
+                        "This is the comparison that actually discriminates.")
     p.add_argument("--out", default="data/validation.json")
     args = p.parse_args()
+
+    if args.hard_cases:
+        result = run_hard_case_mode(
+            args.seeds or list(range(1, 11)),
+            args.sizes or [args.n],
+            args.sleep,
+        )
+        if result:
+            with open(args.out, "w") as f:
+                json.dump({"hard_case_evaluation": result}, f, indent=2)
+            print(f"\n(Full detail saved to {args.out})")
+        return
 
     runs = []
 
