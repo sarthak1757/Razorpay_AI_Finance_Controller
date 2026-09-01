@@ -47,12 +47,16 @@ def build_explain_prompt(case: dict) -> str:
     allowed = CAUSES_BY_KIND.get(case["kind"], [])
     menu = "\n".join(f'  - "{c}": {CAUSE_DESCRIPTIONS[c]}' for c in allowed)
 
+    # Compact JSON, not indent=2. On a free API tier the binding constraint is
+    # tokens-per-minute, and pretty-printing a case costs ~40% more tokens for
+    # zero benefit to the model - which translates directly into rate-limit
+    # backoff and a grading run that takes 15 minutes instead of 5.
     return f"""You are a financial reconciliation analyst reviewing an exception
 flagged by an automated matcher. The matcher has already done the arithmetic;
 your job is to work out WHY this happened.
 
 THE CASE:
-{json.dumps(case, indent=2)}
+{json.dumps(case, separators=(",", ":"), default=str)}
 
 The "signals" block contains factual arithmetic observations computed by the
 matcher - what the gap is, whether it exactly equals one transaction's

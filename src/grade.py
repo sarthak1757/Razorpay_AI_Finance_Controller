@@ -123,30 +123,67 @@ def grade_structural(settlement_results, transaction_results, ground_truth):
 # Attribution accuracy: did the reasoner name the TRUE cause?
 # --------------------------------------------------------------------------
 
-def grade_attribution(cases, reasoner, ground_truth):
+def grade_attribution(cases, reasoner, ground_truth, progress=False, sleep_between=0.0):
     """Ask a reasoner to explain every case, then score its causes.
 
     ORPHAN cases are scored separately and kept out of the headline number:
     there is only one possible cause for an orphan, so getting it right
     demonstrates nothing and would inflate the score for free.
+
+    Progress is printed for real-LLM runs because on a free tier these calls
+    serialize behind a tokens-per-minute limit - a silent terminal for ten
+    minutes is indistinguishable from a hang, and the honest fix is to show
+    the work rather than to hide it. A Ctrl-C mid-run keeps whatever has been
+    graded so far instead of throwing it away.
     """
     true_causes = ground_truth["true_causes"]
 
     graded = []
     start = time.perf_counter()
-    for case in cases:
+    interrupted = False
+    errors = 0
+
+    for i, case in enumerate(cases, 1):
         case_id = case.get("settlement_id") or case.get("transaction_id")
-        result = reasoner.explain(case)
+        try:
+            result = reasoner.explain(case)
+        except KeyboardInterrupt:
+            interrupted = True
+            print(f"\n  [interrupted after {i - 1}/{len(cases)} cases - scoring what we have]")
+            break
+        except Exception as e:  # rate limit, transport error, bad JSON upstream
+            errors += 1
+            result = {
+                "likely_cause": "api_error",
+                "confidence": "low",
+                "explanation": f"[{type(e).__name__}: {e}]",
+                "recommended_action": "Retry - the call failed rather than the model being wrong.",
+            }
+
+        correct = result.get("likely_cause") == true_causes.get(case_id)
         graded.append({
             "case_id": case_id,
             "kind": case["kind"],
             "true_cause": true_causes.get(case_id),
             "predicted_cause": result.get("likely_cause"),
-            "correct": result.get("likely_cause") == true_causes.get(case_id),
+            "correct": correct,
             "confidence": result.get("confidence"),
             "explanation": result.get("explanation"),
             "recommended_action": result.get("recommended_action"),
         })
+
+        if progress:
+            running = sum(1 for g in graded if g["correct"] and g["kind"] != "ORPHAN")
+            denom = sum(1 for g in graded if g["kind"] != "ORPHAN")
+            rate = f"{running}/{denom}" if denom else "n/a"
+            mark = "OK " if correct else "MISS"
+            print(f"  [{i:>3}/{len(cases)}] {mark} {case_id:<12} "
+                  f"true={true_causes.get(case_id):<28} got={result.get('likely_cause'):<28} "
+                  f"running={rate}", flush=True)
+
+        if sleep_between and i < len(cases):
+            time.sleep(sleep_between)
+
     elapsed = time.perf_counter() - start
 
     scored = [g for g in graded if g["kind"] != "ORPHAN"]
@@ -172,6 +209,8 @@ def grade_attribution(cases, reasoner, ground_truth):
         "cases_correct": correct,
         "attribution_accuracy": round(correct / len(scored), 4) if scored else None,
         "orphan_cases_excluded": len(graded) - len(scored),
+        "interrupted": interrupted,
+        "api_errors": errors,
         "seconds": round(elapsed, 3),
         "avg_seconds_per_case": round(elapsed / len(graded), 3) if graded else None,
         "by_kind": {
@@ -190,7 +229,7 @@ def grade_attribution(cases, reasoner, ground_truth):
 # Runner
 # --------------------------------------------------------------------------
 
-def grade_dataset(data_dir, with_ai=False):
+def grade_dataset(data_dir, with_ai=False, max_ai_cases=None, sleep_between=0.0):
     transactions, settlements, refunds = load_data(data_dir)
     with open(os.path.join(data_dir, "ground_truth.json")) as f:
         ground_truth = json.load(f)
@@ -220,7 +259,16 @@ def grade_dataset(data_dir, with_ai=False):
         if isinstance(reasoner, RuleBaselineReasoner):
             print("[grade] --with-ai requested but no API key found; skipping LLM grading.")
         else:
-            result["ai"] = grade_attribution(cases, reasoner, ground_truth)
+            ai_cases = cases if max_ai_cases is None else cases[:max_ai_cases]
+            if len(ai_cases) < len(cases):
+                print(f"  grading {len(ai_cases)}/{len(cases)} exceptions with {reasoner.name} "
+                      f"(capped by --max-ai-cases)")
+            else:
+                print(f"  grading {len(ai_cases)} exceptions with {reasoner.name}")
+            result["ai"] = grade_attribution(
+                ai_cases, reasoner, ground_truth,
+                progress=True, sleep_between=sleep_between,
+            )
 
     return result
 
@@ -234,6 +282,13 @@ def main():
                    help="Grade across several dataset sizes (uses the first seed).")
     p.add_argument("--with-ai", action="store_true",
                    help="Also grade the real LLM (needs an API key; costs calls).")
+    p.add_argument("--max-ai-cases", type=int, default=None,
+                   help="Cap LLM-graded exceptions PER DATASET. On a free tier the "
+                        "tokens-per-minute limit makes calls serialize, so an uncapped "
+                        "run across several large datasets can take 15+ minutes.")
+    p.add_argument("--sleep", type=float, default=0.0,
+                   help="Seconds to wait between LLM calls. Use ~1-2 if you keep hitting "
+                        "rate-limit backoff, which is slower than pacing yourself.")
     p.add_argument("--out", default="data/validation.json")
     args = p.parse_args()
 
@@ -241,7 +296,9 @@ def main():
 
     if args.seeds is None and args.sizes is None:
         print("Grading the existing dataset in data/ ...")
-        runs.append({"label": "data/", **grade_dataset("data", with_ai=args.with_ai)})
+        runs.append({"label": "data/", **grade_dataset(
+            "data", with_ai=args.with_ai,
+            max_ai_cases=args.max_ai_cases, sleep_between=args.sleep)})
     else:
         seeds = args.seeds or [42]
         sizes = args.sizes or [args.n]
@@ -251,7 +308,11 @@ def main():
                 for seed in seeds:
                     ds_dir = os.path.join(tmp_root, f"seed{seed}_n{size}")
                     generate(seed=seed, n_transactions=size, out_dir=ds_dir, verbose=False)
-                    run = grade_dataset(ds_dir, with_ai=args.with_ai)
+                    if args.with_ai:
+                        print(f"\nseed={seed} n={size}:")
+                    run = grade_dataset(
+                        ds_dir, with_ai=args.with_ai,
+                        max_ai_cases=args.max_ai_cases, sleep_between=args.sleep)
                     runs.append({"label": f"seed={seed} n={size}", "seed": seed, "n": size, **run})
                     print(f"  {runs[-1]['label']:<18} "
                           f"{run['records']:>5} records | "
