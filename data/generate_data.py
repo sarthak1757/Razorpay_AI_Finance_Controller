@@ -10,29 +10,67 @@ Real Razorpay <-> bank reconciliation has two sources that don't line up 1:1:
 So this generator produces two CSVs that are DELIBERATELY not a clean 1:1 match,
 plus a ground_truth.json that records exactly what we injected and why.
 
-IMPORTANT: ground_truth.json is for US to grade the matcher against later ("did it
-find the real exceptions, and did it wrongly flag clean cases?"). The matching
-agent we build next will NEVER see this file - that would be cheating the metric.
-This is what makes "honest measured accuracy" possible instead of just a vibe.
+WHY MULTIPLE CAUSES PER EXCEPTION TYPE:
+An earlier version of this generator injected exactly one cause of amount
+mismatch (a fee error) and one cause of missing settlement. That makes any
+"did the AI find the right root cause?" metric meaningless - the answer would
+be derivable from the exception TYPE alone, so a model that never reasons at
+all scores 100%. Real reconciliation isn't like that: a settlement that came
+up short could be a fee error, an unrecorded refund, a transaction that got
+dropped from the batch, and a settlement that's too LARGE is a different
+problem again. Telling those apart is the actual job.
+
+So each exception type now has several distinguishable causes, and the true
+cause of every single injected exception is recorded in ground_truth.json.
+The signal needed to tell them apart is present in the raw numbers (a dropped
+transaction makes the gap exactly equal that transaction's net; an unrecorded
+refund makes it a fraction of one; a fee error is small and unrelated to any
+transaction's structure), so this is a real inference task, not a guess.
+
+IMPORTANT: ground_truth.json is for US to grade against later - both the
+matcher ("did it find the real exceptions, and did it wrongly flag clean
+cases?") and the AI reasoning layer ("did it name the right cause?"). Neither
+matcher.py nor reasoner.py ever reads this file. That's what makes "honest
+measured accuracy" possible instead of just a vibe.
+
+Usage:
+    python3 data/generate_data.py                      # canonical dataset
+    python3 data/generate_data.py --seed 7 --n 300     # a different draw
+    python3 data/generate_data.py --seed 7 --out-dir /tmp/ds7
 """
 
+import argparse
 import csv
 import json
+import os
 import random
+import sys
 from datetime import datetime, timedelta
 
-random.seed(42)  # reproducible run - same data every time we regenerate
+# The cause taxonomy is defined once, in src/causes.py, and imported by the
+# generator, the reasoner and the grader alike - see that file for why.
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src"))
+from causes import (  # noqa: E402
+    CAUSE_FEE_OR_GST,
+    CAUSE_UNRECORDED_REFUND,
+    CAUSE_DROPPED_TXN,
+    CAUSE_OVERPAYMENT,
+    CAUSE_ORPHAN,
+    CAUSE_STUCK,
+    CAUSE_NOT_YET_DUE,
+    MISMATCH_CAUSES,
+    ALL_CAUSES,
+)
 
-N_TRANSACTIONS = 60
 START_DATE = datetime(2026, 8, 1)
+SETTLEMENT_SLA_DAYS = 2  # Razorpay's standard T+2 payout cycle
 PAYMENT_METHODS = ["upi", "card", "netbanking", "wallet"]
 
 RAZORPAY_FEE_PCT = 0.02      # 2% platform fee
 GST_ON_FEE_PCT = 0.18        # 18% GST charged on top of the fee
 
-
-def make_transaction(i, txn_date):
-    amount = round(random.uniform(150, 25000), 2)
+def make_transaction(rng, i, txn_date):
+    amount = round(rng.uniform(150, 25000), 2)
     fee = round(amount * RAZORPAY_FEE_PCT, 2)
     gst_on_fee = round(fee * GST_ON_FEE_PCT, 2)
     net_amount = round(amount - fee - gst_on_fee, 2)
@@ -41,7 +79,7 @@ def make_transaction(i, txn_date):
         "order_id": f"order_{i:04d}",
         "amount": amount,
         "currency": "INR",
-        "payment_method": random.choice(PAYMENT_METHODS),
+        "payment_method": rng.choice(PAYMENT_METHODS),
         "status": "captured",
         "timestamp": txn_date.strftime("%Y-%m-%d %H:%M:%S"),
         "razorpay_fee": fee,
@@ -50,58 +88,117 @@ def make_transaction(i, txn_date):
     }
 
 
-def main():
-    transactions = []
-    for i in range(1, N_TRANSACTIONS + 1):
-        txn_date = START_DATE + timedelta(
-            days=random.randint(0, 6), hours=random.randint(0, 23)
-        )
-        transactions.append(make_transaction(i, txn_date))
+def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=True):
+    """Generate one complete dataset + its ground truth.
 
+    Uses a local RNG instance rather than seeding the global `random` module,
+    so generating several datasets in one process (the validation harness
+    does exactly that) can't have one run's draws bleed into the next.
+
+    Exception counts scale with n_transactions so that a 600-transaction
+    dataset has proportionally the same exception density as a 60-transaction
+    one - otherwise cross-scale comparisons would be apples to oranges.
+    """
+    rng = random.Random(seed)
+
+    # window_end is the "report pull date" - the last date this dataset can
+    # tell us anything about. A payment from the final two days simply has no
+    # settlement row yet, because T+2 hasn't elapsed by the time the report
+    # was pulled. That is a property of the reporting window, not a fault.
+    window_end = START_DATE + timedelta(days=window_days)
+    settleable_end = window_end - timedelta(days=SETTLEMENT_SLA_DAYS)
+
+    n_not_yet_due = max(1, n_transactions // 30)
+
+    # Transactions are placed in two groups so that the "not yet due" label is
+    # always TRUE BY CONSTRUCTION rather than asserted: everything in the
+    # settleable window has T+2 <= window_end, everything in the tail does not.
+    # (An earlier version picked "recent" transactions by eye and produced
+    # labels the arithmetic contradicted - grading a model against those would
+    # have punished it for being correct.)
+    transactions = []
+    for i in range(1, n_transactions + 1):
+        if i <= n_transactions - n_not_yet_due:
+            span_hours = max(1, int((settleable_end - START_DATE).total_seconds() // 3600))
+            txn_date = START_DATE + timedelta(hours=rng.randint(0, span_hours - 1))
+        else:
+            tail_hours = int((window_end - settleable_end).total_seconds() // 3600)
+            txn_date = settleable_end + timedelta(hours=rng.randint(1, tail_hours - 1))
+        transactions.append(make_transaction(rng, i, txn_date))
     transactions.sort(key=lambda t: t["timestamp"])
 
+    def txn_dt(t):
+        return datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S")
+
     ground_truth = {
-        "clean_matches": [],
-        "timing_offset_only": [],
-        "batched_into": {},       # txn_id -> settlement_id (many txns -> one settlement)
-        "partial_refund": [],     # txn_id
-        "fee_mismatch": [],       # settlement_id
-        "duplicate_entry": [],    # the duplicate txn_id that shouldn't exist
-        "missing_settlement": [], # txn_id that never got settled
-        "orphan_settlement": [],  # settlement_id referencing a txn that doesn't exist
+        "meta": {
+            "seed": seed,
+            "n_transactions": n_transactions,
+            "window_days": window_days,
+            "data_window_end": window_end.strftime("%Y-%m-%d"),
+        },
+        "clean_settlements": [],      # settlement_ids that should reconcile exactly
+        "batched_into": {},           # txn_id -> settlement_id
+        "legit_partial_refund": [],   # txn_ids w/ a PROPERLY recorded refund - must NOT be flagged
+        "duplicate_entry": [],        # duplicate txn_ids that shouldn't exist
+        # The graded part: every injected exception and its TRUE cause.
+        "true_causes": {},            # settlement_id | txn_id -> cause label
     }
 
-    settlements = []
-    settlement_counter = 1
-    refunds = []
+    # --- pick exception victims -------------------------------------------
+    # Scaled proportionally; at the default n=60 this reproduces the original
+    # mix (4 missing, 4 partial refunds, 3 duplicates, ~4 mismatches, 1 orphan).
+    n_stuck = max(1, n_transactions // 30)
+    n_partial_refund = max(1, n_transactions // 15)
+    n_duplicate = max(1, n_transactions // 20)
 
-    # Decide which transactions get which treatment.
-    ids = [t["transaction_id"] for t in transactions]
-    random.shuffle(ids)
+    # Everything past the settleable cutoff is not-yet-due by construction:
+    # its T+2 falls after the report pull date, so no settlement exists yet.
+    not_yet_due_ids = {
+        t["transaction_id"] for t in transactions if txn_dt(t) > settleable_end
+    }
+    older = [t for t in transactions if txn_dt(t) <= settleable_end]
+    rng.shuffle(older)
 
-    n_missing = 4
-    n_partial_refund = 4
-    n_duplicate = 3
-    missing_ids = set(ids[:n_missing])
-    partial_refund_ids = set(ids[n_missing:n_missing + n_partial_refund])
-    duplicate_source_ids = set(
-        ids[n_missing + n_partial_refund: n_missing + n_partial_refund + n_duplicate]
-    )
+    # "Stuck" ones are deliberately dropped from settlement despite being old
+    # enough that T+2 has comfortably passed - a genuinely lost payout.
+    stuck_ids = {t["transaction_id"] for t in older[:n_stuck]}
 
-    ground_truth["missing_settlement"] = sorted(missing_ids)
-    ground_truth["partial_refund"] = sorted(partial_refund_ids)
-
-    remaining = [
+    remaining_pool = [
         t for t in transactions
-        if t["transaction_id"] not in missing_ids
+        if t["transaction_id"] not in not_yet_due_ids
+        and t["transaction_id"] not in stuck_ids
     ]
+    rng.shuffle(remaining_pool)
+    partial_refund_ids = {t["transaction_id"] for t in remaining_pool[:n_partial_refund]}
+    duplicate_source_ids = {
+        t["transaction_id"]
+        for t in remaining_pool[n_partial_refund:n_partial_refund + n_duplicate]
+    }
 
-    # Batch remaining transactions into settlements of 1-3 transactions each,
-    # settling T+2 from the LATEST transaction in the batch.
+    for tid in sorted(stuck_ids):
+        ground_truth["true_causes"][tid] = CAUSE_STUCK
+    for tid in sorted(not_yet_due_ids):
+        ground_truth["true_causes"][tid] = CAUSE_NOT_YET_DUE
+    ground_truth["legit_partial_refund"] = sorted(partial_refund_ids)
+
+    # --- batch the rest into settlements -----------------------------------
+    to_settle = [
+        t for t in transactions
+        if t["transaction_id"] not in stuck_ids
+        and t["transaction_id"] not in not_yet_due_ids
+    ]
+    to_settle.sort(key=lambda t: t["timestamp"])
+
+    settlements = []
+    refunds = []
+    settlement_counter = 1
+    batches = []  # (settlement_dict, [txn dicts], expected_total)
+
     i = 0
-    while i < len(remaining):
-        batch_size = random.choice([1, 1, 2, 2, 3])
-        batch = remaining[i:i + batch_size]
+    while i < len(to_settle):
+        batch_size = rng.choice([1, 1, 2, 2, 3])
+        batch = to_settle[i:i + batch_size]
         i += batch_size
         if not batch:
             continue
@@ -109,16 +206,17 @@ def main():
         settlement_id = f"stl_{settlement_counter:04d}"
         settlement_counter += 1
 
-        latest_txn_date = max(
-            datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S") for t in batch
-        )
-        settlement_date = latest_txn_date + timedelta(days=2)
+        latest = max(txn_dt(t) for t in batch)
+        settlement_date = latest + timedelta(days=2)
 
-        settled_amount = 0.0
+        expected_total = 0.0
         for t in batch:
             net = t["net_amount"]
             if t["transaction_id"] in partial_refund_ids:
-                refund_amount = round(net * random.uniform(0.2, 0.5), 2)
+                # A REAL refund, properly recorded in refunds.csv. The matcher
+                # should net this out and NOT flag the settlement. These exist
+                # specifically as false-positive bait.
+                refund_amount = round(net * rng.uniform(0.2, 0.5), 2)
                 net = round(net - refund_amount, 2)
                 refunds.append({
                     "refund_id": f"rfnd_{t['transaction_id']}",
@@ -126,62 +224,129 @@ def main():
                     "refund_amount": refund_amount,
                     "refund_date": settlement_date.strftime("%Y-%m-%d"),
                 })
-            settled_amount += net
+            expected_total += net
             if len(batch) > 1:
                 ground_truth["batched_into"][t["transaction_id"]] = settlement_id
-            else:
-                ground_truth["clean_matches" if t["transaction_id"] not in partial_refund_ids else "timing_offset_only"].append(t["transaction_id"])
 
-        settled_amount = round(settled_amount, 2)
-
-        # Occasionally inject a fee-miscalculation error into the settlement total
-        if random.random() < 0.08:
-            error = round(random.uniform(5, 40), 2)
-            settled_amount = round(settled_amount - error, 2)
-            ground_truth["fee_mismatch"].append(settlement_id)
-
-        settlements.append({
+        expected_total = round(expected_total, 2)
+        settlement = {
             "settlement_id": settlement_id,
-            "utr_number": f"UTR{random.randint(100000000000, 999999999999)}",
+            "utr_number": f"UTR{rng.randint(100000000000, 999999999999)}",
             "settlement_date": settlement_date.strftime("%Y-%m-%d"),
-            "settled_amount": settled_amount,
+            "settled_amount": expected_total,
             "transaction_ids_included": ";".join(t["transaction_id"] for t in batch),
-        })
+        }
+        settlements.append(settlement)
+        batches.append((settlement, batch, expected_total))
 
-    # Inject duplicate transaction rows (data quality issue on Razorpay's own side)
-    for dup_source in duplicate_source_ids:
+    # --- inject amount mismatches, round-robin across the four causes ------
+    # Round-robin (rather than random choice) guarantees every cause is
+    # represented even on a small dataset, so the AI-accuracy metric is never
+    # computed over a set that happens to contain only one kind of problem.
+    n_mismatch = max(len(MISMATCH_CAUSES), round(len(batches) * 0.12))
+    eligible = [b for b in batches if b[1]]
+    rng.shuffle(eligible)
+
+    for idx, (settlement, batch, expected_total) in enumerate(eligible[:n_mismatch]):
+        cause = MISMATCH_CAUSES[idx % len(MISMATCH_CAUSES)]
+        sid = settlement["settlement_id"]
+
+        if cause == CAUSE_FEE_OR_GST:
+            # A fee MIS-RATE, not a flat error: the fee was computed at the
+            # wrong percentage, so the size of the mistake scales with the
+            # value of the batch. This matters for honesty of the benchmark -
+            # a flat Rs 5-40 error is always tiny and therefore always
+            # trivially separable from a refund-sized gap, which would make
+            # root-cause attribution a solved problem by construction. Real
+            # fee errors scale, and on a large batch they land in the same
+            # numeric range as a refund on a small transaction. That overlap
+            # is where attribution actually requires weighing evidence.
+            mis_rate = rng.uniform(0.002, 0.01)
+            error = round(expected_total * mis_rate, 2)
+            settlement["settled_amount"] = round(expected_total - error, 2)
+
+        elif cause == CAUSE_UNRECORDED_REFUND:
+            # Short by a refund-sized fraction of ONE transaction's net, with
+            # no corresponding row in refunds.csv. Wide fraction range for the
+            # same reason as above: a 6% refund on a big transaction and a fee
+            # mis-rate on the batch are genuinely hard to tell apart.
+            victim = rng.choice(batch)
+            hidden = round(victim["net_amount"] * rng.uniform(0.05, 0.6), 2)
+            settlement["settled_amount"] = round(expected_total - hidden, 2)
+
+        elif cause == CAUSE_DROPPED_TXN:
+            # Settlement claims to include a transaction it never actually paid:
+            # short by EXACTLY that transaction's contribution.
+            if len(batch) < 2:
+                # Needs >=2 transactions to be distinguishable from "nothing
+                # settled at all"; fall back to a fee error on singletons.
+                error = round(rng.uniform(5, 40), 2)
+                settlement["settled_amount"] = round(expected_total - error, 2)
+                cause = CAUSE_FEE_OR_GST
+            else:
+                victim = rng.choice(batch)
+                contribution = victim["net_amount"]
+                refund_row = next(
+                    (r for r in refunds if r["transaction_id"] == victim["transaction_id"]), None
+                )
+                if refund_row:
+                    contribution = round(contribution - refund_row["refund_amount"], 2)
+                settlement["settled_amount"] = round(expected_total - contribution, 2)
+
+        elif cause == CAUSE_OVERPAYMENT:
+            # Bank credited MORE than owed - one transaction paid out twice.
+            victim = rng.choice(batch)
+            contribution = victim["net_amount"]
+            refund_row = next(
+                (r for r in refunds if r["transaction_id"] == victim["transaction_id"]), None
+            )
+            if refund_row:
+                contribution = round(contribution - refund_row["refund_amount"], 2)
+            settlement["settled_amount"] = round(expected_total + contribution, 2)
+
+        ground_truth["true_causes"][sid] = cause
+
+    ground_truth["clean_settlements"] = sorted(
+        s["settlement_id"] for s in settlements
+        if s["settlement_id"] not in ground_truth["true_causes"]
+    )
+
+    # --- duplicate transaction rows (data quality issue on Razorpay's side) --
+    for dup_source in sorted(duplicate_source_ids):
         original = next(t for t in transactions if t["transaction_id"] == dup_source)
         dup = dict(original)
         dup["transaction_id"] = dup_source + "_dup"
         transactions.append(dup)
         ground_truth["duplicate_entry"].append(dup["transaction_id"])
 
-    # Inject one orphan settlement (references a transaction_id that never existed)
+    # --- one orphan settlement (references a txn that never existed) --------
     orphan_id = f"stl_{settlement_counter:04d}"
     settlement_counter += 1
     settlements.append({
         "settlement_id": orphan_id,
-        "utr_number": f"UTR{random.randint(100000000000, 999999999999)}",
-        "settlement_date": (START_DATE + timedelta(days=8)).strftime("%Y-%m-%d"),
-        "settled_amount": round(random.uniform(500, 5000), 2),
+        "utr_number": f"UTR{rng.randint(100000000000, 999999999999)}",
+        "settlement_date": window_end.strftime("%Y-%m-%d"),
+        "settled_amount": round(rng.uniform(500, 5000), 2),
         "transaction_ids_included": "txn_9999",
     })
-    ground_truth["orphan_settlement"].append(orphan_id)
+    ground_truth["true_causes"][orphan_id] = CAUSE_ORPHAN
 
     transactions.sort(key=lambda t: t["transaction_id"])
 
-    # --- write outputs ---
-    with open("data/razorpay_transactions.csv", "w", newline="") as f:
+    # --- write outputs ------------------------------------------------------
+    os.makedirs(out_dir, exist_ok=True)
+
+    with open(os.path.join(out_dir, "razorpay_transactions.csv"), "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(transactions[0].keys()))
         w.writeheader()
         w.writerows(transactions)
 
-    with open("data/bank_settlements.csv", "w", newline="") as f:
+    with open(os.path.join(out_dir, "bank_settlements.csv"), "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=list(settlements[0].keys()))
         w.writeheader()
         w.writerows(settlements)
 
-    with open("data/refunds.csv", "w", newline="") as f:
+    with open(os.path.join(out_dir, "refunds.csv"), "w", newline="") as f:
         if refunds:
             w = csv.DictWriter(f, fieldnames=list(refunds[0].keys()))
             w.writeheader()
@@ -189,14 +354,44 @@ def main():
         else:
             f.write("refund_id,transaction_id,refund_amount,refund_date\n")
 
-    with open("data/ground_truth.json", "w") as f:
+    with open(os.path.join(out_dir, "ground_truth.json"), "w") as f:
         json.dump(ground_truth, f, indent=2)
 
-    print(f"Generated {len(transactions)} transactions ({len(duplicate_source_ids)} duplicated)")
-    print(f"Generated {len(settlements)} settlements (1 orphan)")
-    print(f"Generated {len(refunds)} refunds")
-    print(f"Seeded exceptions: {n_missing} missing, {len(partial_refund_ids)} partial refunds, "
-          f"{len(ground_truth['fee_mismatch'])} fee mismatches, {len(duplicate_source_ids)} duplicates, 1 orphan")
+    cause_counts = {}
+    for cause in ground_truth["true_causes"].values():
+        cause_counts[cause] = cause_counts.get(cause, 0) + 1
+
+    if verbose:
+        print(f"[seed={seed}] {len(transactions)} transactions "
+              f"({len(duplicate_source_ids)} duplicated), {len(settlements)} settlements, "
+              f"{len(refunds)} recorded refunds -> {out_dir}")
+        print(f"  injected exceptions ({len(ground_truth['true_causes'])} total):")
+        for cause in ALL_CAUSES:
+            if cause in cause_counts:
+                print(f"    {cause:28s} {cause_counts[cause]}")
+
+    return {
+        "transactions": transactions,
+        "settlements": settlements,
+        "refunds": refunds,
+        "ground_truth": ground_truth,
+        "cause_counts": cause_counts,
+    }
+
+
+def main():
+    p = argparse.ArgumentParser(description="Generate a synthetic reconciliation dataset.")
+    p.add_argument("--seed", type=int, default=42)
+    p.add_argument("--n", type=int, default=60, dest="n_transactions")
+    p.add_argument("--out-dir", default="data")
+    p.add_argument("--window-days", type=int, default=7)
+    args = p.parse_args()
+    generate(
+        seed=args.seed,
+        n_transactions=args.n_transactions,
+        out_dir=args.out_dir,
+        window_days=args.window_days,
+    )
 
 
 if __name__ == "__main__":

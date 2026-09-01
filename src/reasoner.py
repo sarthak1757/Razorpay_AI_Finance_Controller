@@ -18,6 +18,18 @@ This mirrors the mock_client.py pattern already in your orchestrator repo.
 import os
 import json
 
+from causes import (
+    CAUSES_BY_KIND,
+    CAUSE_DESCRIPTIONS,
+    CAUSE_FEE_OR_GST,
+    CAUSE_UNRECORDED_REFUND,
+    CAUSE_DROPPED_TXN,
+    CAUSE_OVERPAYMENT,
+    CAUSE_ORPHAN,
+    CAUSE_STUCK,
+    CAUSE_NOT_YET_DUE,
+)
+
 try:
     from dotenv import load_dotenv
     load_dotenv()  # reads a local .env file if present - never commits, see .gitignore
@@ -25,59 +37,177 @@ except ImportError:
     pass  # dotenv not installed - still works if the key is set as a real env var
 
 
-class MockReasoner:
-    """No API key needed. Deterministic, rule-based 'reasoning' so you can
-    test the full pipeline for free. Clearly labeled as mock in its output -
-    never pretend this is a real model's judgment."""
+def build_explain_prompt(case: dict) -> str:
+    """The shared prompt for every real-LLM backend.
 
-    name = "mock"
+    One prompt, four providers - so a difference in measured accuracy between
+    Groq and Anthropic is a difference between the MODELS, not between two
+    prompts that happened to be worded differently.
+    """
+    allowed = CAUSES_BY_KIND.get(case["kind"], [])
+    menu = "\n".join(f'  - "{c}": {CAUSE_DESCRIPTIONS[c]}' for c in allowed)
+
+    return f"""You are a financial reconciliation analyst reviewing an exception
+flagged by an automated matcher. The matcher has already done the arithmetic;
+your job is to work out WHY this happened.
+
+THE CASE:
+{json.dumps(case, indent=2)}
+
+The "signals" block contains factual arithmetic observations computed by the
+matcher - what the gap is, whether it exactly equals one transaction's
+contribution, whether it looks like a fraction of one, whether the bank paid
+more or less than owed, and how the timing sits against the T+2 payout cycle.
+Use them as evidence.
+
+You must choose exactly one likely_cause from this list:
+{menu}
+
+Then give:
+- explanation: 1-2 sentences in plain English for a non-technical merchant,
+  referencing the actual amounts involved.
+- confidence: "high", "medium", or "low" - be honest. If the evidence is
+  genuinely ambiguous, say low. An overconfident wrong answer is worse than
+  an honest uncertain one.
+- recommended_action: one concrete next step. If nothing is actually wrong,
+  say so rather than inventing work.
+
+Respond ONLY with valid JSON:
+{{"explanation": "...", "likely_cause": "...", "confidence": "...", "recommended_action": "..."}}"""
+
+
+def parse_explanation(text: str, allowed_causes) -> dict:
+    """Parse a model's JSON reply, tolerating markdown fences, and refuse to
+    silently accept a cause outside the taxonomy - an unparseable or
+    off-menu answer is recorded as such rather than quietly scored."""
+    text = text.strip()
+    if text.startswith("```"):
+        text = text.strip("`")
+        if text.startswith("json"):
+            text = text[4:]
+        text = text.strip()
+    try:
+        parsed = json.loads(text)
+    except json.JSONDecodeError:
+        return {
+            "explanation": text,
+            "likely_cause": "unparsed",
+            "confidence": "low",
+            "recommended_action": "Manual review required (model response wasn't valid JSON).",
+        }
+
+    cause = parsed.get("likely_cause")
+    if cause not in allowed_causes:
+        parsed["likely_cause"] = "off_taxonomy"
+        parsed.setdefault("explanation", "")
+        parsed["explanation"] = (
+            f"[model returned an out-of-taxonomy cause: {cause!r}] "
+            + str(parsed.get("explanation", ""))
+        )
+    parsed.setdefault("confidence", "low")
+    parsed.setdefault("recommended_action", "Manual review required.")
+    return parsed
+
+
+class RuleBaselineReasoner:
+    """A deliberately dumb, transparent rule-based classifier over the same
+    signals the LLM sees. Serves two purposes:
+
+    1. It means the whole pipeline runs with no API key, for free.
+    2. It is the CONTROL for the AI accuracy metric. "Our LLM got X% on root
+       cause attribution" is only interesting next to "and a handful of
+       if-statements got Y%". If a judge asks "would a simple rule have done
+       this?", the honest answer is a number, not a shrug.
+
+    Note what this baseline cannot do, and why it isn't a replacement for the
+    model: every rule below exists because we knew in advance exactly which
+    four causes we injected. On real data, a cause nobody enumerated ahead of
+    time falls straight through to the else-branch. It also produces no
+    merchant-readable explanation beyond a template, and cannot answer an
+    open-ended question at all.
+    """
+
+    name = "rule_baseline"
 
     def explain(self, case: dict) -> dict:
         kind = case["kind"]
-
-        if kind == "AMOUNT_MISMATCH":
-            diff = case["diff"]
-            if abs(diff) <= 40:
-                return {
-                    "explanation": (
-                        f"Settlement {case['settlement_id']} is off by Rs {diff:+.2f} "
-                        f"from the expected Rs {case['expected_amount']:.2f}. Small enough "
-                        f"that it's consistent with a fee/GST rounding or calculation error "
-                        f"rather than a missing transaction."
-                    ),
-                    "likely_cause": "fee_calculation_error",
-                    "confidence": "medium",
-                    "recommended_action": "Route to finance for a fee recalculation check, not a full investigation.",
-                }
-            return {
-                "explanation": f"Settlement {case['settlement_id']} is off by Rs {diff:+.2f} - too large to be a rounding issue.",
-                "likely_cause": "unknown_large_discrepancy",
-                "confidence": "low",
-                "recommended_action": "Escalate for manual review - discrepancy too large to auto-explain.",
-            }
+        signals = case.get("signals") or {}
 
         if kind == "ORPHAN":
             return {
                 "explanation": (
                     f"Settlement {case['settlement_id']} references transaction(s) that don't "
-                    f"exist anywhere in the Razorpay ledger. Either a data-sync gap between "
-                    f"systems, or a transaction ID typo on the bank/settlement side."
+                    f"exist anywhere in the ledger."
                 ),
-                "likely_cause": "orphan_reference",
-                "confidence": "low",
-                "recommended_action": "Escalate to data engineering - possible sync issue between ledger and settlement feed.",
+                "likely_cause": CAUSE_ORPHAN,
+                "confidence": "high",
+                "recommended_action": "Escalate to data engineering - likely a sync gap between ledger and settlement feed.",
             }
 
         if kind == "MISSING_SETTLEMENT":
+            overdue = signals.get("due_date_passed_within_data_window")
+            if overdue is False:
+                return {
+                    "explanation": (
+                        f"Transaction {case['transaction_id']} was captured on "
+                        f"{signals.get('transaction_timestamp')} and isn't due to settle until "
+                        f"{signals.get('settlement_due_by')}, after this reporting window closes."
+                    ),
+                    "likely_cause": CAUSE_NOT_YET_DUE,
+                    "confidence": "high",
+                    "recommended_action": "No action needed - not yet due under the T+2 cycle.",
+                }
             return {
                 "explanation": (
-                    f"Transaction {case['transaction_id']} was captured but never appears in any "
-                    f"settlement batch. Given typical T+2 settlement timing, if this transaction is "
-                    f"more than a few days old, it's likely stuck or lost rather than just pending."
+                    f"Transaction {case['transaction_id']} was due to settle by "
+                    f"{signals.get('settlement_due_by')} and still has no settlement "
+                    f"{signals.get('days_past_due_at_window_end')} day(s) later."
                 ),
-                "likely_cause": "unsettled_payment",
+                "likely_cause": CAUSE_STUCK,
+                "confidence": "high",
+                "recommended_action": "Flag to the settlements team - payout appears stuck.",
+            }
+
+        if kind == "AMOUNT_MISMATCH":
+            diff = case.get("diff", 0)
+            exact = signals.get("exact_match_to_one_transaction")
+            fraction = signals.get("refund_sized_fraction_of_one_transaction")
+
+            if signals.get("direction") == "bank_paid_more_than_owed":
+                return {
+                    "explanation": f"Settlement {case['settlement_id']} came in Rs {diff:+.2f} ABOVE what was owed.",
+                    "likely_cause": CAUSE_OVERPAYMENT,
+                    "confidence": "high" if exact else "medium",
+                    "recommended_action": "Confirm with the bank before spending - overpayments get clawed back.",
+                }
+            if exact:
+                return {
+                    "explanation": (
+                        f"The Rs {abs(diff):.2f} gap is exactly what {exact['transaction_id']} "
+                        f"should have contributed, so that payment appears not to have been paid out."
+                    ),
+                    "likely_cause": CAUSE_DROPPED_TXN,
+                    "confidence": "high",
+                    "recommended_action": f"Query {exact['transaction_id']} with the settlements team.",
+                }
+            if fraction and not fraction.get("has_recorded_refund"):
+                return {
+                    "explanation": (
+                        f"The Rs {abs(diff):.2f} gap is {fraction['pct_of_net']}% of "
+                        f"{fraction['transaction_id']}'s net - refund-shaped, but no refund is recorded."
+                    ),
+                    "likely_cause": CAUSE_UNRECORDED_REFUND,
+                    "confidence": "medium",
+                    "recommended_action": f"Check for an unrecorded refund against {fraction['transaction_id']}.",
+                }
+            return {
+                "explanation": (
+                    f"Settlement {case['settlement_id']} is short by Rs {abs(diff):.2f}, which isn't "
+                    f"tied to any single transaction's amount - consistent with a fee/GST calculation error."
+                ),
+                "likely_cause": CAUSE_FEE_OR_GST,
                 "confidence": "medium",
-                "recommended_action": "Flag to settlements team for follow-up; escalate if unresolved after 5 business days.",
+                "recommended_action": "Route to finance for a fee/GST recalculation check.",
             }
 
         return {
@@ -88,8 +218,12 @@ class MockReasoner:
         }
 
     def chat(self, prompt: str) -> str:
-        return ("[mock reasoner has no free-form Q&A - it only knows the canned "
-                "exception explanations above. Add a real API key to use the Q&A agent.]")
+        return ("[rule baseline has no free-form Q&A - it only classifies exceptions "
+                "into fixed categories. Add a real API key to use the Q&A agent.]")
+
+
+# Backwards-compatible alias: this used to be called MockReasoner.
+MockReasoner = RuleBaselineReasoner
 
 
 class AnthropicReasoner:
@@ -103,34 +237,12 @@ class AnthropicReasoner:
         self.model = model
 
     def explain(self, case: dict) -> dict:
-        prompt = f"""You are a financial reconciliation analyst reviewing an exception
-from an automated matcher. Here is the case, already classified by deterministic logic:
-
-{json.dumps(case, indent=2)}
-
-Explain in 1-2 sentences why this likely happened, in plain English for a
-non-technical merchant. Then give:
-- likely_cause: a short snake_case label
-- confidence: "high", "medium", or "low" - how sure you are of the cause
-- recommended_action: one concrete next step
-
-Respond ONLY with valid JSON: {{"explanation": "...", "likely_cause": "...", "confidence": "...", "recommended_action": "..."}}"""
-
         resp = self.client.messages.create(
             model=self.model,
-            max_tokens=300,
-            messages=[{"role": "user", "content": prompt}],
+            max_tokens=400,
+            messages=[{"role": "user", "content": build_explain_prompt(case)}],
         )
-        text = resp.content[0].text.strip()
-        try:
-            return json.loads(text)
-        except json.JSONDecodeError:
-            return {
-                "explanation": text,
-                "likely_cause": "unparsed",
-                "confidence": "low",
-                "recommended_action": "Manual review required (model response wasn't valid JSON).",
-            }
+        return parse_explanation(resp.content[0].text, CAUSES_BY_KIND.get(case["kind"], []))
 
     def chat(self, prompt: str) -> str:
         resp = self.client.messages.create(
@@ -161,35 +273,10 @@ class GeminiReasoner:
         self.model_name = model or os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 
     def explain(self, case: dict) -> dict:
-        prompt = f"""You are a financial reconciliation analyst reviewing an exception
-from an automated matcher. Here is the case, already classified by deterministic logic:
-
-{json.dumps(case, indent=2)}
-
-Explain in 1-2 sentences why this likely happened, in plain English for a
-non-technical merchant. Then give:
-- likely_cause: a short snake_case label
-- confidence: "high", "medium", or "low" - how sure you are of the cause
-- recommended_action: one concrete next step
-
-Respond ONLY with valid JSON: {{"explanation": "...", "likely_cause": "...", "confidence": "...", "recommended_action": "..."}}"""
-
-        resp = self.client.models.generate_content(model=self.model_name, contents=prompt)
-        text = resp.text.strip()
-        if text.startswith("```"):
-            text = text.strip("`")
-            if text.startswith("json"):
-                text = text[4:]
-            text = text.strip()
-        try:
-            return json.loads(text)
-        except json.JSONDecodeError:
-            return {
-                "explanation": text,
-                "likely_cause": "unparsed",
-                "confidence": "low",
-                "recommended_action": "Manual review required (model response wasn't valid JSON).",
-            }
+        resp = self.client.models.generate_content(
+            model=self.model_name, contents=build_explain_prompt(case)
+        )
+        return parse_explanation(resp.text, CAUSES_BY_KIND.get(case["kind"], []))
 
     def chat(self, prompt: str) -> str:
         resp = self.client.models.generate_content(model=self.model_name, contents=prompt)
@@ -215,39 +302,14 @@ class GroqReasoner:
         self.model_name = model or os.environ.get("GROQ_MODEL", "openai/gpt-oss-20b")
 
     def explain(self, case: dict) -> dict:
-        prompt = f"""You are a financial reconciliation analyst reviewing an exception
-from an automated matcher. Here is the case, already classified by deterministic logic:
-
-{json.dumps(case, indent=2)}
-
-Explain in 1-2 sentences why this likely happened, in plain English for a
-non-technical merchant. Then give:
-- likely_cause: a short snake_case label
-- confidence: "high", "medium", or "low" - how sure you are of the cause
-- recommended_action: one concrete next step
-
-Respond ONLY with valid JSON: {{"explanation": "...", "likely_cause": "...", "confidence": "...", "recommended_action": "..."}}"""
-
         resp = self.client.chat.completions.create(
             model=self.model_name,
-            messages=[{"role": "user", "content": prompt}],
+            messages=[{"role": "user", "content": build_explain_prompt(case)}],
             temperature=0.3,
         )
-        text = resp.choices[0].message.content.strip()
-        if text.startswith("```"):
-            text = text.strip("`")
-            if text.startswith("json"):
-                text = text[4:]
-            text = text.strip()
-        try:
-            return json.loads(text)
-        except json.JSONDecodeError:
-            return {
-                "explanation": text,
-                "likely_cause": "unparsed",
-                "confidence": "low",
-                "recommended_action": "Manual review required (model response wasn't valid JSON).",
-            }
+        return parse_explanation(
+            resp.choices[0].message.content, CAUSES_BY_KIND.get(case["kind"], [])
+        )
 
     def chat(self, prompt: str) -> str:
         resp = self.client.chat.completions.create(

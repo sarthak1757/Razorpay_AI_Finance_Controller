@@ -19,9 +19,20 @@ This file never opens ground_truth.json. It has no way to cheat.
 """
 
 import csv
-from datetime import datetime
+from datetime import datetime, timedelta
 
 AMOUNT_TOLERANCE = 0.05  # rupees - allows for float rounding, nothing more
+
+# A discrepancy this size or smaller is in "someone's fee/GST maths was off"
+# territory rather than "a whole payment went missing" territory. Used only to
+# describe the gap, never to decide what caused it.
+SMALL_DISCREPANCY_CEILING = 50.0
+
+# A gap between these fractions of a single transaction's net is refund-shaped.
+REFUND_FRACTION_MIN = 0.10
+REFUND_FRACTION_MAX = 0.70
+
+SETTLEMENT_SLA_DAYS = 2  # Razorpay's standard T+2 payout cycle
 
 
 def load_csv(path):
@@ -67,10 +78,98 @@ def find_duplicates(transactions):
     return duplicate_ids
 
 
+def contribution_of(txn, refund_by_txn):
+    """What this transaction SHOULD have contributed to its settlement:
+    its net amount, less any refund we have a record of."""
+    net = txn["net_amount"]
+    refund = refund_by_txn.get(txn["transaction_id"])
+    if refund:
+        net = round(net - refund["refund_amount"], 2)
+    return round(net, 2)
+
+
+def discrepancy_signals(diff, expected_total, batch_txns, refund_by_txn):
+    """Purely arithmetic observations about a settlement discrepancy.
+
+    DELIBERATELY DOES NOT NAME A CAUSE. This function answers factual
+    questions - "is the gap exactly equal to one transaction's contribution?",
+    "is it a refund-sized fraction of one?", "did the bank pay too much or too
+    little?" - and stops there. Turning those facts into a root cause is a
+    judgment call, and judgment calls are the reasoning layer's job (see
+    reasoner.py). Keeping the split here is what makes the AI layer's accuracy
+    a real measurement rather than a formality: the model has to do the
+    attribution, we only hand it good evidence.
+    """
+    abs_diff = abs(diff)
+    signals = {
+        "direction": "bank_paid_more_than_owed" if diff > 0 else "bank_paid_less_than_owed",
+        "abs_diff": round(abs_diff, 2),
+        "diff_pct_of_expected": round(abs_diff / expected_total * 100, 3) if expected_total else None,
+        "is_small_absolute_discrepancy": abs_diff <= SMALL_DISCREPANCY_CEILING,
+        "transactions_in_batch": len(batch_txns),
+        "exact_match_to_one_transaction": None,
+        "refund_sized_fraction_of_one_transaction": None,
+        # The full batch, so a reasoner can work the numbers itself instead of
+        # trusting our two convenience checks above. Those checks use fixed
+        # thresholds, and fixed thresholds are exactly what a real discrepancy
+        # eventually falls outside of - a 6% unrecorded refund isn't
+        # "refund-sized" by our rule, but it's still obviously 6% of one
+        # transaction if you look. Handing over the raw composition is what
+        # lets the reasoning layer beat the rule instead of inheriting its
+        # blind spots.
+        "batch_composition": [
+            {
+                "transaction_id": t["transaction_id"],
+                "net_amount": t["net_amount"],
+                "contribution_after_recorded_refunds": contribution_of(t, refund_by_txn),
+                "gap_as_pct_of_this_txn_net": round(abs_diff / t["net_amount"] * 100, 1) if t["net_amount"] else None,
+            }
+            for t in batch_txns
+        ],
+    }
+
+    # Does the gap equal exactly what one of these transactions should have
+    # contributed? (i.e. one payment's worth of money is unaccounted for)
+    for t in batch_txns:
+        contribution = contribution_of(t, refund_by_txn)
+        if abs(abs_diff - contribution) <= AMOUNT_TOLERANCE:
+            signals["exact_match_to_one_transaction"] = {
+                "transaction_id": t["transaction_id"],
+                "contribution": contribution,
+            }
+            break
+
+    # Failing that - is it a refund-shaped slice of one transaction?
+    if not signals["exact_match_to_one_transaction"]:
+        for t in batch_txns:
+            net = t["net_amount"]
+            if not net:
+                continue
+            fraction = abs_diff / net
+            if REFUND_FRACTION_MIN <= fraction <= REFUND_FRACTION_MAX:
+                signals["refund_sized_fraction_of_one_transaction"] = {
+                    "transaction_id": t["transaction_id"],
+                    "net_amount": net,
+                    "pct_of_net": round(fraction * 100, 1),
+                    "has_recorded_refund": t["transaction_id"] in refund_by_txn,
+                }
+                break
+
+    return signals
+
+
 def match(transactions, settlements, refunds):
     txn_by_id = {t["transaction_id"]: t for t in transactions}
     refund_by_txn = {r["transaction_id"]: r for r in refunds}
     duplicate_ids = find_duplicates(transactions)
+
+    # The last date this dataset can tell us anything about. A transaction
+    # from the final two days simply hasn't had time to settle at T+2 - that
+    # is a fact about the reporting window, not a problem with the payment.
+    settlement_dates = [
+        datetime.strptime(s["settlement_date"], "%Y-%m-%d") for s in settlements
+    ]
+    data_window_end = max(settlement_dates) if settlement_dates else None
 
     settlement_results = []
     settled_txn_ids = set()
@@ -94,13 +193,12 @@ def match(transactions, settlements, refunds):
 
         expected_total = 0.0
         latest_txn_date = None
+        batch_txns = []
         for tid in included_ids:
             settled_txn_ids.add(tid)
             t = txn_by_id[tid]
-            net = t["net_amount"]
-            if tid in refund_by_txn:
-                net -= refund_by_txn[tid]["refund_amount"]
-            expected_total += net
+            batch_txns.append(t)
+            expected_total += contribution_of(t, refund_by_txn)
 
             txn_date = datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S")
             if latest_txn_date is None or txn_date > latest_txn_date:
@@ -123,11 +221,13 @@ def match(transactions, settlements, refunds):
                 "Batched settlement, amounts reconcile"
                 if len(included_ids) > 1 else "Clean match"
             )
+            signals = None
         else:
             status = "AMOUNT_MISMATCH"
             reason = f"Settled amount is off by Rs {diff:+.2f} vs expected"
+            signals = discrepancy_signals(diff, expected_total, batch_txns, refund_by_txn)
 
-        settlement_results.append({
+        result = {
             "settlement_id": s["settlement_id"],
             "status": status,
             "reason": reason,
@@ -136,7 +236,10 @@ def match(transactions, settlements, refunds):
             "diff": diff,
             "timing_note": timing_note,
             "included_transactions": included_ids,
-        })
+        }
+        if signals:
+            result["signals"] = signals
+        settlement_results.append(result)
 
     # Transaction-level view: every real (non-duplicate) transaction is either
     # settled somewhere, or it's missing.
@@ -151,9 +254,27 @@ def match(transactions, settlements, refunds):
         elif tid in settled_txn_ids:
             transaction_results[tid] = {"status": "SETTLED", "reason": None}
         else:
+            # Facts only: when it happened, when T+2 would have made it due,
+            # and whether that deadline has passed within the data we have.
+            # Whether "overdue" means lost or just in-flight is a judgment
+            # call, left to the reasoning layer.
+            txn_date = datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S")
+            due_by = txn_date + timedelta(days=SETTLEMENT_SLA_DAYS)
+            signals = {
+                "transaction_timestamp": t["timestamp"],
+                "settlement_due_by": due_by.strftime("%Y-%m-%d"),
+                "data_window_end": data_window_end.strftime("%Y-%m-%d") if data_window_end else None,
+                "net_amount": t["net_amount"],
+            }
+            if data_window_end:
+                days_overdue = (data_window_end - due_by).days
+                signals["days_past_due_at_window_end"] = days_overdue
+                signals["due_date_passed_within_data_window"] = days_overdue >= 0
+
             transaction_results[tid] = {
                 "status": "MISSING_SETTLEMENT",
                 "reason": "No settlement references this transaction",
+                "signals": signals,
             }
 
     return settlement_results, transaction_results

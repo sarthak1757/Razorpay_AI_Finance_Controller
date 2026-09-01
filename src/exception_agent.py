@@ -29,6 +29,9 @@ def build_cases(settlement_results, transaction_results):
                 "actual_amount": r["actual_amount"],
                 "diff": r["diff"],
                 "included_transactions": r["included_transactions"],
+                # Arithmetic evidence from the matcher - what the reasoner
+                # actually reasons OVER. Without this it would be guessing.
+                "signals": r.get("signals"),
             })
         elif r["status"] == "ORPHAN":
             cases.append({
@@ -43,6 +46,7 @@ def build_cases(settlement_results, transaction_results):
             cases.append({
                 "kind": "MISSING_SETTLEMENT",
                 "transaction_id": tid,
+                "signals": r.get("signals"),
             })
 
     return cases

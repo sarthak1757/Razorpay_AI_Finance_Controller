@@ -18,19 +18,36 @@ from reasoner import get_reasoner
 
 
 def generate_report():
-    start = time.perf_counter()
+    """Times the two phases SEPARATELY, on purpose.
 
+    An earlier version reported one blended "records/sec" - total wall clock
+    divided by all records. That number was misleading in both directions: it
+    made the deterministic matcher look thousands of times slower than it is,
+    while implying every record pays LLM latency. Neither is true. Only the
+    handful of flagged exceptions ever reach the model; the other ~90% are
+    pure arithmetic. Reporting one number hides the actual design decision -
+    that AI is used sparingly and deliberately - and invites a fair question
+    ("why is this so slow?") whose honest answer is "it isn't".
+    """
+    load_start = time.perf_counter()
     transactions, settlements, refunds = load_data()
+    load_seconds = time.perf_counter() - load_start
+
+    match_start = time.perf_counter()
     settlement_results, transaction_results = match(transactions, settlements, refunds)
+    match_seconds = time.perf_counter() - match_start
+
     cases = build_cases(settlement_results, transaction_results)
 
     reasoner = get_reasoner()
+    reason_start = time.perf_counter()
     exceptions = []
     for case in cases:
         explanation = reasoner.explain(case)
         exceptions.append({**case, **explanation})
+    reason_seconds = time.perf_counter() - reason_start
 
-    elapsed = time.perf_counter() - start
+    elapsed = load_seconds + match_seconds + reason_seconds
 
     total_settlements = len(settlement_results)
     matched_settlements = sum(1 for r in settlement_results if r["status"] == "MATCHED")
@@ -56,8 +73,22 @@ def generate_report():
             "total_records_processed": total_records,
             "transactions": len(transactions),
             "settlements": len(settlements),
-            "processing_time_seconds": round(elapsed, 4),
-            "records_per_second": round(total_records / elapsed, 1) if elapsed > 0 else None,
+            "total_wall_clock_seconds": round(elapsed, 4),
+            # Phase 1: deterministic. Scales with record count. This is the
+            # number that matters for "can this handle a real merchant's volume".
+            "deterministic_matching": {
+                "seconds": round(match_seconds, 6),
+                "records_per_second": round(total_records / match_seconds) if match_seconds > 0 else None,
+            },
+            # Phase 2: AI. Scales with EXCEPTION count, not record count -
+            # which is the whole point of the architecture.
+            "ai_reasoning": {
+                "exceptions_reasoned": len(cases),
+                "seconds": round(reason_seconds, 4),
+                "seconds_per_exception": round(reason_seconds / len(cases), 3) if cases else None,
+                "pct_of_records_needing_ai": round(len(cases) / total_records * 100, 2) if total_records else None,
+            },
+            "data_load_seconds": round(load_seconds, 4),
         },
         "accuracy": {
             "settlement_match_rate": round(matched_settlements / total_settlements, 4),
@@ -91,10 +122,15 @@ def print_summary(report):
     print("=" * 60)
     print("RECONCILIATION REPORT")
     print("=" * 60)
-    print(f"\nThroughput:")
-    print(f"  {t['total_records_processed']} records processed in {t['processing_time_seconds']}s "
-          f"({t['records_per_second']} records/sec)")
-    print(f"  ({t['transactions']} transactions, {t['settlements']} settlements)")
+    d, ai = t["deterministic_matching"], t["ai_reasoning"]
+    print(f"\nThroughput ({t['total_records_processed']} records: "
+          f"{t['transactions']} transactions + {t['settlements']} settlements):")
+    print(f"  Deterministic matching: {d['seconds']:.4f}s "
+          f"({d['records_per_second']:,} records/sec)")
+    print(f"  AI reasoning:           {ai['seconds']:.2f}s for {ai['exceptions_reasoned']} exceptions "
+          f"({ai['seconds_per_exception']}s each)")
+    print(f"  Only {ai['pct_of_records_needing_ai']}% of records ever reach the model - "
+          f"the rest are pure arithmetic.")
 
     print(f"\nAccuracy:")
     print(f"  Settlement match rate: {a['settlement_match_rate']*100:.1f}% "
