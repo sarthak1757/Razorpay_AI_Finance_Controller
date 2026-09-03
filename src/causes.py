@@ -25,6 +25,27 @@ CAUSE_UNRECORDED_REFUND = "unrecorded_refund"
 CAUSE_DROPPED_TXN = "missing_txn_in_batch"
 CAUSE_OVERPAYMENT = "overpayment_duplicate_payout"
 
+# --- The escape hatch: "this doesn't match anything I know" --------------
+# Every other label in this file describes a mechanism we can name. This one
+# is the honest answer when the numbers fit none of them.
+#
+# WHY A CLOSED TAXONOMY IS DANGEROUS WITHOUT IT:
+# The four causes above are the four we inject. Force a classifier to pick one
+# of them and it will always pick one - so a genuinely novel problem (a
+# chargeback, a bank rounding a payout down, a refund deducted twice) gets
+# filed under whichever known label it least resembles, and the exception list
+# reports a confident, specific, wrong diagnosis. On synthetic data that only
+# costs you accuracy. On real money it sends someone to argue with the fees
+# team about a chargeback.
+#
+# THE COST OF ADDING IT, STATED UP FRONT:
+# This label can be abused. A classifier that says "unknown" whenever it is
+# unsure scores well on novel cases and destroys its accuracy on the ordinary
+# ones. So it cannot be graded with a single accuracy number - it needs
+# precision AND recall on the label itself, which is exactly what grade.py
+# now reports. See ARCHITECTURE.md section 5e.
+CAUSE_UNKNOWN = "unknown_anomaly"
+
 # --- Cause behind a settlement referencing a non-existent transaction ----
 CAUSE_ORPHAN = "orphan_reference"
 
@@ -32,6 +53,11 @@ CAUSE_ORPHAN = "orphan_reference"
 CAUSE_STUCK = "unsettled_stuck"
 CAUSE_NOT_YET_DUE = "not_yet_due"
 
+# The KNOWN mechanisms - the ones the generator injects and can label. Note
+# that CAUSE_UNKNOWN is deliberately NOT in here: "unknown" is not a mechanism
+# you can inject, it is what the system should say when it meets a mechanism
+# nobody enumerated. Keeping the two lists separate is what makes novel-cause
+# detection measurable at all.
 MISMATCH_CAUSES = [
     CAUSE_FEE_OR_GST,
     CAUSE_UNRECORDED_REFUND,
@@ -41,13 +67,15 @@ MISMATCH_CAUSES = [
 
 MISSING_CAUSES = [CAUSE_STUCK, CAUSE_NOT_YET_DUE]
 
-ALL_CAUSES = MISMATCH_CAUSES + [CAUSE_ORPHAN] + MISSING_CAUSES
+ALL_CAUSES = MISMATCH_CAUSES + [CAUSE_UNKNOWN, CAUSE_ORPHAN] + MISSING_CAUSES
 
-# Which causes are plausible for which exception kind. The model is only ever
-# asked to choose within the relevant set - asking it to consider "not_yet_due"
-# for an amount mismatch would be noise, not rigour.
+# Which causes a reasoner may ANSWER for each exception kind. This is a
+# superset of what gets injected: an amount mismatch may always be answered
+# "unknown_anomaly", because a real ledger contains mechanisms this taxonomy
+# never enumerated. Asking it to consider "not_yet_due" for an amount mismatch
+# would be noise, not rigour, so the sets stay kind-specific.
 CAUSES_BY_KIND = {
-    "AMOUNT_MISMATCH": MISMATCH_CAUSES,
+    "AMOUNT_MISMATCH": MISMATCH_CAUSES + [CAUSE_UNKNOWN],
     "ORPHAN": [CAUSE_ORPHAN],
     "MISSING_SETTLEMENT": MISSING_CAUSES,
 }
@@ -68,6 +96,13 @@ CAUSE_DESCRIPTIONS = {
     CAUSE_OVERPAYMENT:
         "The bank paid MORE than was owed - typically one transaction paid out "
         "twice. The settled amount exceeds the expected amount.",
+    CAUSE_UNKNOWN:
+        "None of the above fit. The discrepancy is real, but its size and shape "
+        "match no known mechanism: it is not a plausible fee/GST miscalculation "
+        "(those cannot exceed the total fee charged on the batch), it does not "
+        "equal any transaction's contribution, and it is not a refund-shaped "
+        "fraction of one. Something is happening that this taxonomy does not "
+        "cover, and a human should look at it.",
     CAUSE_ORPHAN:
         "The settlement references a transaction ID that does not exist in the "
         "ledger at all - a data sync gap or a bad reference.",
