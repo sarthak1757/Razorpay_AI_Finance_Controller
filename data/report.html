@@ -27,9 +27,9 @@
   <div class="subtitle">Multi-source reconciliation: Razorpay transactions vs. bank settlements</div>
   <div class="tiles">
         <div class="tile">
-          <div class="tile-value">84.9%</div>
+          <div class="tile-value">83.9%</div>
           <div class="tile-label">Settlement match rate</div>
-          <div class="tile-sub">28/33 settlements</div>
+          <div class="tile-sub">26/31 settlements</div>
         </div>
         <div class="tile">
           <div class="tile-value">93.3%</div>
@@ -37,17 +37,17 @@
           <div class="tile-sub">56/60 (dupes excluded)</div>
         </div>
         <div class="tile">
-          <div class="tile-value">96</div>
+          <div class="tile-value">94</div>
           <div class="tile-label">Records processed</div>
-          <div class="tile-sub">63 txns + 33 settlements</div>
+          <div class="tile-sub">63 txns + 31 settlements</div>
         </div>
         <div class="tile">
-          <div class="tile-value">Rs 31,904.48</div>
+          <div class="tile-value">Rs 42,387.18</div>
           <div class="tile-label">Amount at risk</div>
           <div class="tile-sub">sitting in unsettled transactions</div>
         </div>
         <div class="tile">
-          <div class="tile-value">Rs 74.49</div>
+          <div class="tile-value">Rs 32,101.53</div>
           <div class="tile-label">Amount flagged</div>
           <div class="tile-sub">in settlement discrepancies</div>
         </div>
@@ -61,67 +61,67 @@
     <tbody>
         <tr>
           <td><span class="badge" style="background:#b453091a;color:#b45309">AMOUNT_MISMATCH</span></td>
-          <td class="mono">stl_0008</td>
-          <td>The amount shown for the settlement is $12.46 less than expected, probably because a small fee or charge was taken from the single transaction that was included.</td>
+          <td class="mono">stl_0009</td>
+          <td>The bank paid twice the amount that was expected for transaction txn_0050 – the settlement shows 3103.86 instead of the correct 1551.93, a difference equal to the full contribution of that transaction.</td>
           <td><span class="badge" style="background:#15803d1a;color:#15803d">high</span></td>
-          <td>Check the merchant portal or transaction receipt for txn_0060 to confirm whether a processing fee was applied and adjust the expected amount accordingly.</td>
+          <td>Check the payout logs for txn_0050 to confirm whether it was processed twice, and if so, reverse the duplicate payment.</td>
         </tr>
         <tr>
           <td><span class="badge" style="background:#b453091a;color:#b45309">AMOUNT_MISMATCH</span></td>
-          <td class="mono">stl_0012</td>
-          <td>The settlement amount is $33.60 lower than expected, likely because a transaction fee was omitted or rounded differently when the amounts were summed.</td>
+          <td class="mono">stl_0016</td>
+          <td>The settlement is $102.05 short of what the ledger expects, which is a small amount compared to the $487.45 fee charged on the batch. This gap does not match any single transaction’s net amount and isn’t a clear fraction of one transaction, suggesting a possible mis‑calculation of the platform fee or GST.</td>
           <td><span class="badge" style="background:#b453091a;color:#b45309">medium</span></td>
-          <td>Check the fee line items for the listed transactions and adjust the settlement amount accordingly.</td>
+          <td>Verify the fee/GST calculation for this batch and adjust the settlement amount accordingly.</td>
         </tr>
         <tr>
           <td><span class="badge" style="background:#b453091a;color:#b45309">AMOUNT_MISMATCH</span></td>
-          <td class="mono">stl_0017</td>
-          <td>The actual total is $16.67 lower than expected, likely because a fee was deducted from one of the included transactions.</td>
+          <td class="mono">stl_0021</td>
+          <td>The bank paid $18,825.51 instead of the expected $28,034.30, a shortfall of $9,208.79. That amount is exactly 52.2% of the net amount of transaction txn_0040 ($17,633.72), indicating a refund of that size was likely issued but not recorded in the refunds data.</td>
           <td><span class="badge" style="background:#15803d1a;color:#15803d">high</span></td>
-          <td>Check the fee schedule for txn_0042 and txn_0037 to confirm if a fee of $16.67 was applied; if so, adjust the expected amount accordingly.</td>
+          <td>Verify whether a refund of $9,208.79 was issued for txn_0040 and update the refunds record accordingly.</td>
         </tr>
         <tr>
           <td><span class="badge" style="background:#b453091a;color:#b45309">AMOUNT_MISMATCH</span></td>
-          <td class="mono">stl_0032</td>
-          <td>The amount you expected was $10389.56, but the system recorded $10377.80, a shortfall of $11.76. This usually happens when a fee or charge was applied to the transaction that wasn’t included in the original expected amount.</td>
+          <td class="mono">stl_0026</td>
+          <td>The settlement amount is $1,200.72, but the expected amount was $22,439.48, a shortfall of $21,238.76. That shortfall exactly matches the full contribution of transaction txn_0008, meaning the bank paid for only txn_0013 and omitted txn_0008 from the payout.</td>
           <td><span class="badge" style="background:#15803d1a;color:#15803d">high</span></td>
-          <td>Check the details of txn_0031 for any merchant or processing fees that were deducted, and adjust the expected amount to match the actual amount.</td>
+          <td>Verify that txn_0008 was indeed included in the settlement batch; if not, re‑issue the payout for that transaction or adjust the settlement to include its amount.</td>
         </tr>
         <tr>
           <td><span class="badge" style="background:#b91c1c1a;color:#b91c1c">ORPHAN</span></td>
-          <td class="mono">stl_0033</td>
-          <td>The system flagged txn_9999 as an orphan because it wasn’t found in settlement stl_0033, likely because the settlement was created before the transaction was processed or the transaction was omitted from the settlement batch.</td>
+          <td class="mono">stl_0031</td>
+          <td>The settlement references transaction txn_9999, but that transaction does not exist in the ledger, so the system cannot match the amount to any real payment.</td>
           <td><span class="badge" style="background:#15803d1a;color:#15803d">high</span></td>
-          <td>Check the transaction record to confirm it belongs to this settlement; if it does, re‑run the matcher or manually add it to the settlement to resolve the orphan status.</td>
+          <td>Verify the transaction list for missing entries and correct the settlement reference or remove the orphaned transaction from the batch.</td>
         </tr>
         <tr>
           <td><span class="badge" style="background:#b91c1c1a;color:#b91c1c">MISSING_SETTLEMENT</span></td>
-          <td class="mono">txn_0004</td>
-          <td>The payment was authorized but the funds haven’t yet been transferred to your account, which can happen if the settlement period hasn’t finished or if the transaction was declined after authorization.</td>
+          <td class="mono">txn_0026</td>
+          <td>The payment was due on 2026‑08‑04, but the reporting window ended on 2026‑08‑08 and the matcher shows it was 3 days past due, meaning the settlement date has already passed and no payment was received.</td>
           <td><span class="badge" style="background:#15803d1a;color:#15803d">high</span></td>
-          <td>Check the settlement schedule in your merchant portal and verify that your account details are correct; if the issue persists, contact the payment processor for clarification.</td>
+          <td>Verify the bank statement for the settlement of txn_0026; if missing, contact the bank to investigate the delayed or missing payment.</td>
         </tr>
         <tr>
           <td><span class="badge" style="background:#b91c1c1a;color:#b91c1c">MISSING_SETTLEMENT</span></td>
-          <td class="mono">txn_0018</td>
-          <td>The transaction was matched to a payment, but the settlement (the actual transfer of funds to your account) hasn't arrived yet, which is why the system flagged it as missing. This often happens when the payment processor hasn't completed the final transfer step or the settlement file hasn't been processed yet.</td>
+          <td class="mono">txn_0053</td>
+          <td>The payment was due on 2026‑08‑03 (T+2 after the 2026‑08‑01 transaction), but by the end of the reporting window on 2026‑08‑08 it was still outstanding, so the settlement never arrived.</td>
           <td><span class="badge" style="background:#15803d1a;color:#15803d">high</span></td>
-          <td>Check the settlement status in your merchant portal or contact your payment processor to confirm the expected settlement date and ensure the funds have been transferred.</td>
+          <td>Contact the bank to confirm the settlement status and investigate why the payment has not cleared.</td>
         </tr>
         <tr>
           <td><span class="badge" style="background:#b91c1c1a;color:#b91c1c">MISSING_SETTLEMENT</span></td>
-          <td class="mono">txn_0027</td>
-          <td>The system couldn’t find a settlement record for this transaction, which usually means the payment hasn’t cleared yet or was rejected by the bank.</td>
+          <td class="mono">txn_0059</td>
+          <td>The payment is scheduled to settle on 8 Aug, which is the last day of the reporting window, so it hasn’t actually passed its settlement date yet.</td>
           <td><span class="badge" style="background:#15803d1a;color:#15803d">high</span></td>
-          <td>Check the payment processor dashboard for the transaction status or contact the bank to confirm why the settlement hasn’t arrived.</td>
+          <td>No action needed – the payment will settle after the reporting window closes.</td>
         </tr>
         <tr>
           <td><span class="badge" style="background:#b91c1c1a;color:#b91c1c">MISSING_SETTLEMENT</span></td>
-          <td class="mono">txn_0044</td>
-          <td>The system couldn’t find a settlement record for transaction txn_0044, which usually means the payment hasn’t yet been credited to your account or was missed during the settlement process.</td>
+          <td class="mono">txn_0060</td>
+          <td>The settlement date (2026-08-09) is still two days after the reporting window ended (2026-08-08), so the payment is not yet due and no settlement should be expected yet.</td>
           <td><span class="badge" style="background:#15803d1a;color:#15803d">high</span></td>
-          <td>Check your bank statement for the transaction date; if the payment is still missing, contact your bank to confirm the settlement status.</td>
+          <td>No action required – the payment is still within the expected settlement window.</td>
         </tr></tbody>
   </table>
-  <div class="footer">Generated 2026-09-01 08:35 UTC - full machine-readable detail in report.json</div>
+  <div class="footer">Generated 2026-09-03 21:28 UTC - full machine-readable detail in report.json</div>
 </div></body></html>

@@ -3,7 +3,23 @@
     "seed": 42,
     "n_transactions": 60,
     "window_days": 7,
-    "data_window_end": "2026-08-08"
+    "data_window_end": "2026-08-08",
+    "regime": {
+      "vary": false,
+      "window_days": 7,
+      "mismatch_rate": 0.12,
+      "stuck_divisor": 30,
+      "refund_divisor": 15,
+      "duplicate_divisor": 20,
+      "batch_size_weights": [
+        1,
+        1,
+        2,
+        2,
+        3
+      ],
+      "novel_rate": 0.0
+    }
   },
   "clean_settlements": [
     "stl_0001",
@@ -102,5 +118,6 @@
     "stl_0026": "missing_txn_in_batch",
     "stl_0009": "overpayment_duplicate_payout",
     "stl_0031": "orphan_reference"
-  }
+  },
+  "novel_mechanisms": {}
 }

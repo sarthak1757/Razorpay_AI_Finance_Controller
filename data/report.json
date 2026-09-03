@@ -1,129 +1,284 @@
 {
   "throughput": {
-    "total_records_processed": 96,
+    "total_records_processed": 94,
     "transactions": 63,
-    "settlements": 33,
-    "processing_time_seconds": 9.6509,
-    "records_per_second": 9.9
+    "settlements": 31,
+    "total_wall_clock_seconds": 58.1942,
+    "deterministic_matching": {
+      "seconds": 0.002296,
+      "records_per_second": 40944
+    },
+    "ai_reasoning": {
+      "exceptions_reasoned": 9,
+      "seconds": 58.1914,
+      "seconds_per_exception": 6.466,
+      "pct_of_records_needing_ai": 9.57
+    },
+    "data_load_seconds": 0.0005
   },
   "accuracy": {
-    "settlement_match_rate": 0.8485,
-    "settlements_matched": 28,
-    "settlements_total": 33,
+    "settlement_match_rate": 0.8387,
+    "settlements_matched": 26,
+    "settlements_total": 31,
     "transaction_settlement_rate": 0.9333,
     "transactions_settled": 56,
     "transactions_total_excl_duplicates": 60,
     "duplicate_entries_flagged": 3
   },
   "money_flagged": {
-    "amount_at_risk_unsettled": 31904.48,
-    "amount_flagged_mismatch": 74.49,
+    "amount_at_risk_unsettled": 42387.18,
+    "amount_flagged_mismatch": 32101.53,
     "currency": "INR"
   },
   "exceptions": [
     {
       "kind": "AMOUNT_MISMATCH",
-      "settlement_id": "stl_0008",
-      "expected_amount": 4598.54,
-      "actual_amount": 4586.08,
-      "diff": -12.46,
+      "settlement_id": "stl_0009",
+      "expected_amount": 1551.93,
+      "actual_amount": 3103.86,
+      "diff": 1551.93,
       "included_transactions": [
-        "txn_0060"
+        "txn_0050"
       ],
-      "explanation": "The amount shown for the settlement is $12.46 less than expected, probably because a small fee or charge was taken from the single transaction that was included.",
-      "likely_cause": "processing_fee_difference",
+      "signals": {
+        "direction": "bank_paid_more_than_owed",
+        "abs_diff": 1551.93,
+        "diff_pct_of_expected": 100.0,
+        "is_small_absolute_discrepancy": false,
+        "transactions_in_batch": 1,
+        "total_fee_charged_on_batch": 37.51,
+        "gap_exceeds_total_fee_charged": true,
+        "exact_match_to_one_transaction": {
+          "transaction_id": "txn_0050",
+          "contribution": 1551.93
+        },
+        "refund_sized_fraction_of_one_transaction": null,
+        "batch_composition": [
+          {
+            "transaction_id": "txn_0050",
+            "net_amount": 1551.93,
+            "contribution_after_recorded_refunds": 1551.93,
+            "gap_as_pct_of_this_txn_net": 100.0
+          }
+        ]
+      },
+      "explanation": "The bank paid twice the amount that was expected for transaction txn_0050 \u2013 the settlement shows 3103.86 instead of the correct 1551.93, a difference equal to the full contribution of that transaction.",
+      "likely_cause": "overpayment_duplicate_payout",
       "confidence": "high",
-      "recommended_action": "Check the merchant portal or transaction receipt for txn_0060 to confirm whether a processing fee was applied and adjust the expected amount accordingly."
+      "recommended_action": "Check the payout logs for txn_0050 to confirm whether it was processed twice, and if so, reverse the duplicate payment."
     },
     {
       "kind": "AMOUNT_MISMATCH",
-      "settlement_id": "stl_0012",
-      "expected_amount": 35672.28,
-      "actual_amount": 35638.68,
-      "diff": -33.6,
+      "settlement_id": "stl_0016",
+      "expected_amount": 20166.8,
+      "actual_amount": 20064.75,
+      "diff": -102.05,
       "included_transactions": [
-        "txn_0009",
-        "txn_0028",
-        "txn_0041"
+        "txn_0006",
+        "txn_0016",
+        "txn_0004"
       ],
-      "explanation": "The settlement amount is $33.60 lower than expected, likely because a transaction fee was omitted or rounded differently when the amounts were summed.",
-      "likely_cause": "transaction_fee_missing",
+      "signals": {
+        "direction": "bank_paid_less_than_owed",
+        "abs_diff": 102.05,
+        "diff_pct_of_expected": 0.506,
+        "is_small_absolute_discrepancy": false,
+        "transactions_in_batch": 3,
+        "total_fee_charged_on_batch": 487.45,
+        "gap_exceeds_total_fee_charged": false,
+        "exact_match_to_one_transaction": null,
+        "refund_sized_fraction_of_one_transaction": null,
+        "batch_composition": [
+          {
+            "transaction_id": "txn_0006",
+            "net_amount": 4970.97,
+            "contribution_after_recorded_refunds": 4970.97,
+            "gap_as_pct_of_this_txn_net": 2.1
+          },
+          {
+            "transaction_id": "txn_0016",
+            "net_amount": 4812.06,
+            "contribution_after_recorded_refunds": 4812.06,
+            "gap_as_pct_of_this_txn_net": 2.1
+          },
+          {
+            "transaction_id": "txn_0004",
+            "net_amount": 10383.77,
+            "contribution_after_recorded_refunds": 10383.77,
+            "gap_as_pct_of_this_txn_net": 1.0
+          }
+        ]
+      },
+      "explanation": "The settlement is $102.05 short of what the ledger expects, which is a small amount compared to the $487.45 fee charged on the batch. This gap does not match any single transaction\u2019s net amount and isn\u2019t a clear fraction of one transaction, suggesting a possible mis\u2011calculation of the platform fee or GST.",
+      "likely_cause": "fee_or_gst_error",
       "confidence": "medium",
-      "recommended_action": "Check the fee line items for the listed transactions and adjust the settlement amount accordingly."
+      "recommended_action": "Verify the fee/GST calculation for this batch and adjust the settlement amount accordingly."
     },
     {
       "kind": "AMOUNT_MISMATCH",
-      "settlement_id": "stl_0017",
-      "expected_amount": 9095.16,
-      "actual_amount": 9078.49,
-      "diff": -16.67,
+      "settlement_id": "stl_0021",
+      "expected_amount": 28034.3,
+      "actual_amount": 18825.51,
+      "diff": -9208.79,
       "included_transactions": [
-        "txn_0042",
-        "txn_0037"
+        "txn_0040",
+        "txn_0009"
       ],
-      "explanation": "The actual total is $16.67 lower than expected, likely because a fee was deducted from one of the included transactions.",
-      "likely_cause": "transaction_fee_applied",
+      "signals": {
+        "direction": "bank_paid_less_than_owed",
+        "abs_diff": 9208.79,
+        "diff_pct_of_expected": 32.848,
+        "is_small_absolute_discrepancy": false,
+        "transactions_in_batch": 2,
+        "total_fee_charged_on_batch": 677.61,
+        "gap_exceeds_total_fee_charged": true,
+        "exact_match_to_one_transaction": null,
+        "refund_sized_fraction_of_one_transaction": {
+          "transaction_id": "txn_0040",
+          "net_amount": 17633.72,
+          "pct_of_net": 52.2,
+          "has_recorded_refund": false
+        },
+        "batch_composition": [
+          {
+            "transaction_id": "txn_0040",
+            "net_amount": 17633.72,
+            "contribution_after_recorded_refunds": 17633.72,
+            "gap_as_pct_of_this_txn_net": 52.2
+          },
+          {
+            "transaction_id": "txn_0009",
+            "net_amount": 10400.58,
+            "contribution_after_recorded_refunds": 10400.58,
+            "gap_as_pct_of_this_txn_net": 88.5
+          }
+        ]
+      },
+      "explanation": "The bank paid $18,825.51 instead of the expected $28,034.30, a shortfall of $9,208.79. That amount is exactly 52.2% of the net amount of transaction txn_0040 ($17,633.72), indicating a refund of that size was likely issued but not recorded in the refunds data.",
+      "likely_cause": "unrecorded_refund",
       "confidence": "high",
-      "recommended_action": "Check the fee schedule for txn_0042 and txn_0037 to confirm if a fee of $16.67 was applied; if so, adjust the expected amount accordingly."
+      "recommended_action": "Verify whether a refund of $9,208.79 was issued for txn_0040 and update the refunds record accordingly."
     },
     {
       "kind": "AMOUNT_MISMATCH",
-      "settlement_id": "stl_0032",
-      "expected_amount": 10389.56,
-      "actual_amount": 10377.8,
-      "diff": -11.76,
+      "settlement_id": "stl_0026",
+      "expected_amount": 22439.48,
+      "actual_amount": 1200.72,
+      "diff": -21238.76,
       "included_transactions": [
-        "txn_0031"
+        "txn_0008",
+        "txn_0013"
       ],
-      "explanation": "The amount you expected was $10389.56, but the system recorded $10377.80, a shortfall of $11.76. This usually happens when a fee or charge was applied to the transaction that wasn\u2019t included in the original expected amount.",
-      "likely_cause": "transaction_fee_not_included",
+      "signals": {
+        "direction": "bank_paid_less_than_owed",
+        "abs_diff": 21238.76,
+        "diff_pct_of_expected": 94.649,
+        "is_small_absolute_discrepancy": false,
+        "transactions_in_batch": 2,
+        "total_fee_charged_on_batch": 542.37,
+        "gap_exceeds_total_fee_charged": true,
+        "exact_match_to_one_transaction": {
+          "transaction_id": "txn_0008",
+          "contribution": 21238.76
+        },
+        "refund_sized_fraction_of_one_transaction": null,
+        "batch_composition": [
+          {
+            "transaction_id": "txn_0008",
+            "net_amount": 21238.76,
+            "contribution_after_recorded_refunds": 21238.76,
+            "gap_as_pct_of_this_txn_net": 100.0
+          },
+          {
+            "transaction_id": "txn_0013",
+            "net_amount": 1200.72,
+            "contribution_after_recorded_refunds": 1200.72,
+            "gap_as_pct_of_this_txn_net": 1768.8
+          }
+        ]
+      },
+      "explanation": "The settlement amount is $1,200.72, but the expected amount was $22,439.48, a shortfall of $21,238.76. That shortfall exactly matches the full contribution of transaction txn_0008, meaning the bank paid for only txn_0013 and omitted txn_0008 from the payout.",
+      "likely_cause": "missing_txn_in_batch",
       "confidence": "high",
-      "recommended_action": "Check the details of txn_0031 for any merchant or processing fees that were deducted, and adjust the expected amount to match the actual amount."
+      "recommended_action": "Verify that txn_0008 was indeed included in the settlement batch; if not, re\u2011issue the payout for that transaction or adjust the settlement to include its amount."
     },
     {
       "kind": "ORPHAN",
-      "settlement_id": "stl_0033",
-      "actual_amount": 4851.0,
+      "settlement_id": "stl_0031",
+      "actual_amount": 1873.36,
       "included_transactions": [
         "txn_9999"
       ],
-      "explanation": "The system flagged txn_9999 as an orphan because it wasn\u2019t found in settlement stl_0033, likely because the settlement was created before the transaction was processed or the transaction was omitted from the settlement batch.",
-      "likely_cause": "transaction_not_included_in_settlement",
+      "explanation": "The settlement references transaction txn_9999, but that transaction does not exist in the ledger, so the system cannot match the amount to any real payment.",
+      "likely_cause": "orphan_reference",
       "confidence": "high",
-      "recommended_action": "Check the transaction record to confirm it belongs to this settlement; if it does, re\u2011run the matcher or manually add it to the settlement to resolve the orphan status."
+      "recommended_action": "Verify the transaction list for missing entries and correct the settlement reference or remove the orphaned transaction from the batch."
     },
     {
       "kind": "MISSING_SETTLEMENT",
-      "transaction_id": "txn_0004",
-      "explanation": "The payment was authorized but the funds haven\u2019t yet been transferred to your account, which can happen if the settlement period hasn\u2019t finished or if the transaction was declined after authorization.",
-      "likely_cause": "settlement_delay",
+      "transaction_id": "txn_0026",
+      "signals": {
+        "transaction_timestamp": "2026-08-02 05:00:00",
+        "settlement_due_by": "2026-08-04",
+        "data_window_end": "2026-08-08",
+        "net_amount": 20086.29,
+        "days_past_due_at_window_end": 3,
+        "due_date_passed_within_data_window": true
+      },
+      "explanation": "The payment was due on 2026\u201108\u201104, but the reporting window ended on 2026\u201108\u201108 and the matcher shows it was 3 days past due, meaning the settlement date has already passed and no payment was received.",
+      "likely_cause": "unsettled_stuck",
       "confidence": "high",
-      "recommended_action": "Check the settlement schedule in your merchant portal and verify that your account details are correct; if the issue persists, contact the payment processor for clarification."
+      "recommended_action": "Verify the bank statement for the settlement of txn_0026; if missing, contact the bank to investigate the delayed or missing payment."
     },
     {
       "kind": "MISSING_SETTLEMENT",
-      "transaction_id": "txn_0018",
-      "explanation": "The transaction was matched to a payment, but the settlement (the actual transfer of funds to your account) hasn't arrived yet, which is why the system flagged it as missing. This often happens when the payment processor hasn't completed the final transfer step or the settlement file hasn't been processed yet.",
-      "likely_cause": "settlement_pending",
+      "transaction_id": "txn_0053",
+      "signals": {
+        "transaction_timestamp": "2026-08-01 16:00:00",
+        "settlement_due_by": "2026-08-03",
+        "data_window_end": "2026-08-08",
+        "net_amount": 16154.35,
+        "days_past_due_at_window_end": 4,
+        "due_date_passed_within_data_window": true
+      },
+      "explanation": "The payment was due on 2026\u201108\u201103 (T+2 after the 2026\u201108\u201101 transaction), but by the end of the reporting window on 2026\u201108\u201108 it was still outstanding, so the settlement never arrived.",
+      "likely_cause": "unsettled_stuck",
       "confidence": "high",
-      "recommended_action": "Check the settlement status in your merchant portal or contact your payment processor to confirm the expected settlement date and ensure the funds have been transferred."
+      "recommended_action": "Contact the bank to confirm the settlement status and investigate why the payment has not cleared."
     },
     {
       "kind": "MISSING_SETTLEMENT",
-      "transaction_id": "txn_0027",
-      "explanation": "The system couldn\u2019t find a settlement record for this transaction, which usually means the payment hasn\u2019t cleared yet or was rejected by the bank.",
-      "likely_cause": "settlement_pending",
+      "transaction_id": "txn_0059",
+      "signals": {
+        "transaction_timestamp": "2026-08-06 22:00:00",
+        "settlement_due_by": "2026-08-08",
+        "data_window_end": "2026-08-08",
+        "net_amount": 656.83,
+        "days_past_due_at_window_end": -1,
+        "due_date_passed_within_data_window": false
+      },
+      "explanation": "The payment is scheduled to settle on 8\u202fAug, which is the last day of the reporting window, so it hasn\u2019t actually passed its settlement date yet.",
+      "likely_cause": "not_yet_due",
       "confidence": "high",
-      "recommended_action": "Check the payment processor dashboard for the transaction status or contact the bank to confirm why the settlement hasn\u2019t arrived."
+      "recommended_action": "No action needed \u2013 the payment will settle after the reporting window closes."
     },
     {
       "kind": "MISSING_SETTLEMENT",
-      "transaction_id": "txn_0044",
-      "explanation": "The system couldn\u2019t find a settlement record for transaction txn_0044, which usually means the payment hasn\u2019t yet been credited to your account or was missed during the settlement process.",
-      "likely_cause": "missing_settlement",
+      "transaction_id": "txn_0060",
+      "signals": {
+        "transaction_timestamp": "2026-08-07 14:00:00",
+        "settlement_due_by": "2026-08-09",
+        "data_window_end": "2026-08-08",
+        "net_amount": 5489.71,
+        "days_past_due_at_window_end": -2,
+        "due_date_passed_within_data_window": false
+      },
+      "explanation": "The settlement date (2026-08-09) is still two days after the reporting window ended (2026-08-08), so the payment is not yet due and no settlement should be expected yet.",
+      "likely_cause": "not_yet_due",
       "confidence": "high",
-      "recommended_action": "Check your bank statement for the transaction date; if the payment is still missing, contact your bank to confirm the settlement status."
+      "recommended_action": "No action required \u2013 the payment is still within the expected settlement window."
     }
   ],
-  "reasoner_used": "groq"
+  "reasoner_used": "groq",
+  "data_dir": "data"
 }
