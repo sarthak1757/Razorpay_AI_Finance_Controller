@@ -19,6 +19,8 @@ This file never opens ground_truth.json. It has no way to cheat.
 """
 
 import csv
+import os
+import re
 from datetime import datetime, timedelta
 
 AMOUNT_TOLERANCE = 0.05  # rupees - allows for float rounding, nothing more
@@ -35,27 +37,189 @@ REFUND_FRACTION_MAX = 0.70
 SETTLEMENT_SLA_DAYS = 2  # Razorpay's standard T+2 payout cycle
 
 
-def load_csv(path):
+class DatasetError(Exception):
+    """A dataset we cannot read. Raised with a message that says which file,
+    which column and which row - because the alternative is a KeyError or a
+    ValueError surfacing three call frames deep, which tells the person
+    pointing this at their own export precisely nothing."""
+
+
+# Columns each file must have for the arithmetic to be possible at all.
+# Anything else in the file is carried through untouched.
+REQUIRED_COLUMNS = {
+    "razorpay_transactions.csv": [
+        "transaction_id", "order_id", "amount", "razorpay_fee",
+        "gst_on_fee", "net_amount", "timestamp",
+    ],
+    "bank_settlements.csv": [
+        "settlement_id", "settled_amount", "settlement_date",
+        "transaction_ids_included",
+    ],
+    "refunds.csv": ["transaction_id", "refund_amount"],
+}
+
+
+def load_csv(path, required, optional=False):
+    """Read one CSV and check its shape before anything downstream trusts it.
+
+    Fails loudly and specifically, or not at all. A dataset that is missing a
+    column is a dataset we cannot reconcile, and saying so up front is far
+    better than half-processing it and reporting a confident wrong number.
+    """
+    if not os.path.exists(path):
+        if optional:
+            return []
+        raise DatasetError(f"Required file not found: {path}")
+
     with open(path, newline="") as f:
-        return list(csv.DictReader(f))
+        reader = csv.DictReader(f)
+        rows = list(reader)
+        header = reader.fieldnames or []
+
+    missing = [c for c in required if c not in header]
+    if missing:
+        raise DatasetError(
+            f"{path} is missing required column(s): {', '.join(missing)}. "
+            f"Found: {', '.join(header) or '(no header row)'}"
+        )
+    return rows
+
+
+def to_amount(value, path, column, row_number):
+    """Parse a money column the way real exports actually write money.
+
+    Bank and gateway CSVs are not tidy: amounts arrive as "1,234.56", as
+    "Rs 1,234.56", wrapped in quotes, or as "(45.00)" for a negative in
+    accounting notation. A bare float() rejects every one of those, and the
+    person who exported the file did nothing wrong. Blank means zero.
+    """
+    if value is None:
+        raise DatasetError(f"{path} row {row_number}: column '{column}' is absent")
+
+    text = str(value).strip()
+    if not text:
+        return 0.0
+
+    negative = text.startswith("(") and text.endswith(")")
+    if negative:
+        text = text[1:-1].strip()
+
+    # Strip currency symbols/codes and thousands separators, keep sign and point.
+    cleaned = re.sub(r"[^0-9.\-+]", "", text)
+    try:
+        amount = float(cleaned)
+    except ValueError:
+        raise DatasetError(
+            f"{path} row {row_number}: column '{column}' is not a number: {value!r}"
+        )
+    return -amount if negative else amount
 
 
 def load_data(data_dir="data"):
-    transactions = load_csv(f"{data_dir}/razorpay_transactions.csv")
-    settlements = load_csv(f"{data_dir}/bank_settlements.csv")
-    refunds = load_csv(f"{data_dir}/refunds.csv")
+    """Load a dataset from any directory laid out with the three CSVs.
 
-    for t in transactions:
-        t["amount"] = float(t["amount"])
-        t["razorpay_fee"] = float(t["razorpay_fee"])
-        t["gst_on_fee"] = float(t["gst_on_fee"])
-        t["net_amount"] = float(t["net_amount"])
-    for s in settlements:
-        s["settled_amount"] = float(s["settled_amount"])
-    for r in refunds:
-        r["refund_amount"] = float(r["refund_amount"])
+    refunds.csv is optional: a merchant with no refunds in the period has no
+    refunds file, and that is a valid dataset rather than a crash. The other
+    two are mandatory - there is nothing to reconcile without both sides.
+    """
+    txn_path = os.path.join(data_dir, "razorpay_transactions.csv")
+    stl_path = os.path.join(data_dir, "bank_settlements.csv")
+    ref_path = os.path.join(data_dir, "refunds.csv")
+
+    transactions = load_csv(txn_path, REQUIRED_COLUMNS["razorpay_transactions.csv"])
+    settlements = load_csv(stl_path, REQUIRED_COLUMNS["bank_settlements.csv"])
+    refunds = load_csv(ref_path, REQUIRED_COLUMNS["refunds.csv"], optional=True)
+
+    for i, t in enumerate(transactions, start=2):  # row 1 is the header
+        for col in ("amount", "razorpay_fee", "gst_on_fee", "net_amount"):
+            t[col] = to_amount(t[col], txn_path, col, i)
+    for i, s in enumerate(settlements, start=2):
+        s["settled_amount"] = to_amount(s["settled_amount"], stl_path, "settled_amount", i)
+    for i, r in enumerate(refunds, start=2):
+        r["refund_amount"] = to_amount(r["refund_amount"], ref_path, "refund_amount", i)
+
+    if not transactions:
+        raise DatasetError(f"{txn_path} has no rows - nothing to reconcile.")
+    if not settlements:
+        raise DatasetError(f"{stl_path} has no rows - nothing to reconcile against.")
 
     return transactions, settlements, refunds
+
+
+# Timestamp shapes we accept. A gateway export, a bank statement and a
+# hand-edited spreadsheet will each write the same instant differently, and
+# none of them is wrong. Tried in order; the first that parses wins.
+TIMESTAMP_FORMATS = [
+    "%Y-%m-%d %H:%M:%S",
+    "%Y-%m-%dT%H:%M:%S",
+    "%Y-%m-%d %H:%M",
+    "%Y-%m-%d",
+    "%d/%m/%Y %H:%M:%S",
+    "%d/%m/%Y",
+    "%d-%m-%Y %H:%M:%S",
+    "%d-%m-%Y",
+    "%m/%d/%Y %H:%M:%S",
+    "%m/%d/%Y",
+]
+
+
+def to_datetime(value, path_hint, column, row_hint=None):
+    """Parse a date/timestamp column, tolerating the usual export dialects.
+
+    Note the ordering hazard this deliberately does NOT paper over: 03/04/2026
+    is 3 April in a day-first export and 4 March in a month-first one, and no
+    parser can tell which from the string alone. We try day-first before
+    month-first because this is an Indian payments dataset, and we say so here
+    rather than silently guessing - if your export is US-formatted, normalise
+    it to ISO (YYYY-MM-DD) before feeding it in.
+    """
+    text = str(value or "").strip()
+    if not text:
+        raise DatasetError(
+            f"{path_hint}: column '{column}' is empty"
+            + (f" on row {row_hint}" if row_hint else "")
+        )
+
+    def try_formats(candidate):
+        for fmt in TIMESTAMP_FORMATS:
+            try:
+                return datetime.strptime(candidate, fmt)
+            except ValueError:
+                continue
+        return None
+
+    parsed = try_formats(text)
+    if parsed:
+        return parsed
+
+    # Only now consider a trailing timezone designator. Stripping it up front
+    # is actively harmful: the tail of a DD-MM-YYYY date ("01-08-2026") is
+    # indistinguishable from a "-20:26" UTC offset by shape alone, so an
+    # eager strip turns a valid date into "01-08" and fails it. Trying the
+    # plain formats first means a real date is never mangled, and a genuine
+    # offset still gets its second chance here. We reconcile on calendar
+    # days, so dropping the offset changes nothing about which day it is.
+    stripped = re.sub(r"(Z|[+-]\d{2}:?\d{2})$", "", text).strip()
+    if stripped != text:
+        parsed = try_formats(stripped)
+        if parsed:
+            return parsed
+
+    raise DatasetError(
+        f"{path_hint}: could not read '{column}' value {value!r}"
+        + (f" on row {row_hint}" if row_hint else "")
+        + f". Supported formats: {', '.join(TIMESTAMP_FORMATS)}"
+    )
+
+
+def split_ids(value):
+    """Split a settlement's transaction ID list.
+
+    Our generator writes semicolons, but a real feed may use commas, pipes or
+    whitespace, and there is no ambiguity in accepting all of them - none of
+    these characters occur inside a transaction ID.
+    """
+    return [part for part in re.split(r"[;,|\s]+", str(value or "").strip()) if part]
 
 
 def find_duplicates(transactions):
@@ -167,7 +331,9 @@ def match(transactions, settlements, refunds):
     # from the final two days simply hasn't had time to settle at T+2 - that
     # is a fact about the reporting window, not a problem with the payment.
     settlement_dates = [
-        datetime.strptime(s["settlement_date"], "%Y-%m-%d") for s in settlements
+        to_datetime(s["settlement_date"], "bank_settlements.csv", "settlement_date",
+                    s.get("settlement_id"))
+        for s in settlements
     ]
     data_window_end = max(settlement_dates) if settlement_dates else None
 
@@ -175,7 +341,21 @@ def match(transactions, settlements, refunds):
     settled_txn_ids = set()
 
     for s in settlements:
-        included_ids = s["transaction_ids_included"].split(";")
+        included_ids = split_ids(s["transaction_ids_included"])
+        if not included_ids:
+            # A payout that names no transactions at all. We cannot reconstruct
+            # what it should have been, so we surface it rather than silently
+            # counting it as clean - an unexplained credit is still an exception.
+            settlement_results.append({
+                "settlement_id": s["settlement_id"],
+                "status": "ORPHAN",
+                "reason": "Settlement lists no transaction IDs",
+                "expected_amount": None,
+                "actual_amount": s["settled_amount"],
+                "included_transactions": [],
+            })
+            continue
+
         missing_txn_refs = [tid for tid in included_ids if tid not in txn_by_id]
 
         if missing_txn_refs:
@@ -200,7 +380,8 @@ def match(transactions, settlements, refunds):
             batch_txns.append(t)
             expected_total += contribution_of(t, refund_by_txn)
 
-            txn_date = datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S")
+            txn_date = to_datetime(t["timestamp"], "razorpay_transactions.csv",
+                                   "timestamp", tid)
             if latest_txn_date is None or txn_date > latest_txn_date:
                 latest_txn_date = txn_date
 
@@ -208,7 +389,8 @@ def match(transactions, settlements, refunds):
         actual_total = s["settled_amount"]
         diff = round(actual_total - expected_total, 2)
 
-        settlement_date = datetime.strptime(s["settlement_date"], "%Y-%m-%d")
+        settlement_date = to_datetime(s["settlement_date"], "bank_settlements.csv",
+                                      "settlement_date", s["settlement_id"])
         days_to_settle = (settlement_date - latest_txn_date).days
         timing_note = (
             "normal T+2 cycle" if 1 <= days_to_settle <= 3
@@ -258,7 +440,8 @@ def match(transactions, settlements, refunds):
             # and whether that deadline has passed within the data we have.
             # Whether "overdue" means lost or just in-flight is a judgment
             # call, left to the reasoning layer.
-            txn_date = datetime.strptime(t["timestamp"], "%Y-%m-%d %H:%M:%S")
+            txn_date = to_datetime(t["timestamp"], "razorpay_transactions.csv",
+                                   "timestamp", tid)
             due_by = txn_date + timedelta(days=SETTLEMENT_SLA_DAYS)
             signals = {
                 "transaction_timestamp": t["timestamp"],

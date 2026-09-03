@@ -122,6 +122,28 @@ def parse_explanation(text: str, allowed_causes) -> dict:
             except json.JSONDecodeError:
                 parsed = None
         if parsed is None:
+            # Last resort before giving up: the commonest way this fails is a
+            # reply truncated mid-sentence, where the model HAD already named
+            # a cause before we cut it off. Throwing that away and calling it
+            # a non-answer is as wrong as scoring it a wrong answer - the
+            # model answered, our token budget was the problem.
+            #
+            # Deliberately narrow: it salvages only an explicit likely_cause
+            # field whose value is in the allowed taxonomy. It cannot invent a
+            # cause, and it cannot promote a guess - if the model never got as
+            # far as naming one, this finds nothing and we fall through.
+            salvaged = re.search(
+                r'"likely_cause"\s*:\s*"([^"]+)"', text
+            )
+            if salvaged and salvaged.group(1) in allowed_causes:
+                explanation = re.search(r'"explanation"\s*:\s*"([^"]*)', text)
+                return {
+                    "explanation": (explanation.group(1) if explanation else "")
+                                   + " [response truncated - cause recovered from partial JSON]",
+                    "likely_cause": salvaged.group(1),
+                    "confidence": "low",
+                    "recommended_action": "Manual review required (model response was truncated).",
+                }
             return {
                 "explanation": text,
                 "likely_cause": "unparsed",
@@ -334,10 +356,26 @@ class GroqReasoner:
         self.client = Groq(api_key=os.environ["GROQ_API_KEY"])
         self.model_name = model or os.environ.get("GROQ_MODEL", "openai/gpt-oss-20b")
 
-    def _complete(self, prompt: str, json_mode: bool, max_tokens: int) -> str:
+    def _complete(self, prompt: str, json_mode: bool, max_tokens: int,
+                  reasoning_effort: str = "low") -> str:
         """One call, with graceful degradation for parameters this particular
         model/tier may not support (json mode, reasoning_effort). Unsupported
-        params raise rather than being ignored, so we retry without them."""
+        params raise rather than being ignored, so we retry without them.
+
+        WHY reasoning_effort="low" MATTERS HERE:
+        On this API, max_tokens caps the WHOLE completion - the model's
+        internal reasoning channel and the answer share one budget. A
+        reasoning-style model left to think freely spends the budget thinking
+        and gets truncated mid-answer, which we then score as a non-answer.
+        Capping the thinking is what leaves room for the reply. It also cuts
+        token spend several-fold, which on a free tier with a 200k
+        tokens-per-DAY ceiling is the difference between finishing an
+        evaluation run and having it die two-thirds of the way through.
+
+        This is a budget/latency setting, not a thumb on the scale: the same
+        value is used everywhere, so a comparison between models or between
+        the LLM and the rule baseline is unaffected by it.
+        """
         kwargs = {
             "model": self.model_name,
             "messages": [{"role": "user", "content": prompt}],
@@ -346,11 +384,25 @@ class GroqReasoner:
         }
         if json_mode:
             kwargs["response_format"] = {"type": "json_object"}
-        try:
-            resp = self.client.chat.completions.create(**kwargs)
-        except Exception:
-            kwargs.pop("response_format", None)
-            resp = self.client.chat.completions.create(**kwargs)
+        if reasoning_effort:
+            kwargs["reasoning_effort"] = reasoning_effort
+
+        # Drop the optional parameters one at a time rather than all at once,
+        # so a model that supports only one of them still gets the benefit.
+        # A rate-limit error is re-raised immediately - retrying it here
+        # without a backoff would just burn more of the very quota that ran
+        # out, and the grader needs to see it as an infrastructure failure
+        # rather than a wrong answer.
+        for drop in ([], ["reasoning_effort"], ["reasoning_effort", "response_format"]):
+            attempt = {k: v for k, v in kwargs.items() if k not in drop}
+            try:
+                resp = self.client.chat.completions.create(**attempt)
+                break
+            except Exception as e:
+                if type(e).__name__ == "RateLimitError" or "429" in str(e):
+                    raise
+                if drop == ["reasoning_effort", "response_format"]:
+                    raise
 
         message = resp.choices[0].message
         content = (message.content or "").strip()

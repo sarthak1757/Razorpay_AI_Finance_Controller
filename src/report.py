@@ -9,7 +9,9 @@ example, and saves them to data/report.json so they can be dropped straight
 into the pitch video / architecture doc later.
 """
 
+import argparse
 import json
+import os
 import time
 
 from matcher import load_data, match
@@ -17,7 +19,7 @@ from exception_agent import build_cases
 from reasoner import get_reasoner
 
 
-def generate_report():
+def generate_report(data_dir="data", out_path=None):
     """Times the two phases SEPARATELY, on purpose.
 
     An earlier version reported one blended "records/sec" - total wall clock
@@ -30,7 +32,7 @@ def generate_report():
     ("why is this so slow?") whose honest answer is "it isn't".
     """
     load_start = time.perf_counter()
-    transactions, settlements, refunds = load_data()
+    transactions, settlements, refunds = load_data(data_dir)
     load_seconds = time.perf_counter() - load_start
 
     match_start = time.perf_counter()
@@ -106,10 +108,14 @@ def generate_report():
         },
         "exceptions": exceptions,
         "reasoner_used": reasoner.name,
+        "data_dir": data_dir,
     }
 
-    with open("data/report.json", "w") as f:
+    out_path = out_path or os.path.join(data_dir, "report.json")
+    os.makedirs(os.path.dirname(out_path) or ".", exist_ok=True)
+    with open(out_path, "w") as f:
         json.dump(report, f, indent=2)
+    report["_out_path"] = out_path
 
     return report
 
@@ -148,9 +154,31 @@ def print_summary(report):
         label = e.get("settlement_id") or e.get("transaction_id")
         print(f"  [{e['kind']}] {label} - {e['likely_cause']} (confidence: {e['confidence']})")
 
-    print("\n(Full detail saved to data/report.json)")
+    print(f"\n(Full detail saved to {report.get('_out_path', 'data/report.json')})")
+
+
+def main():
+    p = argparse.ArgumentParser(
+        description="Reconcile a transaction ledger against a bank settlement feed.")
+    p.add_argument("--data-dir", default="data",
+                   help="Directory holding razorpay_transactions.csv, bank_settlements.csv "
+                        "and (optionally) refunds.csv. Defaults to ./data")
+    p.add_argument("--out", default=None,
+                   help="Where to write report.json. Defaults to <data-dir>/report.json")
+    p.add_argument("--html", action="store_true",
+                   help="Also render report.html next to the JSON.")
+    args = p.parse_args()
+
+    report = generate_report(data_dir=args.data_dir, out_path=args.out)
+    print_summary(report)
+
+    if args.html:
+        from render_report import render
+        html_path = os.path.splitext(report["_out_path"])[0] + ".html"
+        with open(html_path, "w") as f:
+            f.write(render(report))
+        print(f"(Readable HTML report at {html_path})")
 
 
 if __name__ == "__main__":
-    report = generate_report()
-    print_summary(report)
+    main()

@@ -4,3 +4,9 @@ __pycache__/
 .DS_Store
 venv/
 .venv/
+
+# Full per-case validation dumps: ~21MB of JSON nobody reads, and fully
+# reproducible via the commands in the README. The *_summary.json files
+# carry every number the docs actually cite and ARE committed.
+data/validation.json
+data/validation_varied.json

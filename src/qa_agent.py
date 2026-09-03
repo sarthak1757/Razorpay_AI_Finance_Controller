@@ -115,15 +115,24 @@ of guessing. Reference specific IDs and amounts where relevant."""
 
 
 def main():
-    transactions, settlements, refunds = load_data()
+    # Hand-rolled rather than argparse so a bare question still works
+    # unquoted: `qa_agent.py why did stl_0008 mismatch?`
+    argv = sys.argv[1:]
+    data_dir = "data"
+    if "--data-dir" in argv:
+        i = argv.index("--data-dir")
+        data_dir = argv[i + 1]
+        argv = argv[:i] + argv[i + 2:]
+
+    transactions, settlements, refunds = load_data(data_dir)
     settlement_results, transaction_results = match(transactions, settlements, refunds)
     context = build_context(transactions, settlements, refunds, settlement_results, transaction_results)
     reasoner = get_reasoner()
 
-    print(f"Settlement Q&A agent ready (reasoner: {reasoner.name})")
+    print(f"Settlement Q&A agent ready (reasoner: {reasoner.name}, data: {data_dir})")
 
-    if len(sys.argv) > 1:
-        question = " ".join(sys.argv[1:])
+    if argv:
+        question = " ".join(argv)
         print(f"\nQ: {question}")
         print(f"A: {answer(question, context, reasoner)}")
         return

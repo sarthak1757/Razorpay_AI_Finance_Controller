@@ -273,7 +273,7 @@ def grade_dataset(data_dir, with_ai=False, max_ai_cases=None, sleep_between=0.0)
     return result
 
 
-def collect_hard_cases(seeds, sizes):
+def collect_hard_cases(seeds, sizes, vary=False):
     """Find the exceptions the rule baseline gets WRONG, across many datasets.
 
     WHY THIS MODE EXISTS:
@@ -297,7 +297,8 @@ def collect_hard_cases(seeds, sizes):
         for size in sizes:
             for seed in seeds:
                 ds_dir = os.path.join(tmp_root, f"seed{seed}_n{size}")
-                generate(seed=seed, n_transactions=size, out_dir=ds_dir, verbose=False)
+                generate(seed=seed, n_transactions=size, out_dir=ds_dir, verbose=False,
+                         vary=vary)
                 transactions, settlements, refunds = load_data(ds_dir)
                 with open(os.path.join(ds_dir, "ground_truth.json")) as f:
                     ground_truth = json.load(f)
@@ -325,10 +326,10 @@ def collect_hard_cases(seeds, sizes):
     return hard, total_cases
 
 
-def run_hard_case_mode(seeds, sizes, sleep_between):
+def run_hard_case_mode(seeds, sizes, sleep_between, vary=False):
     print(f"Sweeping {len(seeds) * len(sizes)} datasets with the free rule baseline "
           f"to find its failures...")
-    hard, total_cases = collect_hard_cases(seeds, sizes)
+    hard, total_cases = collect_hard_cases(seeds, sizes, vary=vary)
     print(f"  baseline failed {len(hard)} of {total_cases} scoreable cases "
           f"({len(hard) / total_cases * 100:.2f}%)\n")
 
@@ -377,18 +378,68 @@ def run_hard_case_mode(seeds, sizes, sleep_between):
             time.sleep(sleep_between)
 
     answered = len(hard) - infra_failures
+
+    # THE CONTROL THIS SAMPLE ACTUALLY NEEDS.
+    #
+    # "The LLM scored 50% on cases the rule baseline got wrong" sounds like a
+    # win, and it is worthless without knowing what a degenerate strategy
+    # scores on the SAME sample. It turns out that matters enormously here,
+    # because this sample is not drawn at random - it is selected by "the
+    # baseline was wrong", and the baseline is wrong asymmetrically. That
+    # selection skews the true-cause mix hard, and a classifier that ignores
+    # the evidence entirely and always says the commonest label can score very
+    # well on it.
+    #
+    # That constant guess is NOT a legitimate rival system - it exploits how
+    # the sample was selected and would be terrible on the real distribution.
+    # But it is a necessary sanity check on the METRIC: if the model cannot
+    # beat it, then this evaluation has not demonstrated that the model adds
+    # anything, and reporting the raw percentage as a success would be exactly
+    # the kind of decorative number this project exists to avoid.
+    answered_items = [d for d in detail if d["llm_answered"]]
+    majority = None
+    if answered_items:
+        counts = defaultdict(int)
+        for d in answered_items:
+            counts[d["true_cause"]] += 1
+        label, hits = max(counts.items(), key=lambda kv: kv[1])
+        majority = {
+            "label": label,
+            "correct": hits,
+            "total": len(answered_items),
+            "accuracy": round(hits / len(answered_items), 4),
+            "true_cause_mix": dict(counts),
+        }
+
+    llm_acc = correct / answered if answered else 0
     print("\n" + "=" * 66)
     print("ADVERSARIAL SAMPLE: cases the rule baseline got wrong")
     print("=" * 66)
     print(f"  baseline accuracy on these, by definition: 0/{len(hard)} = 0.000")
     print(f"  LLM accuracy (of cases it answered):       {correct}/{answered} = "
-          f"{(correct / answered if answered else 0):.3f}")
+          f"{llm_acc:.3f}")
     if infra_failures:
         print(f"  excluded - no usable answer returned:      {infra_failures}"
               f"  (empty/unparseable/API error, not a wrong answer)")
     print(f"  LLM accuracy (counting non-answers wrong): {correct}/{len(hard)} = "
           f"{correct / len(hard):.3f}")
+
+    if majority:
+        print(f"\n  CONTROL - always guess '{majority['label']}':"
+              f"    {majority['correct']}/{majority['total']} = {majority['accuracy']:.3f}")
+        print(f"  true-cause mix in this sample: {majority['true_cause_mix']}")
+        if majority["accuracy"] >= llm_acc:
+            print("\n  >> READ THIS: the model did NOT beat a constant guess on this")
+            print("     sample. Selecting on 'the baseline was wrong' skews the label")
+            print("     mix, and a strategy that ignores the evidence entirely scores")
+            print("     at least as well. This run therefore does NOT show the LLM")
+            print("     recovering the baseline's failures. Report it as such.")
+        else:
+            print("\n  The model beats the constant-guess control on this sample,")
+            print("  so it is using the evidence rather than the label skew.")
+
     return {
+        "majority_class_control": majority,
         "hard_cases_found": len(hard),
         "total_scoreable_cases_swept": total_cases,
         "baseline_failure_rate": round(len(hard) / total_cases, 4),
@@ -422,6 +473,10 @@ def main():
                    help="Adversarial mode: sweep datasets with the free rule baseline, "
                         "then grade the LLM ONLY on the cases the baseline got wrong. "
                         "This is the comparison that actually discriminates.")
+    p.add_argument("--vary", action="store_true",
+                   help="Vary each dataset's REGIME (exception rate, batch sizes, refund "
+                        "and duplicate frequency, reporting window), not just its amounts. "
+                        "Without this, every seed is a different draw of the same recipe.")
     p.add_argument("--out", default="data/validation.json")
     args = p.parse_args()
 
@@ -430,6 +485,7 @@ def main():
             args.seeds or list(range(1, 11)),
             args.sizes or [args.n],
             args.sleep,
+            vary=args.vary,
         )
         if result:
             with open(args.out, "w") as f:
@@ -452,7 +508,8 @@ def main():
             for size in sizes:
                 for seed in seeds:
                     ds_dir = os.path.join(tmp_root, f"seed{seed}_n{size}")
-                    generate(seed=seed, n_transactions=size, out_dir=ds_dir, verbose=False)
+                    generate(seed=seed, n_transactions=size, out_dir=ds_dir, verbose=False,
+                             vary=args.vary)
                     if args.with_ai:
                         print(f"\nseed={seed} n={size}:")
                     run = grade_dataset(

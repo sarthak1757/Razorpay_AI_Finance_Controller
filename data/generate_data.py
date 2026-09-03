@@ -88,7 +88,8 @@ def make_transaction(rng, i, txn_date):
     }
 
 
-def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=True):
+def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=True,
+             vary=False):
     """Generate one complete dataset + its ground truth.
 
     Uses a local RNG instance rather than seeding the global `random` module,
@@ -98,8 +99,57 @@ def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=
     Exception counts scale with n_transactions so that a 600-transaction
     dataset has proportionally the same exception density as a 60-transaction
     one - otherwise cross-scale comparisons would be apples to oranges.
+
+    WHAT `vary` IS FOR:
+    Without it, changing the seed changes every amount, date and victim, but
+    NOT the recipe: every dataset still has ~12% mismatched batches, a
+    duplicate every 20 transactions, and the same 1-3 batch-size mix. Running
+    a hundred of those measures robustness to different *numbers*, which is
+    worth something, but it does not measure robustness to a different *kind*
+    of merchant - and quoting "120 datasets" while every one shares a recipe
+    would overstate what was actually tested.
+
+    With `vary=True` the regime itself is drawn from the seed: how often
+    settlements go wrong (4%-30%), how big the payout batches are (from all
+    singletons to batches of six), how long the reporting window is, how
+    common refunds, duplicates and stuck payouts are. A high-volume merchant
+    with clean books and a small one with messy books are different problems,
+    and the matcher has to hold on both.
     """
     rng = random.Random(seed)
+
+    # The regime gets its OWN generator, deliberately. Sharing one would mean
+    # that changing the shape of a dataset also reshuffled every amount inside
+    # it, so a vary=True run could never be compared against the vary=False
+    # run at the same seed. Two independent knobs, two independent streams.
+    if vary:
+        vrng = random.Random(seed * 7919 + 13)
+        window_days = vrng.choice([5, 7, 10, 14, 21])
+        mismatch_rate = vrng.uniform(0.04, 0.30)
+        stuck_divisor = vrng.choice([15, 20, 30, 50, 80])
+        refund_divisor = vrng.choice([8, 12, 15, 25, 40])
+        duplicate_divisor = vrng.choice([10, 20, 35, 60])
+        batch_size_weights = vrng.choice([
+            [1],                # never batches - one payout per payment
+            [1, 1, 2],          # mostly singletons
+            [1, 1, 2, 2, 3],    # the default mix
+            [1, 2, 3, 4],       # moderately batched
+            [2, 3, 4, 5, 6],    # heavily batched, no singletons at all
+        ])
+    else:
+        mismatch_rate = 0.12
+        stuck_divisor, refund_divisor, duplicate_divisor = 30, 15, 20
+        batch_size_weights = [1, 1, 2, 2, 3]
+
+    regime = {
+        "vary": vary,
+        "window_days": window_days,
+        "mismatch_rate": round(mismatch_rate, 4),
+        "stuck_divisor": stuck_divisor,
+        "refund_divisor": refund_divisor,
+        "duplicate_divisor": duplicate_divisor,
+        "batch_size_weights": batch_size_weights,
+    }
 
     # window_end is the "report pull date" - the last date this dataset can
     # tell us anything about. A payment from the final two days simply has no
@@ -136,6 +186,7 @@ def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=
             "n_transactions": n_transactions,
             "window_days": window_days,
             "data_window_end": window_end.strftime("%Y-%m-%d"),
+            "regime": regime,
         },
         "clean_settlements": [],      # settlement_ids that should reconcile exactly
         "batched_into": {},           # txn_id -> settlement_id
@@ -148,9 +199,9 @@ def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=
     # --- pick exception victims -------------------------------------------
     # Scaled proportionally; at the default n=60 this reproduces the original
     # mix (4 missing, 4 partial refunds, 3 duplicates, ~4 mismatches, 1 orphan).
-    n_stuck = max(1, n_transactions // 30)
-    n_partial_refund = max(1, n_transactions // 15)
-    n_duplicate = max(1, n_transactions // 20)
+    n_stuck = max(1, n_transactions // stuck_divisor)
+    n_partial_refund = max(1, n_transactions // refund_divisor)
+    n_duplicate = max(1, n_transactions // duplicate_divisor)
 
     # Everything past the settleable cutoff is not-yet-due by construction:
     # its T+2 falls after the report pull date, so no settlement exists yet.
@@ -197,7 +248,7 @@ def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=
 
     i = 0
     while i < len(to_settle):
-        batch_size = rng.choice([1, 1, 2, 2, 3])
+        batch_size = rng.choice(batch_size_weights)
         batch = to_settle[i:i + batch_size]
         i += batch_size
         if not batch:
@@ -243,7 +294,7 @@ def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=
     # Round-robin (rather than random choice) guarantees every cause is
     # represented even on a small dataset, so the AI-accuracy metric is never
     # computed over a set that happens to contain only one kind of problem.
-    n_mismatch = max(len(MISMATCH_CAUSES), round(len(batches) * 0.12))
+    n_mismatch = max(len(MISMATCH_CAUSES), round(len(batches) * mismatch_rate))
     eligible = [b for b in batches if b[1]]
     rng.shuffle(eligible)
 
@@ -385,12 +436,18 @@ def main():
     p.add_argument("--n", type=int, default=60, dest="n_transactions")
     p.add_argument("--out-dir", default="data")
     p.add_argument("--window-days", type=int, default=7)
+    p.add_argument("--vary", action="store_true",
+                   help="Draw the dataset's REGIME from the seed too - exception rate, "
+                        "batch sizes, refund/duplicate frequency, window length - not "
+                        "just its amounts. Use this to test across different kinds of "
+                        "merchant rather than different draws of the same kind.")
     args = p.parse_args()
     generate(
         seed=args.seed,
         n_transactions=args.n_transactions,
         out_dir=args.out_dir,
         window_days=args.window_days,
+        vary=args.vary,
     )
 
 

@@ -93,9 +93,19 @@ def render(report: dict) -> str:
 
 
 if __name__ == "__main__":
-    with open("data/report.json") as f:
+    import argparse
+    import os
+
+    p = argparse.ArgumentParser(description="Render report.json as readable HTML.")
+    p.add_argument("--report", default="data/report.json",
+                   help="Path to a report.json produced by report.py")
+    p.add_argument("--out", default=None,
+                   help="Where to write the HTML. Defaults to the report's name with .html")
+    args = p.parse_args()
+
+    with open(args.report) as f:
         report = json.load(f)
-    html = render(report)
-    with open("data/report.html", "w") as f:
-        f.write(html)
-    print("Wrote data/report.html")
+    out_path = args.out or os.path.splitext(args.report)[0] + ".html"
+    with open(out_path, "w") as f:
+        f.write(render(report))
+    print(f"Wrote {out_path}")

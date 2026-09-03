@@ -1,10 +1,13 @@
 {
   "hard_case_evaluation": {
-    "hard_cases_found": 13,
-    "total_scoreable_cases_swept": 585,
-    "baseline_failure_rate": 0.0222,
-    "llm_correct_on_baseline_failures": 4,
-    "llm_accuracy_on_baseline_failures": 0.3077,
+    "hard_cases_found": 34,
+    "total_scoreable_cases_swept": 1553,
+    "baseline_failure_rate": 0.0219,
+    "llm_correct_on_baseline_failures": 11,
+    "llm_cases_answered": 22,
+    "llm_infrastructure_failures": 12,
+    "llm_accuracy_of_answered": 0.5,
+    "llm_accuracy_strict": 0.3235,
     "reasoner": "groq",
     "detail": [
       {
@@ -13,8 +16,9 @@
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
         "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
         "llm_confidence": "high",
-        "llm_explanation": "The settlement is short by $1,720.43, which is exactly 11.1% of transaction txn_0192\u2019s net amount ($15,566.74). That matches the refund amount recorded for that transaction, indicating the bank didn\u2019t pay the refund that was logged in the ledger.",
+        "llm_explanation": "The settlement is short by $1,720.43, which is exactly 11.1% of transaction txn_0192\u2019s net amount ($15,566.74). That 11.1% represents a refund that was issued but not reflected in the bank\u2019s payout, so the bank paid less than the ledger expected.",
         "llm_correct": true
       },
       {
@@ -23,8 +27,9 @@
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
         "llm_predicted": "fee_or_gst_error",
-        "llm_confidence": "medium",
-        "llm_explanation": "The settlement is 1,076.58 less than expected, which is about 5% of each of the two transactions\u2019 net amounts. This pattern suggests the platform fee or GST was calculated incorrectly for these payments.",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The bank paid $1,076.58 less than expected, which is about 2.7% of the settlement total. This gap isn\u2019t tied to any single transaction\u2019s amount or a fraction of one, indicating a likely mis\u2011calculation of platform fee or GST.",
         "llm_correct": false
       },
       {
@@ -32,20 +37,22 @@
         "case_id": "stl_0029",
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
-        "llm_predicted": "fee_or_gst_error",
-        "llm_confidence": "medium",
-        "llm_explanation": "The bank paid $22,474.41 instead of the expected $23,939.99, a shortfall of $1,465.58 which is about 6.1% of the transaction amount. This pattern indicates a likely mis\u2011calculation of the platform fee or GST applied to txn_0280.",
-        "llm_correct": false
+        "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The bank settled $22,474.41 instead of the expected $23,939.99, a shortfall of $1,465.58 \u2013 about 6.1% of the single transaction\u2019s net amount. This pattern matches a refund that was issued but never recorded in the refunds data, so the matcher didn\u2019t subtract it.",
+        "llm_correct": true
       },
       {
         "label": "seed=5 n=300",
         "case_id": "stl_0036",
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
-        "llm_predicted": "unparsed",
-        "llm_confidence": "low",
-        "llm_explanation": "",
-        "llm_correct": false
+        "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
+        "llm_confidence": "medium",
+        "llm_explanation": "The settlement expected to pay $8,021.58 for txn_0014, but the bank only paid $5,215.93 \u2013 a shortfall of $2,805.65, which is exactly the recorded refund amount (21.2% of the $13,229.93 net). This suggests the refund was recorded but not yet reflected in the bank\u2019s payout.",
+        "llm_correct": true
       },
       {
         "label": "seed=6 n=300",
@@ -53,8 +60,9 @@
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
         "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
         "llm_confidence": "medium",
-        "llm_explanation": "The settlement is short by $1,217.01, which is about 82.9% of the net amount of transaction txn_0192 ($1,467.50). This suggests a refund of that portion was issued but not recorded in the refunds data, so the bank paid less than the ledger expected.",
+        "llm_explanation": "The settlement is short by $1,217.01, which is exactly 82.9% of the net amount of transaction txn_0192 ($1,467.50). This suggests a refund of that amount was issued but never recorded in the refunds data, causing the bank to pay less than expected.",
         "llm_correct": true
       },
       {
@@ -62,20 +70,22 @@
         "case_id": "stl_0159",
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
-        "llm_predicted": "unparsed",
-        "llm_confidence": "low",
-        "llm_explanation": "",
-        "llm_correct": false
+        "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The settlement is short by $6,182.71, which is exactly 32% of the net amount of transaction txn_0271 ($19,333.71). This indicates that a refund of that portion was recorded but not reflected in the bank transfer.",
+        "llm_correct": true
       },
       {
         "label": "seed=11 n=300",
         "case_id": "stl_0117",
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
-        "llm_predicted": "unparsed",
-        "llm_confidence": "low",
-        "llm_explanation": "{\"explanation\":\"The bank paid only $3,037.57 instead of the expected $10,107.84. The missing $7,070.27 is about 54% of the net amount of transaction txn_0106, indicating a refund that was issued but not recorded in the system, so the bank settled less than it should have.\",\"likely_cause\":\"unrecorded_refund\",\"confidence\":\"medium\",\"",
-        "llm_correct": false
+        "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The settlement is short by $7,070.27, which is exactly 53.8% of the net amount of transaction txn_0106. This pattern matches a missing refund that should have reduced the payout but was not reflected in the bank payment.",
+        "llm_correct": true
       },
       {
         "label": "seed=12 n=300",
@@ -83,8 +93,9 @@
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
         "llm_predicted": "fee_or_gst_error",
-        "llm_confidence": "medium",
-        "llm_explanation": "The bank paid $3,576.83 less than expected, a shortfall of about 3.1% of the settlement amount. This gap isn\u2019t tied to any single transaction and isn\u2019t a small discrepancy, suggesting a mis\u2011calculation of the platform fee or GST applied to the batch.",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The settlement is short by $1,176.83, about 3.1% of the expected amount. Both included transactions show a similar 6% shortfall, suggesting a fee or GST mis\u2011calculation rather than a missing transaction or refund.",
         "llm_correct": false
       },
       {
@@ -93,8 +104,9 @@
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
         "llm_predicted": "unparsed",
+        "llm_answered": false,
         "llm_confidence": "low",
-        "llm_explanation": "",
+        "llm_explanation": "{\"explanation\":\"The settlement shows the bank paid only $2,596.63 when $8,705.88 was expected. The $6,109.25 shortfall is roughly 41% of the transaction\u2019s net amount, which matches the recorded refund fraction, indicating the refund may not have been applied correctly in the payout.\",\"likely_cause\":\"unrecorded_refund\",\"confidence\":\"low\",\"recommended_action\":\"Contact the bank to confirm whether the refund was processed and included in",
         "llm_correct": false
       },
       {
@@ -103,8 +115,9 @@
         "true_cause": "fee_or_gst_error",
         "baseline_predicted": "unrecorded_refund",
         "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
         "llm_confidence": "high",
-        "llm_explanation": "The settlement is 141.69 less than expected because a refund of that amount was issued for transaction txn_0259 but was never recorded. The expected amount was 33,324.80, the actual paid was 33,183.11, leaving a 141.69 shortfall that matches 28.7% of txn_0259\u2019s net 494.48.",
+        "llm_explanation": "The bank paid $141.69 less than expected, which is about 28.7% of the $494.48 net amount of transaction txn_0259. This indicates a refund was issued for that transaction but not recorded in the system.",
         "llm_correct": false
       },
       {
@@ -113,8 +126,9 @@
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
         "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
         "llm_confidence": "high",
-        "llm_explanation": "The bank paid $4,321.64 but we expected $12,619.04 for transaction txn_0008. The $8,297.40 shortfall is about 42.7% of that transaction\u2019s net amount, indicating a refund was processed but not recorded in the system.",
+        "llm_explanation": "The settlement was supposed to pay 12,619.04 for transaction txn_0008, but the bank only paid 4,321.64 \u2013 a shortfall of 8,297.40, which is about 42.7% of the transaction\u2019s net amount. This gap matches the size of a refund that should have been deducted but wasn\u2019t recorded.",
         "llm_correct": true
       },
       {
@@ -123,8 +137,9 @@
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
         "llm_predicted": "unrecorded_refund",
-        "llm_confidence": "medium",
-        "llm_explanation": "The bank paid $14,791.08 instead of the expected $22,318.31 because a refund of $7,527.23 was applied to transaction txn_0039 (32.9% of its $22,860.28 net). The settlement amount did not account for this refund, so the ledger shows a mismatch.",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The bank paid $14,791.08 instead of the expected $22,318.31, a shortfall of $7,527.23, which is exactly 32.9% of transaction txn_0039\u2019s net amount ($22,860.28). This suggests a refund was issued for that transaction but wasn\u2019t recorded in the system, so the ledger expected more than the bank actually paid.",
         "llm_correct": true
       },
       {
@@ -132,11 +147,254 @@
         "case_id": "stl_0067",
         "true_cause": "unrecorded_refund",
         "baseline_predicted": "fee_or_gst_error",
-        "llm_predicted": "unparsed",
+        "llm_predicted": "fee_or_gst_error",
+        "llm_answered": true,
+        "llm_confidence": "medium",
+        "llm_explanation": "The settlement should have been $25,229.41 but the bank paid $23,837.81, a shortfall of $1,391.60 (about 5.5% of the expected amount). This gap isn\u2019t tied to any single transaction\u2019s net amount, so it most likely reflects a mis\u2011calculated platform fee or GST applied to the batch.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=17 n=300",
+        "case_id": "stl_0060",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "fee_or_gst_error",
+        "llm_answered": true,
+        "llm_confidence": "medium",
+        "llm_explanation": "The bank paid $7,319.75 instead of the expected $7,950.69, a shortfall of $630.94. This gap is about 7.9% of the transaction\u2019s net amount, suggesting the platform fee or GST was likely mis\u2011calculated and deducted too much.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=19 n=300",
+        "case_id": "stl_0110",
+        "true_cause": "fee_or_gst_error",
+        "baseline_predicted": "unrecorded_refund",
+        "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The settlement is short by $240.56, which is exactly 30.5% of the $788.93 net amount of transaction txn_0205. This indicates a refund of that amount was issued but not recorded in the system.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=19 n=300",
+        "case_id": "stl_0113",
+        "true_cause": "fee_or_gst_error",
+        "baseline_predicted": "unrecorded_refund",
+        "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The bank paid $47,533.71 instead of the expected $47,969.89, a shortfall of $436.18. That amount is about 12.3% of the net amount of transaction txn_0173 ($3,537.69), indicating a refund was issued for that transaction but not recorded in the system.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=20 n=300",
+        "case_id": "stl_0049",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "off_taxonomy",
+        "llm_answered": false,
         "llm_confidence": "low",
-        "llm_explanation": "",
+        "llm_explanation": "[model returned an out-of-taxonomy cause: None] ",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=20 n=300",
+        "case_id": "stl_0070",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
+        "llm_confidence": "medium",
+        "llm_explanation": "The settlement expected to pay $3,559.49 but the bank only paid \u2013$111.06, a shortfall of $3,670.55. That shortfall is about 52.8% of the $6,945.24 net amount of transaction txn_0160, which the system shows had a refund recorded. It appears the refund was recorded in the ledger but the bank did not apply it to the payout, so the bank paid less than owed.",
+        "llm_correct": true
+      },
+      {
+        "label": "seed=21 n=300",
+        "case_id": "stl_0097",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "fee_or_gst_error",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The bank paid $587.11 less than expected, about 1.5% of the settlement. That shortfall is roughly 3\u20118% of each transaction\u2019s net amount, suggesting a mis\u2011calculated platform fee or GST rather than a missing transaction or refund.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=22 n=300",
+        "case_id": "stl_0011",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The settlement should have paid $1,603.68 for transaction txn_0022 after a $937.98 refund was recorded, but the bank only paid $665.32 \u2013 a shortfall of about $938, which is exactly the refund amount. This indicates the refund was recorded in the system but not actually processed by the bank.",
+        "llm_correct": true
+      },
+      {
+        "label": "seed=23 n=300",
+        "case_id": "stl_0063",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "unrecorded_refund",
+        "llm_answered": true,
+        "llm_confidence": "medium",
+        "llm_explanation": "The settlement is $3,001.71 short, which is about 19.4% of the net amount of transaction txn_0246. This matches the size of a refund that appears to have been issued but not reflected in the bank\u2019s payout, so the bank paid less than the ledger expected.",
+        "llm_correct": true
+      },
+      {
+        "label": "seed=26 n=300",
+        "case_id": "stl_0025",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "fee_or_gst_error",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The settlement paid $6,964.40 instead of the expected $7,339.74, a shortfall of $375.34 which is about 5.1% of the transaction\u2019s net amount, indicating a likely mis\u2011calculation of the platform fee or GST.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=26 n=300",
+        "case_id": "stl_0103",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "fee_or_gst_error",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The bank paid $3,982.24 less than the $41,544.45 expected, a shortfall of $1,762.21 which is about 4.2% of the total. This gap is roughly 9% of each transaction\u2019s net amount, suggesting a fee or GST was omitted or mis\u2011calculated rather than a missing refund or transaction.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=27 n=300",
+        "case_id": "stl_0052",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "fee_or_gst_error",
+        "llm_answered": true,
+        "llm_confidence": "high",
+        "llm_explanation": "The bank paid $1,153.43 less than expected, which is about 6.3% of the $18,237.19 transaction. This matches the typical size of a mis\u2011calculated platform fee or GST, not a refund or missing transaction.",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=27 n=300",
+        "case_id": "stl_0109",
+        "true_cause": "fee_or_gst_error",
+        "baseline_predicted": "unrecorded_refund",
+        "llm_predicted": "api_error",
+        "llm_answered": false,
+        "llm_confidence": "low",
+        "llm_explanation": "[RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kj1aqh0vfv48fenrspdhsgnr` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199544, Requested 1947. Please try again in 10m44.112s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=29 n=300",
+        "case_id": "stl_0084",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "api_error",
+        "llm_answered": false,
+        "llm_confidence": "low",
+        "llm_explanation": "[RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kj1aqh0vfv48fenrspdhsgnr` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199532, Requested 1949. Please try again in 10m39.792s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=29 n=300",
+        "case_id": "stl_0129",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "api_error",
+        "llm_answered": false,
+        "llm_confidence": "low",
+        "llm_explanation": "[RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kj1aqh0vfv48fenrspdhsgnr` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199518, Requested 1917. Please try again in 10m19.92s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=30 n=300",
+        "case_id": "stl_0074",
+        "true_cause": "fee_or_gst_error",
+        "baseline_predicted": "unrecorded_refund",
+        "llm_predicted": "api_error",
+        "llm_answered": false,
+        "llm_confidence": "low",
+        "llm_explanation": "[RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kj1aqh0vfv48fenrspdhsgnr` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199506, Requested 1897. Please try again in 10m6.096s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=34 n=300",
+        "case_id": "stl_0133",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "api_error",
+        "llm_answered": false,
+        "llm_confidence": "low",
+        "llm_explanation": "[RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kj1aqh0vfv48fenrspdhsgnr` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199494, Requested 1870. Please try again in 9m49.247999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=36 n=300",
+        "case_id": "stl_0060",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "api_error",
+        "llm_answered": false,
+        "llm_confidence": "low",
+        "llm_explanation": "[RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kj1aqh0vfv48fenrspdhsgnr` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199479, Requested 1825. Please try again in 9m23.328s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=38 n=300",
+        "case_id": "stl_0048",
+        "true_cause": "fee_or_gst_error",
+        "baseline_predicted": "unrecorded_refund",
+        "llm_predicted": "api_error",
+        "llm_answered": false,
+        "llm_confidence": "low",
+        "llm_explanation": "[RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kj1aqh0vfv48fenrspdhsgnr` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199465, Requested 1900. Please try again in 9m49.68s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=39 n=300",
+        "case_id": "stl_0096",
+        "true_cause": "fee_or_gst_error",
+        "baseline_predicted": "unrecorded_refund",
+        "llm_predicted": "api_error",
+        "llm_answered": false,
+        "llm_confidence": "low",
+        "llm_explanation": "[RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kj1aqh0vfv48fenrspdhsgnr` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199453, Requested 1944. Please try again in 10m3.504s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=40 n=300",
+        "case_id": "stl_0052",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "api_error",
+        "llm_answered": false,
+        "llm_confidence": "low",
+        "llm_explanation": "[RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kj1aqh0vfv48fenrspdhsgnr` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199441, Requested 1825. Please try again in 9m6.911999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
+        "llm_correct": false
+      },
+      {
+        "label": "seed=40 n=300",
+        "case_id": "stl_0097",
+        "true_cause": "unrecorded_refund",
+        "baseline_predicted": "fee_or_gst_error",
+        "llm_predicted": "api_error",
+        "llm_answered": false,
+        "llm_confidence": "low",
+        "llm_explanation": "[RateLimitError: Error code: 429 - {'error': {'message': 'Rate limit reached for model `openai/gpt-oss-20b` in organization `org_01kj1aqh0vfv48fenrspdhsgnr` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199429, Requested 1915. Please try again in 9m40.608s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}]",
         "llm_correct": false
       }
-    ]
+    ],
+    "majority_class_control": {
+      "label": "unrecorded_refund",
+      "correct": 19,
+      "total": 22,
+      "accuracy": 0.8636,
+      "true_cause_mix": {
+        "unrecorded_refund": 19,
+        "fee_or_gst_error": 3
+      }
+    },
+    "run_note": "INVALID AS A HEADLINE NUMBER - READ BEFORE QUOTING. Two problems. (1) The run was cut short: the Groq free tier 200,000 tokens-per-day ceiling was exhausted partway through, so 10 of the 34 cases returned HTTP 429 and 2 more were truncated/unparseable. Those 12 are excluded from the denominator because a call that never returned is our infrastructure failing, not the model being wrong - leaving only 22 scored cases. (2) More importantly, on those 22 the LLM scored 0.500 while simply always guessing the commonest label in the sample scores 0.864. The sample is selected by \"the rule baseline was wrong\", the baseline errs asymmetrically, and that skews the label mix 19:3. The constant guess is not a real rival system - it exploits the selection and would be useless on the true distribution - but the model failing to beat it means this run does NOT demonstrate the LLM recovering the baseline failures. Re-run when the daily quota resets; reasoning_effort=low now cuts token spend so a full run fits the budget."
   }
 }
