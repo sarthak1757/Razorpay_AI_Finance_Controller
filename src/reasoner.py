@@ -17,7 +17,9 @@ This mirrors the mock_client.py pattern already in your orchestrator repo.
 
 import os
 import json
+import random
 import re
+import time
 
 from causes import (
     CAUSES_BY_KIND,
@@ -37,6 +39,88 @@ try:
     load_dotenv()  # reads a local .env file if present - never commits, see .gitignore
 except ImportError:
     pass  # dotenv not installed - still works if the key is set as a real env var
+
+
+class DailyQuotaExhausted(RuntimeError):
+    """The provider's per-DAY budget is gone.
+
+    Distinguished from ordinary throttling because the remedy is completely
+    different. A per-minute limit is a pacing problem: wait a few seconds and
+    the call succeeds. A daily cap cannot be waited out inside a run, so
+    continuing just converts every remaining case into an api_error - which is
+    how a 120-case evaluation produced 100 non-answers and no measurement.
+    Callers should stop and say so.
+    """
+
+
+def is_rate_limit(exc) -> bool:
+    text = str(exc)
+    return (
+        type(exc).__name__ in ("RateLimitError", "ResourceExhausted")
+        or "429" in text
+        or "RESOURCE_EXHAUSTED" in text
+        or "rate limit" in text.lower()
+    )
+
+
+def is_daily_quota(exc) -> bool:
+    """Per-day exhaustion, as opposed to per-minute throttling.
+
+    Both providers say so in the message: Groq names "tokens per day (TPD)",
+    Gemini names a per-day metric. Matching on the text is unlovely, but the
+    alternative is treating a daily cap as transient and burning twenty
+    minutes of backoff discovering otherwise.
+    """
+    text = str(exc).lower()
+    return any(marker in text for marker in
+               ("per day", "perday", "per-day", "(tpd)", "tpd:", "daily"))
+
+
+def retry_after_seconds(exc, default=None):
+    """Pull the provider's own wait hint out of the error message.
+
+    Both APIs tell us exactly how long to wait ("Please retry in 11.7s",
+    "try again in 7m45.696s"). Honouring that is strictly better than a
+    guessed backoff - too short and we are throttled again, too long and a
+    120-case run takes an hour.
+    """
+    text = str(exc)
+    match = re.search(r"(?:retry|try again) in ((?:\d+m)?[\d.]+)s", text, re.IGNORECASE)
+    if match:
+        raw = match.group(1)
+        minutes = 0.0
+        if "m" in raw:
+            mins, _, secs = raw.partition("m")
+            minutes, raw = float(mins), secs or "0"
+        return minutes * 60 + float(raw)
+    return default
+
+
+def call_with_backoff(fn, max_attempts=5, cap=90.0, label=""):
+    """Run `fn`, waiting out transient rate limits.
+
+    Raises DailyQuotaExhausted immediately on a per-day cap (no point
+    waiting), and re-raises anything that isn't a rate limit untouched so a
+    genuine bug doesn't get silently retried five times.
+    """
+    for attempt in range(1, max_attempts + 1):
+        try:
+            return fn()
+        except Exception as e:
+            if not is_rate_limit(e):
+                raise
+            if is_daily_quota(e):
+                raise DailyQuotaExhausted(str(e)) from e
+            if attempt == max_attempts:
+                raise
+            # Jitter matters: without it, a paced loop that hits the limit
+            # retries every case at the same offset and stays synchronised
+            # with the provider's window.
+            delay = retry_after_seconds(e, default=2.0 * (2 ** (attempt - 1)))
+            delay = min(delay, cap) + random.uniform(0, 1.0)
+            print(f"    [{label or 'api'}] rate limited, waiting {delay:.1f}s "
+                  f"(attempt {attempt}/{max_attempts})", flush=True)
+            time.sleep(delay)
 
 
 def build_explain_prompt(case: dict) -> str:
@@ -324,10 +408,12 @@ class AnthropicReasoner:
 
     name = "anthropic"
 
-    def __init__(self, model="claude-sonnet-4-5-20250929"):
+    def __init__(self, model=None):
         import anthropic
         self.client = anthropic.Anthropic()
-        self.model = model
+        # Set ANTHROPIC_MODEL in .env to override. Model IDs are complete as
+        # written - do not append a date suffix.
+        self.model = model or os.environ.get("ANTHROPIC_MODEL", "claude-opus-5")
 
     def explain(self, case: dict) -> dict:
         resp = self.client.messages.create(
@@ -365,15 +451,67 @@ class GeminiReasoner:
         self.client = genai.Client(api_key=os.environ["GEMINI_API_KEY"])
         self.model_name = model or os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 
+    def _config(self, max_tokens, thinking_budget):
+        """Build a generation config, degrading gracefully if this SDK version
+        or model doesn't accept thinking_config. Unsupported fields raise
+        rather than being ignored, so we have to be able to drop them."""
+        from google.genai import types
+        kwargs = {"max_output_tokens": max_tokens, "temperature": 0.3}
+        if thinking_budget is not None:
+            try:
+                kwargs["thinking_config"] = types.ThinkingConfig(
+                    thinking_budget=thinking_budget)
+            except Exception:
+                pass
+        return types.GenerateContentConfig(**kwargs)
+
+    def _complete(self, prompt, max_tokens, thinking_budget):
+        """One call, waiting out per-minute throttling.
+
+        The free tier caps requests per minute, and this backend used to let
+        that 429 escape into explain()'s retry ladder - which treated it as a
+        bad ANSWER and immediately fired two more requests. That tripled the
+        request rate at exactly the moment we were already over the limit, so
+        a run paced at 10 cases/min was really issuing up to 30 requests/min
+        and 100 of 120 cases came back as errors. Absorbing the throttle here,
+        before the ladder can see it, is the fix.
+        """
+        def once():
+            try:
+                return self.client.models.generate_content(
+                    model=self.model_name, contents=prompt,
+                    config=self._config(max_tokens, thinking_budget))
+            except TypeError:
+                # Older SDK signature without `config`.
+                return self.client.models.generate_content(
+                    model=self.model_name, contents=prompt)
+
+        resp = call_with_backoff(once, label="gemini")
+        return (getattr(resp, "text", None) or "").strip()
+
     def explain(self, case: dict) -> dict:
-        resp = self.client.models.generate_content(
-            model=self.model_name, contents=build_explain_prompt(case)
-        )
-        return parse_explanation(resp.text, CAUSES_BY_KIND.get(case["kind"], []))
+        """Same empty-response defence as the Groq backend, for the same
+        reason: gemini-2.5-flash is a thinking model, so the output budget is
+        shared between its reasoning and its answer. Left unbounded it can
+        spend the budget thinking and return empty content, which we would
+        then score as a wrong answer - reporting our own configuration as a
+        finding about model quality. Thinking is capped rather than the
+        budget merely raised, so the reply has room.
+        """
+        prompt = build_explain_prompt(case)
+        allowed = CAUSES_BY_KIND.get(case["kind"], [])
+
+        last = None
+        for thinking_budget, max_tokens in [(0, 800), (None, 2000), (None, 4000)]:
+            text = self._complete(prompt, max_tokens, thinking_budget)
+            result = parse_explanation(text, allowed)
+            if result["likely_cause"] not in ("empty_response", "unparsed"):
+                return result
+            last = result
+        return last
 
     def chat(self, prompt: str) -> str:
-        resp = self.client.models.generate_content(model=self.model_name, contents=prompt)
-        return resp.text.strip()
+        return self._complete(prompt, 1500, None)
 
 
 class GroqReasoner:
@@ -427,19 +565,23 @@ class GroqReasoner:
 
         # Drop the optional parameters one at a time rather than all at once,
         # so a model that supports only one of them still gets the benefit.
-        # A rate-limit error is re-raised immediately - retrying it here
-        # without a backoff would just burn more of the very quota that ran
-        # out, and the grader needs to see it as an infrastructure failure
-        # rather than a wrong answer.
+        #
+        # Rate limits are handled by call_with_backoff rather than here: a
+        # per-minute throttle is waited out, while a daily cap raises
+        # DailyQuotaExhausted so the caller stops instead of converting every
+        # remaining case into an api_error. Retrying a daily cap would burn
+        # the very quota that ran out.
         for drop in ([], ["reasoning_effort"], ["reasoning_effort", "response_format"]):
             attempt = {k: v for k, v in kwargs.items() if k not in drop}
             try:
-                resp = self.client.chat.completions.create(**attempt)
+                resp = call_with_backoff(
+                    lambda a=attempt: self.client.chat.completions.create(**a),
+                    label="groq")
                 break
+            except DailyQuotaExhausted:
+                raise
             except Exception as e:
-                if type(e).__name__ == "RateLimitError" or "429" in str(e):
-                    raise
-                if drop == ["reasoning_effort", "response_format"]:
+                if is_rate_limit(e) or drop == ["reasoning_effort", "response_format"]:
                     raise
 
         message = resp.choices[0].message
@@ -482,22 +624,55 @@ class GroqReasoner:
         return resp.choices[0].message.content.strip()
 
 
-def get_reasoner():
-    """Auto-selects a real LLM if a key is present, otherwise the mock.
-    Checks Anthropic first, then Groq, then Gemini, then falls back."""
-    if os.environ.get("ANTHROPIC_API_KEY"):
-        try:
-            return AnthropicReasoner()
-        except Exception as e:
-            print(f"[reasoner] Failed to init Anthropic client ({e}), falling back to mock.")
-    if os.environ.get("GROQ_API_KEY"):
-        try:
-            return GroqReasoner()
-        except Exception as e:
-            print(f"[reasoner] Failed to init Groq client ({e}), falling back to mock.")
-    if os.environ.get("GEMINI_API_KEY"):
-        try:
-            return GeminiReasoner()
-        except Exception as e:
-            print(f"[reasoner] Failed to init Gemini client ({e}), falling back to mock.")
-    return MockReasoner()
+BACKENDS = {
+    "anthropic": (AnthropicReasoner, "ANTHROPIC_API_KEY"),
+    "groq": (GroqReasoner, "GROQ_API_KEY"),
+    "gemini": (GeminiReasoner, "GEMINI_API_KEY"),
+    "baseline": (RuleBaselineReasoner, None),
+}
+
+
+def get_reasoner(backend=None):
+    """Pick a reasoning backend.
+
+    WHY EXPLICIT SELECTION MATTERS:
+    This used to auto-select whichever key it found first, which is fine for
+    "just run the thing" but makes the comparison we actually care about
+    impossible. With two keys in .env, auto-selection silently always picks
+    the same one - so "we measured Groq and Gemini on the same sample" would
+    quietly be "we measured Groq twice". Grading two models against one
+    another requires being able to name which one you want.
+
+    Order of precedence: an explicit argument, then the RECON_REASONER
+    environment variable, then auto-detection (unchanged, so every existing
+    entry point keeps working with no key management).
+
+    Falls back to the rule baseline rather than raising, so the pipeline is
+    always runnable for free - but an explicitly REQUESTED backend that fails
+    does raise, because silently grading the baseline while the output claims
+    to be an LLM would corrupt the measurement.
+    """
+    requested = backend or os.environ.get("RECON_REASONER")
+    if requested:
+        requested = requested.strip().lower()
+        if requested not in BACKENDS:
+            raise ValueError(
+                f"Unknown reasoner backend {requested!r}. "
+                f"Choose one of: {', '.join(sorted(BACKENDS))}"
+            )
+        cls, key_var = BACKENDS[requested]
+        if key_var and not os.environ.get(key_var):
+            raise RuntimeError(
+                f"Backend {requested!r} was requested but {key_var} is not set. "
+                f"Add it to .env, or pick a different backend."
+            )
+        return cls()
+
+    for name in ("anthropic", "groq", "gemini"):
+        cls, key_var = BACKENDS[name]
+        if os.environ.get(key_var):
+            try:
+                return cls()
+            except Exception as e:
+                print(f"[reasoner] Failed to init {name} client ({e}), trying next.")
+    return RuleBaselineReasoner()
