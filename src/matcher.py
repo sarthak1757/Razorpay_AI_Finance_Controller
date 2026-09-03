@@ -271,6 +271,20 @@ def discrepancy_signals(diff, expected_total, batch_txns, refund_by_txn):
         "diff_pct_of_expected": round(abs_diff / expected_total * 100, 3) if expected_total else None,
         "is_small_absolute_discrepancy": abs_diff <= SMALL_DISCREPANCY_CEILING,
         "transactions_in_batch": len(batch_txns),
+        # The total fee + GST actually charged across this batch. This is a
+        # hard ceiling on how wrong a fee/GST calculation could possibly be:
+        # even if the entire fee were computed incorrectly, the gap could not
+        # exceed the whole fee. A discrepancy LARGER than this is therefore
+        # not a fee error, whatever else it might be.
+        #
+        # Still a fact, not a cause - it states what was charged and leaves
+        # the inference to the reasoning layer. But it is the fact that makes
+        # "none of the known causes fit this" a defensible conclusion rather
+        # than a shrug, which is what the unknown_anomaly label needs.
+        "total_fee_charged_on_batch": round(
+            sum(t["razorpay_fee"] + t["gst_on_fee"] for t in batch_txns), 2),
+        "gap_exceeds_total_fee_charged": abs_diff > round(
+            sum(t["razorpay_fee"] + t["gst_on_fee"] for t in batch_txns), 2),
         "exact_match_to_one_transaction": None,
         "refund_sized_fraction_of_one_transaction": None,
         # The full batch, so a reasoner can work the numbers itself instead of
