@@ -68,7 +68,7 @@ at every scale — over 91% of records never touch a model.
 The reasoner must name the true cause of each exception from a fixed
 taxonomy of seven. Graded against the injected truth.
 
-**Rule baseline (the control): 96.97%** — 24,528 of 25,294 cases across the
+**Rule baseline (the control): 97.01%** — 24,538 of 25,294 cases across the
 160 varied-regime datasets, orphans excluded.
 
 Its calibration is the interesting part:
@@ -76,7 +76,7 @@ Its calibration is the interesting part:
 | Stated confidence | Correct | Accuracy |
 |---|---|---|
 | high | 16,544 / 16,544 | **1.0000** |
-| medium | 7,984 / 8,750 | 0.9120 |
+| medium | 7,994 / 8,750 | 0.9136 |
 
 Every single "high confidence" call, across 16,544 of them, was right. That
 means confidence is a usable routing signal rather than decoration — you can
@@ -84,11 +84,95 @@ auto-clear the high-confidence findings and put a human on the rest.
 
 **LLM on the adversarial sample:** see below.
 
+### Admitting it doesn't know
+
+A closed taxonomy has a nasty failure mode: forced to pick one of four causes,
+a classifier always picks one. A genuinely novel problem gets filed under
+whichever label it least resembles, and you get a confident, specific, **wrong**
+diagnosis. Grading only against causes you injected can never reveal this,
+because you never showed it a surprise.
+
+So there is a seventh label, `unknown_anomaly`, and `--novel-rate` injects
+mechanisms deliberately **outside** the taxonomy — a chargeback plus a penalty
+fee, a bank rounding a payout down to a round ₹10,000, a correctly-recorded
+refund deducted twice. The right answer for all of them is "I don't recognise
+this", not the nearest label.
+
+This cannot be graded with one number — the label is gameable both ways — so
+three are reported, with both degenerate controls:
+
+| Rule baseline · 160 varied datasets · 8% novel | |
+|---|---|
+| Novel-detection **recall** | 3,733 / 6,511 = **0.573** |
+| Novel-detection **precision** | 3,733 / 4,142 = **0.901** |
+| Accuracy on **known** causes *(regression guard)* | 24,538 / 25,294 = **0.9701** |
+| *Control — never say unknown* | recall 0.000 |
+| *Control — always say unknown* | recall 1.000, precision 0.205, known accuracy **0.000** |
+
+It beats both degenerate strategies at once, which is the only way this label
+is worth having.
+
+**The regression guard is the number to watch**: known-cause accuracy is
+0.9701 whether or not novel cases are present — byte-identical across both
+runs. Adding the escape hatch did not damage ordinary attribution; it isn't
+being used to dodge hard cases.
+
+The matcher is **unaffected**: precision and recall stay at 1.0000 with novel
+causes present. It still *finds* every one of them; naming them is the
+reasoning layer's job, and that's where the shortfall is — 2,650 novel cases
+were filed as `unrecorded_refund`, mostly chargebacks whose gap happens to
+land inside the refund-shaped window.
+
+That gap looked like the clearest remaining case for using a model at all: a
+fixed threshold cannot separate "42% of one payment's net" from "one payment's
+net plus ₹800", but reasoning over the batch composition can. So it was
+measured — on a **class-balanced** sample (50 novel / 50 known, drawn from a
+population whose true novel base rate is 32.2%, so precision is re-weighted to
+the real rate rather than the sampled one):
+
+| 100 balanced cases · `data/validation_novel_eval_groq.json` | Rule baseline | LLM (`gpt-oss-20b`) |
+|---|---|---|
+| Novel-detection recall | 22 / 50 = **0.44** | 21 / 50 = **0.42** |
+| Precision at true base rate | **0.913** | **0.909** |
+| False-alarm rate | 0.02 | 0.02 |
+| Accuracy on **known** causes *(regression guard)* | 49 / 50 = **0.98** | 34 / 50 = **0.68** |
+
+*(The 0.44 here and the 0.573 above are different experiments, not a
+discrepancy: the sweep scores every novel case across 160 datasets, while this
+is a 100-case balanced sample built for a like-for-like LLM comparison at
+affordable API cost.)*
+
+**The LLM ties on detection and loses badly on the rest.** Novel recall is the
+same within noise — but it misclassifies ordinary cases at fifteen times the
+baseline's rate. Not by over-using the escape hatch, which both used exactly
+once: it confuses `overpayment_duplicate_payout` with `missing_txn_in_batch`
+ten times out of fifty. It is misreading the **sign** of the discrepancy —
+whether the bank paid too much or too little — even though `direction` is
+handed to it as an explicit signal.
+
+Per mechanism, both are blind in the same place:
+
+| Injected mechanism | Rule baseline | LLM |
+|---|---|---|
+| `chargeback_with_penalty` | 21 / 30 = 0.70 | 20 / 30 = 0.67 |
+| `partial_round_payout` | 1 / 19 = **0.05** | 1 / 19 = **0.05** |
+| `double_deducted_refund` | 0 / 1 | 0 / 1 |
+
+Neither notices a payout rounded down to a flat ₹10,000 — a pattern plainly
+visible in the data that neither the rules nor the prompt were built to look
+for. That is the honest edge of this system, and knowing exactly where it sits
+is worth more than a number to quote.
+
+```bash
+python3 src/grade.py --vary --novel-rate 0.08 --seeds $(seq 1 40) \
+    --sizes 60 300 1000 3000 --out data/validation_novel.json
+```
+
 ### The comparison that actually discriminates
 
 Grading an LLM on a random sample mostly measures how often it agrees with
-you about easy cases. Our first honest run scored 40/40 — and so did the rule
-baseline. Two perfect scores on an easy exam say nothing about which grader
+you about easy cases. Our first honest run scored 40/40
+(`data/validation_ai.json`) — and so did the rule baseline. Two perfect scores on an easy exam say nothing about which grader
 is better.
 
 So `--hard-cases` sweeps many datasets with the **free** rule baseline, keeps
@@ -127,12 +211,29 @@ Two caveats, both pointing the same way:
 - **22 cases is small.** The honest reading is "not demonstrated", not
   "disproven".
 
-What this does establish: **the deterministic layer is where the value is.**
-The matcher is exact, the rule baseline attributes 96.97% correctly with
-perfectly calibrated confidence, and on the residual hard tail the LLM has
-not yet been shown to add anything. A submission that quoted "50% recovery on
-adversarial cases" as a win would have been quoting a number worse than
-guessing.
+### What four measurements say, taken together
+
+The LLM was given four chances to demonstrate it beats deterministic rules at
+classification, and the answer was consistent:
+
+| Evaluation | LLM | Control | Outcome |
+|---|---|---|---|
+| Random sample (`validation_ai.json`) | 40 / 40 | rule baseline 40 / 40 | tied — exam too easy to discriminate |
+| Adversarial sample (`validation_hard.json`) | 0.500 | majority-class guess 0.864 | did not clear the control; quota-truncated |
+| Novel detection, balanced (`validation_novel_eval_groq.json`) | 0.42 recall | rule baseline 0.44 | tied |
+| Known-cause accuracy on that same sample | **0.68** | rule baseline **0.98** | **materially worse** |
+
+**The deterministic layer is where the value is.** The matcher is exact, the
+rule baseline attributes 97.01% correctly with perfectly calibrated
+confidence, and across four independent framings the LLM was never shown to
+beat it — on the last one it was measurably worse.
+
+That is reported here rather than buried, because the alternative was
+quoting "50% recovery on adversarial cases" as a win when it is a number
+worse than guessing. What the model *does* contribute is the part no rule
+produces: the plain-English explanation, the recommended action, and the
+open-ended Q&A in `src/qa_agent.py`. The classification is arithmetic's job,
+and the measurement is what proves it.
 
 ---
 
@@ -196,7 +297,17 @@ python3 src/grade.py --vary --seeds $(seq 1 40) --sizes 60 300 1000 3000 \
 # baseline gets wrong. Needs an API key.
 python3 src/grade.py --hard-cases --seeds $(seq 1 40) --sizes 300 \
     --sleep 5 --out data/validation_hard.json
+
+# Novel-cause detection: LLM vs rule baseline on ONE balanced sample.
+# --reasoner forces a backend, so two models can be compared on identical cases.
+python3 src/grade.py --novel-eval --reasoner groq --seeds $(seq 1 20) \
+    --sizes 300 --novel-rate 0.08 --sample-per-class 50 --sleep 7 \
+    --out data/validation_novel_eval_groq.json
 ```
+
+Supported backends: `groq`, `gemini`, `anthropic`, `baseline`. Without
+`--reasoner`, whichever key appears first in `.env` wins — which silently makes
+a two-model comparison impossible, so always name it when comparing.
 
 `--sleep` paces calls under a free tier's tokens-per-minute ceiling. Without
 it the SDK sits in backoff and the run takes far longer.
@@ -228,8 +339,11 @@ attribution accuracy figure a real measurement rather than a formality.
   measurable against causes you injected. The ingest tests address *format*
   generality; they cannot prove real discrepancies have the same statistical
   shape as our injected ones.
-- **The taxonomy is closed.** Seven causes. A real cause nobody enumerated
-  gets mapped to the nearest label rather than reported as novel.
+- **The taxonomy is closed**, but it now has an escape hatch. A cause nobody
+  enumerated should come back as `unknown_anomaly` rather than the nearest
+  label — measured at 0.573 recall / 0.901 precision for the rule baseline.
+  That still means **43% of novel problems get a confident wrong label**, and
+  the LLM has not yet been measured on this.
 - **The rule baseline knows the answers exist.** Its thresholds were written
   by someone who knew which four causes were injected. On genuinely unseen
   data it would degrade in a way the LLM plausibly would not — which is

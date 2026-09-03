@@ -262,6 +262,150 @@ count**. Reporting them separately is what makes the architecture legible;
 blending them hides the entire design decision and invites a fair question
 ("why is this so slow?") whose honest answer is "it isn't".
 
+### 5e. Can it admit it doesn't know?
+
+A closed taxonomy has a specific, dangerous failure mode: forced to pick one
+of four causes, a classifier always picks one. A genuinely novel problem gets
+filed under whichever known label it least resembles, and the exception list
+reports a confident, specific, **wrong** diagnosis. Grading only against
+causes you injected cannot detect this, because you never showed it a
+surprise.
+
+So `causes.py` has a seventh label, `unknown_anomaly`, and the generator has
+`--novel-rate`, which injects mechanisms that are deliberately **not** in the
+taxonomy:
+
+| Mechanism | What it does | Why it's not any known cause |
+|---|---|---|
+| `chargeback_with_penalty` | Claws back one payment **plus** a flat ₹250–1500 penalty | Matches no transaction's contribution *exactly*, and dwarfs any fee error |
+| `partial_round_payout` | Bank pays a round ₹10,000 multiple, holds the rest | Settled amount is exactly divisible by 10,000 |
+| `double_deducted_refund` | A **correctly recorded** refund is subtracted twice | Refund-shaped, but the refund *is* in `refunds.csv` — so "unrecorded refund" is precisely wrong |
+
+Their true cause is recorded as `unknown_anomaly`. The real mechanism is
+stored separately in `ground_truth.json` for diagnostics and is never the
+graded answer — the system was never told these exist.
+
+**This label cannot be graded with one number.** It is gameable in both
+directions, and each direction looks fine on a metric that ignores the other:
+
+- *Never* say unknown → perfect on known causes, catches nothing. (This is
+  what the system did before the label existed.)
+- *Always* say unknown → catches everything, destroys attribution.
+
+So three numbers are reported together, alongside both degenerate controls:
+
+| Rule baseline, 160 varied datasets, 8% novel | |
+|---|---|
+| Novel-detection **recall** | 3,733 / 6,511 = **0.573** |
+| Novel-detection **precision** | 3,733 / 4,142 = **0.901** |
+| Accuracy on **known** causes (regression guard) | 24,538 / 25,294 = **0.9701** |
+| *Control — never say unknown* | recall 0.000 |
+| *Control — always say unknown* | recall 1.000, precision 0.205, known accuracy 0.000 |
+
+The regression guard is the important one: known-cause accuracy is 0.9701
+whether or not novel cases are present - identical across both runs, since it
+is computed over exactly the same known-cause population either way. The
+escape hatch did not damage ordinary attribution; it is not being used to
+dodge hard cases.
+
+The false-alarm rate is worth stating plainly too: with no novel cases
+injected at all, the baseline still calls 409 of 25,294 ordinary cases
+(1.6%) "unknown". Almost all are small unrecorded refunds - under the 10%
+refund-fraction threshold, but over the fee ceiling. It was already getting
+those wrong before (as `fee_or_gst_error`), so accuracy is unchanged; the
+label is merely more honest about it.
+
+The baseline's rule is principled rather than fitted: **the total fee and GST
+charged on a batch is a hard ceiling on how wrong a fee calculation could
+possibly be.** A gap larger than the entire fee is not a fee error, whatever
+else it is. That threshold comes from the fee structure (2% + 18% GST), not
+from inspecting which cases the grader marks wrong — tuning it against ground
+truth would break invariant 5.
+
+Note also that the **matcher is unaffected**: precision and recall stay at
+1.0000 with novel causes present. It still *finds* every one of them. Naming
+them is the reasoning layer's job, and it is the reasoning layer that falls
+short — 2,650 novel cases were filed as `unrecorded_refund`, mostly
+chargebacks whose gap happens to land inside the refund-fraction window.
+
+That gap looked like the best remaining discriminator for the LLM. A fixed
+threshold cannot tell "42% of one payment's net" from "one payment's net plus
+₹800"; reasoning over `batch_composition` plausibly can. So it was measured.
+
+**Measuring it needed a sampling design, not just an API key.** Novel cases
+are ~32% of amount mismatches, and a free tier affords ~100 calls. Sampling at
+the natural rate spends most of the budget re-confirming ordinary cases and
+leaves too few novel ones to estimate recall from. So `--novel-eval` draws a
+**class-balanced** sample — equal novel and known — which is safe because
+recall and false-alarm rate are both measured *within* one class and are
+therefore base-rate independent. Precision is not, so it is derived back at
+the true population rate rather than reported at the sampled one:
+
+    precision = (recall · p) / (recall · p + false_alarm_rate · (1 − p))
+
+The sample is drawn with a fixed seed and order, so a second model grades
+identical cases — two models on two different samples is not a comparison.
+
+| 100 balanced cases · `data/validation_novel_eval_groq.json` | Rule baseline | LLM (`gpt-oss-20b`) |
+|---|---|---|
+| Novel-detection recall | 22 / 50 = **0.44** | 21 / 50 = **0.42** |
+| Precision at true base rate (0.322) | **0.913** | **0.909** |
+| False-alarm rate | 0.02 | 0.02 |
+| Accuracy on **known** causes | 49 / 50 = **0.98** | 34 / 50 = **0.68** |
+| Non-answers | 0 | 0 |
+
+**The model ties on detection and loses badly on ordinary attribution.** It
+misclassifies known causes at fifteen times the baseline's rate — not by
+over-using the escape hatch (both used it exactly once) but by confusing
+`overpayment_duplicate_payout` with `missing_txn_in_batch` ten times in fifty.
+That is misreading the *sign* of the discrepancy, despite `direction` being
+handed over as an explicit signal.
+
+Per mechanism, the two are blind in precisely the same place:
+
+| Injected mechanism | Rule baseline | LLM |
+|---|---|---|
+| `chargeback_with_penalty` | 21 / 30 = 0.70 | 20 / 30 = 0.67 |
+| `partial_round_payout` | 1 / 19 = **0.05** | 1 / 19 = **0.05** |
+| `double_deducted_refund` | 0 / 1 | 0 / 1 |
+
+Not similar scores — the *same failures in the same proportions*. Give a model
+the same evidence a threshold uses and it reproduces the threshold's blind
+spots: it anchors on the most salient signal, exactly as the if-statement
+does. Neither notices a payout rounded down to a flat ₹10,000, a pattern
+plainly visible in the raw numbers that neither the rules nor the prompt were
+built to look for.
+
+Fixing that by adding a "is the settled amount suspiciously round?" signal
+would be **fitting to an answer key already seen** — invariant 5 forbids it.
+Documenting the blind spot precisely is worth more than a suspiciously
+improved number.
+
+### 5f. What four measurements say, taken together
+
+The LLM was given four independent chances to demonstrate it beats
+deterministic rules at classification. The answer was consistent:
+
+| Evaluation | LLM | Control | Outcome |
+|---|---|---|---|
+| Random sample (`validation_ai.json`) | 40 / 40 | rule baseline 40 / 40 | tied — exam too easy to discriminate |
+| Adversarial sample (`validation_hard.json`) | 0.500 | majority-class guess 0.864 | did not clear the control; quota-truncated |
+| Novel detection, balanced (`validation_novel_eval_groq.json`) | 0.42 recall | rule baseline 0.44 | tied |
+| Known-cause accuracy, same sample | **0.68** | rule baseline **0.98** | **materially worse** |
+
+**The deterministic layer is where the value is.** That conclusion is not a
+disappointment to be hidden; it is the measurement working. Each framing was
+built to give the model its best chance — the adversarial sample selects
+exactly the cases rules fail, the novel sample selects exactly the cases rules
+were never designed for — and it still did not clear the bar.
+
+What the model *does* contribute is the part no rule produces: the
+plain-English explanation, the recommended action, and open-ended Q&A
+(`src/qa_agent.py`). The classification is arithmetic's job. The measurement
+is what proves it, and having the measurement is what makes the architectural
+split defensible rather than merely asserted.
+
+
 ---
 
 ## 6. Design invariants
@@ -286,6 +430,16 @@ into a decorative one.
    the majority-class guess is that control for the adversarial sample. A
    percentage with no control beside it is not a result. See §5c for the run
    where this changed the conclusion entirely.
+9. **A label that can be over-used is graded with precision AND recall, plus a
+   regression guard.** `unknown_anomaly` is gameable in both directions — never
+   say it and you catch no surprises; always say it and you destroy
+   attribution. One number hides whichever cheat you are not measuring. See
+   §5e.
+10. **A truncated or aborted run is marked as such in its own output file.**
+    `aborted_early`, `abort_reason` and `run_note` exist so a run that died
+    partway through can never be read as a completed one. See
+    `data/validation_hard.json` and `data/validation_novel_eval_gemini.json`,
+    both of which are recorded as void rather than deleted.
 
 ---
 
@@ -293,15 +447,15 @@ into a decorative one.
 
 | File | Role |
 |---|---|
-| `data/generate_data.py` | Synthetic data + hidden ground truth. `--seed`, `--n`, `--out-dir`, `--vary`. Injects 4 mismatch causes + 2 missing-settlement causes + orphans + duplicates. |
+| `data/generate_data.py` | Synthetic data + hidden ground truth. `--seed`, `--n`, `--out-dir`, `--vary`, `--novel-rate`. Injects 4 mismatch causes + 2 missing-settlement causes + orphans + duplicates, plus mechanisms deliberately outside the taxonomy. |
 | `src/causes.py` | The cause taxonomy. Single source of truth (invariant 4). |
 | `src/matcher.py` | Deterministic matching, tolerant ingest, evidence signals. No AI. |
 | `src/exception_agent.py` | Packages flagged exceptions + signals for the reasoner. |
-| `src/reasoner.py` | Pluggable LLM backends (Groq / Anthropic / Gemini) + the rule baseline control. |
+| `src/reasoner.py` | Selectable LLM backends (Groq / Anthropic / Gemini) + the rule baseline control. Rate-limit backoff distinguishing per-minute throttling from per-day caps. |
 | `src/report.py` | Two-phase throughput, accuracy, honest exception list. `--data-dir`, `--out`, `--html`. |
 | `src/render_report.py` | `report.json` → readable `report.html`. |
 | `src/qa_agent.py` | Plain-English Q&A, two-tier context, no RAG by design. |
-| `src/grade.py` | The honesty layer: structural + attribution grading, adversarial mode. |
+| `src/grade.py` | The honesty layer: structural + attribution grading, adversarial mode (`--hard-cases`), novel-cause detection (`--novel-eval`). |
 | `tests/test_ingest.py` | Proves the ingest layer accepts datasets that aren't ours. |
 
 ### Why the Q&A agent has no RAG
@@ -326,11 +480,13 @@ everything, plus full raw records only for what is actually flagged.
   measurable against causes we injected. The ingest tests (§4) address
   *format* generality; they cannot address whether real Razorpay
   discrepancies have the same *statistical shape* as our injected ones.
-- **The taxonomy is closed.** Seven causes. A real cause nobody enumerated
-  falls through to the nearest label rather than being reported as novel.
-  The rule baseline in particular exists because we knew in advance exactly
-  which causes we injected; on genuinely unseen data it would degrade in a
-  way the LLM plausibly would not, which is precisely what §5c probes.
+- **The taxonomy is closed**, but it now has an escape hatch. A cause nobody
+  enumerated should come back as `unknown_anomaly` rather than the nearest
+  label — measured at 0.573 recall / 0.901 precision for the rule baseline
+  across 160 datasets. That still means **43% of novel problems receive a
+  confident wrong label**, and the LLM did not improve on it (§5e). The known
+  blind spot is a payout rounded to a flat figure, which is indistinguishable
+  from an unrecorded refund on the signals currently emitted.
 - **Duplicate detection assumes `order_id` is meaningful.** A merchant who
   legitimately reuses order IDs would see false positives.
 - **Date ambiguity is not guessed at.** `03/04/2026` is 3 April day-first and
