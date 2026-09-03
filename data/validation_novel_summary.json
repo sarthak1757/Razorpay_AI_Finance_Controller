@@ -11,8 +11,8 @@
       "recall": 1.0
     },
     "match_records_per_second": {
-      "min": 72510,
-      "max": 177589
+      "min": 103522,
+      "max": 216649
     },
     "baseline": {
       "reasoner": "rule_baseline",
@@ -56,8 +56,8 @@
       "records": 79,
       "transactions": 63,
       "settlements": 16,
-      "match_seconds": 0.00109,
-      "match_records_per_second": 72510,
+      "match_seconds": 0.000763,
+      "match_records_per_second": 103522,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -164,8 +164,8 @@
       "records": 120,
       "transactions": 63,
       "settlements": 57,
-      "match_seconds": 0.001277,
-      "match_records_per_second": 93961,
+      "match_seconds": 0.000918,
+      "match_records_per_second": 130683,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -272,8 +272,8 @@
       "records": 82,
       "transactions": 66,
       "settlements": 16,
-      "match_seconds": 0.000554,
-      "match_records_per_second": 147925,
+      "match_seconds": 0.000469,
+      "match_records_per_second": 174731,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -380,8 +380,8 @@
       "records": 86,
       "transactions": 61,
       "settlements": 25,
-      "match_seconds": 0.000667,
-      "match_records_per_second": 129032,
+      "match_seconds": 0.000538,
+      "match_records_per_second": 159740,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -488,8 +488,8 @@
       "records": 91,
       "transactions": 61,
       "settlements": 30,
-      "match_seconds": 0.00072,
-      "match_records_per_second": 126462,
+      "match_seconds": 0.000565,
+      "match_records_per_second": 160967,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -594,8 +594,8 @@
       "records": 102,
       "transactions": 66,
       "settlements": 36,
-      "match_seconds": 0.000811,
-      "match_records_per_second": 125790,
+      "match_seconds": 0.000629,
+      "match_records_per_second": 162033,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -700,8 +700,8 @@
       "records": 78,
       "transactions": 61,
       "settlements": 17,
-      "match_seconds": 0.00052,
-      "match_records_per_second": 149928,
+      "match_seconds": 0.000419,
+      "match_records_per_second": 186306,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -808,8 +808,8 @@
       "records": 84,
       "transactions": 61,
       "settlements": 23,
-      "match_seconds": 0.000627,
-      "match_records_per_second": 134042,
+      "match_seconds": 0.000495,
+      "match_records_per_second": 169540,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -916,8 +916,8 @@
       "records": 84,
       "transactions": 61,
       "settlements": 23,
-      "match_seconds": 0.000634,
-      "match_records_per_second": 132588,
+      "match_seconds": 0.000493,
+      "match_records_per_second": 170501,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1022,8 +1022,8 @@
       "records": 82,
       "transactions": 66,
       "settlements": 16,
-      "match_seconds": 0.000516,
-      "match_records_per_second": 158940,
+      "match_seconds": 0.000415,
+      "match_records_per_second": 197809,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1128,8 +1128,8 @@
       "records": 85,
       "transactions": 61,
       "settlements": 24,
-      "match_seconds": 0.000622,
-      "match_records_per_second": 136610,
+      "match_seconds": 0.00052,
+      "match_records_per_second": 163448,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1234,8 +1234,8 @@
       "records": 90,
       "transactions": 66,
       "settlements": 24,
-      "match_seconds": 0.000627,
-      "match_records_per_second": 143608,
+      "match_seconds": 0.000522,
+      "match_records_per_second": 172455,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1342,8 +1342,8 @@
       "records": 77,
       "transactions": 61,
       "settlements": 16,
-      "match_seconds": 0.000499,
-      "match_records_per_second": 154360,
+      "match_seconds": 0.000417,
+      "match_records_per_second": 184560,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1448,8 +1448,8 @@
       "records": 79,
       "transactions": 61,
       "settlements": 18,
-      "match_seconds": 0.000522,
-      "match_records_per_second": 151401,
+      "match_seconds": 0.00046,
+      "match_records_per_second": 171584,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1556,8 +1556,8 @@
       "records": 93,
       "transactions": 61,
       "settlements": 32,
-      "match_seconds": 0.000723,
-      "match_records_per_second": 128668,
+      "match_seconds": 0.000594,
+      "match_records_per_second": 156610,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1664,8 +1664,8 @@
       "records": 74,
       "transactions": 61,
       "settlements": 13,
-      "match_seconds": 0.000644,
-      "match_records_per_second": 114818,
+      "match_seconds": 0.000382,
+      "match_records_per_second": 193612,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1770,8 +1770,8 @@
       "records": 93,
       "transactions": 61,
       "settlements": 32,
-      "match_seconds": 0.000748,
-      "match_records_per_second": 124359,
+      "match_seconds": 0.000598,
+      "match_records_per_second": 155453,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1878,8 +1878,8 @@
       "records": 78,
       "transactions": 63,
       "settlements": 15,
-      "match_seconds": 0.000498,
-      "match_records_per_second": 156745,
+      "match_seconds": 0.000418,
+      "match_records_per_second": 186770,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1986,8 +1986,8 @@
       "records": 79,
       "transactions": 63,
       "settlements": 16,
-      "match_seconds": 0.000514,
-      "match_records_per_second": 153771,
+      "match_seconds": 0.000408,
+      "match_records_per_second": 193410,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2094,8 +2094,8 @@
       "records": 105,
       "transactions": 61,
       "settlements": 44,
-      "match_seconds": 0.00101,
-      "match_records_per_second": 103943,
+      "match_seconds": 0.000742,
+      "match_records_per_second": 141581,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2202,8 +2202,8 @@
       "records": 91,
       "transactions": 61,
       "settlements": 30,
-      "match_seconds": 0.000718,
-      "match_records_per_second": 126785,
+      "match_seconds": 0.000565,
+      "match_records_per_second": 161074,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2308,8 +2308,8 @@
       "records": 86,
       "transactions": 61,
       "settlements": 25,
-      "match_seconds": 0.000616,
-      "match_records_per_second": 139695,
+      "match_seconds": 0.00054,
+      "match_records_per_second": 159210,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2416,8 +2416,8 @@
       "records": 103,
       "transactions": 63,
       "settlements": 40,
-      "match_seconds": 0.000849,
-      "match_records_per_second": 121337,
+      "match_seconds": 0.00071,
+      "match_records_per_second": 145105,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2524,8 +2524,8 @@
       "records": 93,
       "transactions": 61,
       "settlements": 32,
-      "match_seconds": 0.000704,
-      "match_records_per_second": 132079,
+      "match_seconds": 0.000586,
+      "match_records_per_second": 158681,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2632,8 +2632,8 @@
       "records": 119,
       "transactions": 61,
       "settlements": 58,
-      "match_seconds": 0.001097,
-      "match_records_per_second": 108515,
+      "match_seconds": 0.00088,
+      "match_records_per_second": 135208,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2740,8 +2740,8 @@
       "records": 119,
       "transactions": 61,
       "settlements": 58,
-      "match_seconds": 0.0011,
-      "match_records_per_second": 108141,
+      "match_seconds": 0.000941,
+      "match_records_per_second": 126523,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2846,8 +2846,8 @@
       "records": 103,
       "transactions": 61,
       "settlements": 42,
-      "match_seconds": 0.000873,
-      "match_records_per_second": 117990,
+      "match_seconds": 0.000721,
+      "match_records_per_second": 142890,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2954,8 +2954,8 @@
       "records": 90,
       "transactions": 66,
       "settlements": 24,
-      "match_seconds": 0.000638,
-      "match_records_per_second": 140974,
+      "match_seconds": 0.000496,
+      "match_records_per_second": 181513,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3062,8 +3062,8 @@
       "records": 90,
       "transactions": 66,
       "settlements": 24,
-      "match_seconds": 0.000605,
-      "match_records_per_second": 148760,
+      "match_seconds": 0.000507,
+      "match_records_per_second": 177457,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3170,8 +3170,8 @@
       "records": 103,
       "transactions": 63,
       "settlements": 40,
-      "match_seconds": 0.000865,
-      "match_records_per_second": 119087,
+      "match_seconds": 0.000971,
+      "match_records_per_second": 106044,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3278,8 +3278,8 @@
       "records": 82,
       "transactions": 63,
       "settlements": 19,
-      "match_seconds": 0.000543,
-      "match_records_per_second": 151129,
+      "match_seconds": 0.000465,
+      "match_records_per_second": 176392,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3386,8 +3386,8 @@
       "records": 77,
       "transactions": 61,
       "settlements": 16,
-      "match_seconds": 0.000495,
-      "match_records_per_second": 155451,
+      "match_seconds": 0.000423,
+      "match_records_per_second": 182230,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3494,8 +3494,8 @@
       "records": 105,
       "transactions": 61,
       "settlements": 44,
-      "match_seconds": 0.000892,
-      "match_records_per_second": 117757,
+      "match_seconds": 0.000757,
+      "match_records_per_second": 138637,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3602,8 +3602,8 @@
       "records": 90,
       "transactions": 61,
       "settlements": 29,
-      "match_seconds": 0.00068,
-      "match_records_per_second": 132402,
+      "match_seconds": 0.000569,
+      "match_records_per_second": 158045,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3710,8 +3710,8 @@
       "records": 86,
       "transactions": 61,
       "settlements": 25,
-      "match_seconds": 0.000622,
-      "match_records_per_second": 138366,
+      "match_seconds": 0.000527,
+      "match_records_per_second": 163149,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3816,8 +3816,8 @@
       "records": 117,
       "transactions": 61,
       "settlements": 56,
-      "match_seconds": 0.001073,
-      "match_records_per_second": 109078,
+      "match_seconds": 0.000883,
+      "match_records_per_second": 132428,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3924,8 +3924,8 @@
       "records": 77,
       "transactions": 61,
       "settlements": 16,
-      "match_seconds": 0.000519,
-      "match_records_per_second": 148386,
+      "match_seconds": 0.000408,
+      "match_records_per_second": 188764,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4030,8 +4030,8 @@
       "records": 122,
       "transactions": 66,
       "settlements": 56,
-      "match_seconds": 0.001125,
-      "match_records_per_second": 108400,
+      "match_seconds": 0.000904,
+      "match_records_per_second": 134987,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4138,8 +4138,8 @@
       "records": 91,
       "transactions": 66,
       "settlements": 25,
-      "match_seconds": 0.00063,
-      "match_records_per_second": 144511,
+      "match_seconds": 0.000541,
+      "match_records_per_second": 168259,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4247,8 +4247,8 @@
       "records": 81,
       "transactions": 66,
       "settlements": 15,
-      "match_seconds": 0.000489,
-      "match_records_per_second": 165545,
+      "match_seconds": 0.000417,
+      "match_records_per_second": 194439,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4355,8 +4355,8 @@
       "records": 385,
       "transactions": 315,
       "settlements": 70,
-      "match_seconds": 0.00251,
-      "match_records_per_second": 153369,
+      "match_seconds": 0.001902,
+      "match_records_per_second": 202410,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4463,8 +4463,8 @@
       "records": 596,
       "transactions": 315,
       "settlements": 281,
-      "match_seconds": 0.005311,
-      "match_records_per_second": 112218,
+      "match_seconds": 0.004384,
+      "match_records_per_second": 135958,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4571,8 +4571,8 @@
       "records": 402,
       "transactions": 330,
       "settlements": 72,
-      "match_seconds": 0.002387,
-      "match_records_per_second": 168389,
+      "match_seconds": 0.002017,
+      "match_records_per_second": 199285,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4679,8 +4679,8 @@
       "records": 415,
       "transactions": 305,
       "settlements": 110,
-      "match_seconds": 0.002933,
-      "match_records_per_second": 141509,
+      "match_seconds": 0.002416,
+      "match_records_per_second": 171766,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4787,8 +4787,8 @@
       "records": 456,
       "transactions": 305,
       "settlements": 151,
-      "match_seconds": 0.003434,
-      "match_records_per_second": 132806,
+      "match_seconds": 0.002808,
+      "match_records_per_second": 162408,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4895,8 +4895,8 @@
       "records": 495,
       "transactions": 330,
       "settlements": 165,
-      "match_seconds": 0.003659,
-      "match_records_per_second": 135297,
+      "match_seconds": 0.002878,
+      "match_records_per_second": 171972,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5003,8 +5003,8 @@
       "records": 382,
       "transactions": 308,
       "settlements": 74,
-      "match_seconds": 0.002369,
-      "match_records_per_second": 161275,
+      "match_seconds": 0.001982,
+      "match_records_per_second": 192767,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5111,8 +5111,8 @@
       "records": 425,
       "transactions": 308,
       "settlements": 117,
-      "match_seconds": 0.003002,
-      "match_records_per_second": 141562,
+      "match_seconds": 0.002466,
+      "match_records_per_second": 172373,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5219,8 +5219,8 @@
       "records": 426,
       "transactions": 308,
       "settlements": 118,
-      "match_seconds": 0.00301,
-      "match_records_per_second": 141534,
+      "match_seconds": 0.002468,
+      "match_records_per_second": 172601,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5328,8 +5328,8 @@
       "records": 397,
       "transactions": 330,
       "settlements": 67,
-      "match_seconds": 0.002236,
-      "match_records_per_second": 177589,
+      "match_seconds": 0.001918,
+      "match_records_per_second": 206991,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5436,8 +5436,8 @@
       "records": 412,
       "transactions": 305,
       "settlements": 107,
-      "match_seconds": 0.002871,
-      "match_records_per_second": 143496,
+      "match_seconds": 0.002415,
+      "match_records_per_second": 170603,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5544,8 +5544,8 @@
       "records": 445,
       "transactions": 330,
       "settlements": 115,
-      "match_seconds": 0.002923,
-      "match_records_per_second": 152254,
+      "match_seconds": 0.00232,
+      "match_records_per_second": 191838,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5652,8 +5652,8 @@
       "records": 370,
       "transactions": 305,
       "settlements": 65,
-      "match_seconds": 0.002215,
-      "match_records_per_second": 167062,
+      "match_seconds": 0.001852,
+      "match_records_per_second": 199824,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5760,8 +5760,8 @@
       "records": 382,
       "transactions": 305,
       "settlements": 77,
-      "match_seconds": 0.002387,
-      "match_records_per_second": 160008,
+      "match_seconds": 0.001889,
+      "match_records_per_second": 202250,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5868,8 +5868,8 @@
       "records": 471,
       "transactions": 305,
       "settlements": 166,
-      "match_seconds": 0.003665,
-      "match_records_per_second": 128526,
+      "match_seconds": 0.003115,
+      "match_records_per_second": 151200,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5977,8 +5977,8 @@
       "records": 383,
       "transactions": 308,
       "settlements": 75,
-      "match_seconds": 0.002354,
-      "match_records_per_second": 162670,
+      "match_seconds": 0.001999,
+      "match_records_per_second": 191580,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6085,8 +6085,8 @@
       "records": 463,
       "transactions": 308,
       "settlements": 155,
-      "match_seconds": 0.003607,
-      "match_records_per_second": 128364,
+      "match_seconds": 0.003065,
+      "match_records_per_second": 151042,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6193,8 +6193,8 @@
       "records": 385,
       "transactions": 315,
       "settlements": 70,
-      "match_seconds": 0.002421,
-      "match_records_per_second": 159050,
+      "match_seconds": 0.001974,
+      "match_records_per_second": 194986,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6301,8 +6301,8 @@
       "records": 389,
       "transactions": 315,
       "settlements": 74,
-      "match_seconds": 0.002341,
-      "match_records_per_second": 166195,
+      "match_seconds": 0.00192,
+      "match_records_per_second": 202635,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6409,8 +6409,8 @@
       "records": 516,
       "transactions": 308,
       "settlements": 208,
-      "match_seconds": 0.004544,
-      "match_records_per_second": 113557,
+      "match_seconds": 0.003563,
+      "match_records_per_second": 144827,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6517,8 +6517,8 @@
       "records": 471,
       "transactions": 308,
       "settlements": 163,
-      "match_seconds": 0.003655,
-      "match_records_per_second": 128859,
+      "match_seconds": 0.003093,
+      "match_records_per_second": 152298,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6626,8 +6626,8 @@
       "records": 418,
       "transactions": 305,
       "settlements": 113,
-      "match_seconds": 0.002913,
-      "match_records_per_second": 143517,
+      "match_seconds": 0.00246,
+      "match_records_per_second": 169913,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6734,8 +6734,8 @@
       "records": 518,
       "transactions": 315,
       "settlements": 203,
-      "match_seconds": 0.004294,
-      "match_records_per_second": 120623,
+      "match_seconds": 0.003562,
+      "match_records_per_second": 145421,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6842,8 +6842,8 @@
       "records": 452,
       "transactions": 305,
       "settlements": 147,
-      "match_seconds": 0.003366,
-      "match_records_per_second": 134286,
+      "match_seconds": 0.002808,
+      "match_records_per_second": 160997,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6950,8 +6950,8 @@
       "records": 596,
       "transactions": 308,
       "settlements": 288,
-      "match_seconds": 0.005327,
-      "match_records_per_second": 111891,
+      "match_seconds": 0.004398,
+      "match_records_per_second": 135506,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7058,8 +7058,8 @@
       "records": 590,
       "transactions": 305,
       "settlements": 285,
-      "match_seconds": 0.005485,
-      "match_records_per_second": 107557,
+      "match_seconds": 0.00429,
+      "match_records_per_second": 137516,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7166,8 +7166,8 @@
       "records": 509,
       "transactions": 305,
       "settlements": 204,
-      "match_seconds": 0.004383,
-      "match_records_per_second": 116123,
+      "match_seconds": 0.00361,
+      "match_records_per_second": 141010,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7274,8 +7274,8 @@
       "records": 454,
       "transactions": 330,
       "settlements": 124,
-      "match_seconds": 0.003109,
-      "match_records_per_second": 146030,
+      "match_seconds": 0.002582,
+      "match_records_per_second": 175841,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7382,8 +7382,8 @@
       "records": 441,
       "transactions": 330,
       "settlements": 111,
-      "match_seconds": 0.002965,
-      "match_records_per_second": 148739,
+      "match_seconds": 0.002423,
+      "match_records_per_second": 182031,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7490,8 +7490,8 @@
       "records": 519,
       "transactions": 315,
       "settlements": 204,
-      "match_seconds": 0.004328,
-      "match_records_per_second": 119908,
+      "match_seconds": 0.003561,
+      "match_records_per_second": 145737,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7598,8 +7598,8 @@
       "records": 424,
       "transactions": 315,
       "settlements": 109,
-      "match_seconds": 0.002867,
-      "match_records_per_second": 147879,
+      "match_seconds": 0.002366,
+      "match_records_per_second": 179190,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7706,8 +7706,8 @@
       "records": 376,
       "transactions": 305,
       "settlements": 71,
-      "match_seconds": 0.002398,
-      "match_records_per_second": 156822,
+      "match_seconds": 0.002023,
+      "match_records_per_second": 185878,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7815,8 +7815,8 @@
       "records": 521,
       "transactions": 308,
       "settlements": 213,
-      "match_seconds": 0.004239,
-      "match_records_per_second": 122911,
+      "match_seconds": 0.003533,
+      "match_records_per_second": 147458,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7924,8 +7924,8 @@
       "records": 460,
       "transactions": 305,
       "settlements": 155,
-      "match_seconds": 0.003592,
-      "match_records_per_second": 128053,
+      "match_seconds": 0.002995,
+      "match_records_per_second": 153589,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8032,8 +8032,8 @@
       "records": 425,
       "transactions": 308,
       "settlements": 117,
-      "match_seconds": 0.003008,
-      "match_records_per_second": 141309,
+      "match_seconds": 0.002409,
+      "match_records_per_second": 176437,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8140,8 +8140,8 @@
       "records": 584,
       "transactions": 308,
       "settlements": 276,
-      "match_seconds": 0.005257,
-      "match_records_per_second": 111081,
+      "match_seconds": 0.004443,
+      "match_records_per_second": 131433,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8248,8 +8248,8 @@
       "records": 377,
       "transactions": 305,
       "settlements": 72,
-      "match_seconds": 0.002379,
-      "match_records_per_second": 158498,
+      "match_seconds": 0.001993,
+      "match_records_per_second": 189182,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8356,8 +8356,8 @@
       "records": 606,
       "transactions": 330,
       "settlements": 276,
-      "match_seconds": 0.005325,
-      "match_records_per_second": 113804,
+      "match_seconds": 0.004246,
+      "match_records_per_second": 142735,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8465,8 +8465,8 @@
       "records": 452,
       "transactions": 330,
       "settlements": 122,
-      "match_seconds": 0.003107,
-      "match_records_per_second": 145499,
+      "match_seconds": 0.002642,
+      "match_records_per_second": 171104,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8574,8 +8574,8 @@
       "records": 398,
       "transactions": 330,
       "settlements": 68,
-      "match_seconds": 0.002269,
-      "match_records_per_second": 175395,
+      "match_seconds": 0.001988,
+      "match_records_per_second": 200189,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8682,8 +8682,8 @@
       "records": 1279,
       "transactions": 1050,
       "settlements": 229,
-      "match_seconds": 0.007628,
-      "match_records_per_second": 167665,
+      "match_seconds": 0.006364,
+      "match_records_per_second": 200976,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8791,8 +8791,8 @@
       "records": 1985,
       "transactions": 1050,
       "settlements": 935,
-      "match_seconds": 0.017844,
-      "match_records_per_second": 111239,
+      "match_seconds": 0.014385,
+      "match_records_per_second": 137991,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8899,8 +8899,8 @@
       "records": 1349,
       "transactions": 1100,
       "settlements": 249,
-      "match_seconds": 0.008018,
-      "match_records_per_second": 168245,
+      "match_seconds": 0.007025,
+      "match_records_per_second": 192034,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9007,8 +9007,8 @@
       "records": 1387,
       "transactions": 1016,
       "settlements": 371,
-      "match_seconds": 0.009834,
-      "match_records_per_second": 141044,
+      "match_seconds": 0.008374,
+      "match_records_per_second": 165632,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9116,8 +9116,8 @@
       "records": 1534,
       "transactions": 1016,
       "settlements": 518,
-      "match_seconds": 0.012067,
-      "match_records_per_second": 127127,
+      "match_seconds": 0.009403,
+      "match_records_per_second": 163144,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9225,8 +9225,8 @@
       "records": 1638,
       "transactions": 1100,
       "settlements": 538,
-      "match_seconds": 0.012356,
-      "match_records_per_second": 132562,
+      "match_seconds": 0.009832,
+      "match_records_per_second": 166605,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9334,8 +9334,8 @@
       "records": 1279,
       "transactions": 1028,
       "settlements": 251,
-      "match_seconds": 0.007916,
-      "match_records_per_second": 161563,
+      "match_seconds": 0.006634,
+      "match_records_per_second": 192807,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9442,8 +9442,8 @@
       "records": 1419,
       "transactions": 1028,
       "settlements": 391,
-      "match_seconds": 0.009911,
-      "match_records_per_second": 143168,
+      "match_seconds": 0.008134,
+      "match_records_per_second": 174460,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9551,8 +9551,8 @@
       "records": 1411,
       "transactions": 1028,
       "settlements": 383,
-      "match_seconds": 0.0099,
-      "match_records_per_second": 142523,
+      "match_seconds": 0.007922,
+      "match_records_per_second": 178117,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9659,8 +9659,8 @@
       "records": 1321,
       "transactions": 1100,
       "settlements": 221,
-      "match_seconds": 0.008297,
-      "match_records_per_second": 159205,
+      "match_seconds": 0.006097,
+      "match_records_per_second": 216649,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9767,8 +9767,8 @@
       "records": 1386,
       "transactions": 1016,
       "settlements": 370,
-      "match_seconds": 0.009965,
-      "match_records_per_second": 139082,
+      "match_seconds": 0.007848,
+      "match_records_per_second": 176606,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9875,8 +9875,8 @@
       "records": 1468,
       "transactions": 1100,
       "settlements": 368,
-      "match_seconds": 0.009659,
-      "match_records_per_second": 151985,
+      "match_seconds": 0.00762,
+      "match_records_per_second": 192646,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9984,8 +9984,8 @@
       "records": 1251,
       "transactions": 1016,
       "settlements": 235,
-      "match_seconds": 0.007565,
-      "match_records_per_second": 165367,
+      "match_seconds": 0.006323,
+      "match_records_per_second": 197850,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10092,8 +10092,8 @@
       "records": 1251,
       "transactions": 1016,
       "settlements": 235,
-      "match_seconds": 0.007663,
-      "match_records_per_second": 163256,
+      "match_seconds": 0.006478,
+      "match_records_per_second": 193118,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10200,8 +10200,8 @@
       "records": 1548,
       "transactions": 1016,
       "settlements": 532,
-      "match_seconds": 0.012005,
-      "match_records_per_second": 128941,
+      "match_seconds": 0.009978,
+      "match_records_per_second": 155145,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10308,8 +10308,8 @@
       "records": 1265,
       "transactions": 1028,
       "settlements": 237,
-      "match_seconds": 0.007783,
-      "match_records_per_second": 162538,
+      "match_seconds": 0.00644,
+      "match_records_per_second": 196443,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10417,8 +10417,8 @@
       "records": 1523,
       "transactions": 1028,
       "settlements": 495,
-      "match_seconds": 0.011796,
-      "match_records_per_second": 129110,
+      "match_seconds": 0.009461,
+      "match_records_per_second": 160979,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10526,8 +10526,8 @@
       "records": 1285,
       "transactions": 1050,
       "settlements": 235,
-      "match_seconds": 0.007917,
-      "match_records_per_second": 162309,
+      "match_seconds": 0.006324,
+      "match_records_per_second": 203182,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10635,8 +10635,8 @@
       "records": 1285,
       "transactions": 1050,
       "settlements": 235,
-      "match_seconds": 0.007597,
-      "match_records_per_second": 169135,
+      "match_seconds": 0.00626,
+      "match_records_per_second": 205267,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10744,8 +10744,8 @@
       "records": 1689,
       "transactions": 1028,
       "settlements": 661,
-      "match_seconds": 0.015192,
-      "match_records_per_second": 111176,
+      "match_seconds": 0.0115,
+      "match_records_per_second": 146868,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10853,8 +10853,8 @@
       "records": 1562,
       "transactions": 1028,
       "settlements": 534,
-      "match_seconds": 0.012263,
-      "match_records_per_second": 127376,
+      "match_seconds": 0.00994,
+      "match_records_per_second": 157147,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10961,8 +10961,8 @@
       "records": 1408,
       "transactions": 1016,
       "settlements": 392,
-      "match_seconds": 0.010039,
-      "match_records_per_second": 140259,
+      "match_seconds": 0.008274,
+      "match_records_per_second": 170180,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11070,8 +11070,8 @@
       "records": 1729,
       "transactions": 1050,
       "settlements": 679,
-      "match_seconds": 0.014512,
-      "match_records_per_second": 119145,
+      "match_seconds": 0.011575,
+      "match_records_per_second": 149380,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11179,8 +11179,8 @@
       "records": 1558,
       "transactions": 1016,
       "settlements": 542,
-      "match_seconds": 0.012137,
-      "match_records_per_second": 128370,
+      "match_seconds": 0.009988,
+      "match_records_per_second": 155981,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11287,8 +11287,8 @@
       "records": 1984,
       "transactions": 1028,
       "settlements": 956,
-      "match_seconds": 0.017542,
-      "match_records_per_second": 113100,
+      "match_seconds": 0.014311,
+      "match_records_per_second": 138637,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11396,8 +11396,8 @@
       "records": 1964,
       "transactions": 1016,
       "settlements": 948,
-      "match_seconds": 0.018042,
-      "match_records_per_second": 108854,
+      "match_seconds": 0.014294,
+      "match_records_per_second": 137404,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11505,8 +11505,8 @@
       "records": 1716,
       "transactions": 1016,
       "settlements": 700,
-      "match_seconds": 0.014611,
-      "match_records_per_second": 117444,
+      "match_seconds": 0.011954,
+      "match_records_per_second": 143550,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11613,8 +11613,8 @@
       "records": 1474,
       "transactions": 1100,
       "settlements": 374,
-      "match_seconds": 0.009701,
-      "match_records_per_second": 151944,
+      "match_seconds": 0.008044,
+      "match_records_per_second": 183240,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11722,8 +11722,8 @@
       "records": 1476,
       "transactions": 1100,
       "settlements": 376,
-      "match_seconds": 0.009853,
-      "match_records_per_second": 149803,
+      "match_seconds": 0.00813,
+      "match_records_per_second": 181541,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11831,8 +11831,8 @@
       "records": 1741,
       "transactions": 1050,
       "settlements": 691,
-      "match_seconds": 0.014634,
-      "match_records_per_second": 118972,
+      "match_seconds": 0.011876,
+      "match_records_per_second": 146599,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11940,8 +11940,8 @@
       "records": 1414,
       "transactions": 1050,
       "settlements": 364,
-      "match_seconds": 0.009514,
-      "match_records_per_second": 148619,
+      "match_seconds": 0.007696,
+      "match_records_per_second": 183744,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12048,8 +12048,8 @@
       "records": 1261,
       "transactions": 1016,
       "settlements": 245,
-      "match_seconds": 0.008101,
-      "match_records_per_second": 155660,
+      "match_seconds": 0.006619,
+      "match_records_per_second": 190499,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12157,8 +12157,8 @@
       "records": 1736,
       "transactions": 1028,
       "settlements": 708,
-      "match_seconds": 0.014351,
-      "match_records_per_second": 120966,
+      "match_seconds": 0.013028,
+      "match_records_per_second": 133251,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12266,8 +12266,8 @@
       "records": 1533,
       "transactions": 1016,
       "settlements": 517,
-      "match_seconds": 0.01256,
-      "match_records_per_second": 122057,
+      "match_seconds": 0.009706,
+      "match_records_per_second": 157937,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12374,8 +12374,8 @@
       "records": 1403,
       "transactions": 1028,
       "settlements": 375,
-      "match_seconds": 0.010329,
-      "match_records_per_second": 135828,
+      "match_seconds": 0.007846,
+      "match_records_per_second": 178821,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12483,8 +12483,8 @@
       "records": 1946,
       "transactions": 1028,
       "settlements": 918,
-      "match_seconds": 0.01765,
-      "match_records_per_second": 110255,
+      "match_seconds": 0.014384,
+      "match_records_per_second": 135292,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12592,8 +12592,8 @@
       "records": 1250,
       "transactions": 1016,
       "settlements": 234,
-      "match_seconds": 0.007978,
-      "match_records_per_second": 156690,
+      "match_seconds": 0.00655,
+      "match_records_per_second": 190853,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12700,8 +12700,8 @@
       "records": 2018,
       "transactions": 1100,
       "settlements": 918,
-      "match_seconds": 0.017526,
-      "match_records_per_second": 115142,
+      "match_seconds": 0.013935,
+      "match_records_per_second": 144813,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12809,8 +12809,8 @@
       "records": 1463,
       "transactions": 1100,
       "settlements": 363,
-      "match_seconds": 0.009957,
-      "match_records_per_second": 146936,
+      "match_seconds": 0.008292,
+      "match_records_per_second": 176433,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12918,8 +12918,8 @@
       "records": 1343,
       "transactions": 1100,
       "settlements": 243,
-      "match_seconds": 0.007959,
-      "match_records_per_second": 168734,
+      "match_seconds": 0.006574,
+      "match_records_per_second": 204303,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13027,8 +13027,8 @@
       "records": 3835,
       "transactions": 3150,
       "settlements": 685,
-      "match_seconds": 0.022776,
-      "match_records_per_second": 168380,
+      "match_seconds": 0.018142,
+      "match_records_per_second": 211388,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13136,8 +13136,8 @@
       "records": 5951,
       "transactions": 3150,
       "settlements": 2801,
-      "match_seconds": 0.055264,
-      "match_records_per_second": 107683,
+      "match_seconds": 0.045189,
+      "match_records_per_second": 131691,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13245,8 +13245,8 @@
       "records": 4015,
       "transactions": 3300,
       "settlements": 715,
-      "match_seconds": 0.02396,
-      "match_records_per_second": 167571,
+      "match_seconds": 0.019403,
+      "match_records_per_second": 206924,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13354,8 +13354,8 @@
       "records": 4160,
       "transactions": 3050,
       "settlements": 1110,
-      "match_seconds": 0.030089,
-      "match_records_per_second": 138257,
+      "match_seconds": 0.024116,
+      "match_records_per_second": 172497,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13463,8 +13463,8 @@
       "records": 4598,
       "transactions": 3050,
       "settlements": 1548,
-      "match_seconds": 0.034852,
-      "match_records_per_second": 131929,
+      "match_seconds": 0.028076,
+      "match_records_per_second": 163767,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13572,8 +13572,8 @@
       "records": 4870,
       "transactions": 3300,
       "settlements": 1570,
-      "match_seconds": 0.035681,
-      "match_records_per_second": 136487,
+      "match_seconds": 0.029264,
+      "match_records_per_second": 166418,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13681,8 +13681,8 @@
       "records": 3793,
       "transactions": 3085,
       "settlements": 708,
-      "match_seconds": 0.024176,
-      "match_records_per_second": 156893,
+      "match_seconds": 0.019086,
+      "match_records_per_second": 198730,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13790,8 +13790,8 @@
       "records": 4226,
       "transactions": 3085,
       "settlements": 1141,
-      "match_seconds": 0.029059,
-      "match_records_per_second": 145426,
+      "match_seconds": 0.024135,
+      "match_records_per_second": 175101,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13899,8 +13899,8 @@
       "records": 4224,
       "transactions": 3085,
       "settlements": 1139,
-      "match_seconds": 0.029767,
-      "match_records_per_second": 141903,
+      "match_seconds": 0.024664,
+      "match_records_per_second": 171265,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14008,8 +14008,8 @@
       "records": 3975,
       "transactions": 3300,
       "settlements": 675,
-      "match_seconds": 0.023116,
-      "match_records_per_second": 171962,
+      "match_seconds": 0.019407,
+      "match_records_per_second": 204820,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14117,8 +14117,8 @@
       "records": 4183,
       "transactions": 3050,
       "settlements": 1133,
-      "match_seconds": 0.030081,
-      "match_records_per_second": 139058,
+      "match_seconds": 0.02528,
+      "match_records_per_second": 165466,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14226,8 +14226,8 @@
       "records": 4417,
       "transactions": 3300,
       "settlements": 1117,
-      "match_seconds": 0.028767,
-      "match_records_per_second": 153544,
+      "match_seconds": 0.024195,
+      "match_records_per_second": 182557,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14335,8 +14335,8 @@
       "records": 3738,
       "transactions": 3050,
       "settlements": 688,
-      "match_seconds": 0.023282,
-      "match_records_per_second": 160551,
+      "match_seconds": 0.019271,
+      "match_records_per_second": 193969,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14444,8 +14444,8 @@
       "records": 3745,
       "transactions": 3050,
       "settlements": 695,
-      "match_seconds": 0.024084,
-      "match_records_per_second": 155498,
+      "match_seconds": 0.020068,
+      "match_records_per_second": 186614,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14553,8 +14553,8 @@
       "records": 4603,
       "transactions": 3050,
       "settlements": 1553,
-      "match_seconds": 0.036742,
-      "match_records_per_second": 125281,
+      "match_seconds": 0.032031,
+      "match_records_per_second": 143704,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14662,8 +14662,8 @@
       "records": 3794,
       "transactions": 3085,
       "settlements": 709,
-      "match_seconds": 0.023608,
-      "match_records_per_second": 160712,
+      "match_seconds": 0.021184,
+      "match_records_per_second": 179099,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14771,8 +14771,8 @@
       "records": 4599,
       "transactions": 3085,
       "settlements": 1514,
-      "match_seconds": 0.038034,
-      "match_records_per_second": 120920,
+      "match_seconds": 0.032449,
+      "match_records_per_second": 141728,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14880,8 +14880,8 @@
       "records": 3813,
       "transactions": 3150,
       "settlements": 663,
-      "match_seconds": 0.023989,
-      "match_records_per_second": 158949,
+      "match_seconds": 0.021117,
+      "match_records_per_second": 180565,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14989,8 +14989,8 @@
       "records": 3849,
       "transactions": 3150,
       "settlements": 699,
-      "match_seconds": 0.022937,
-      "match_records_per_second": 167807,
+      "match_seconds": 0.019746,
+      "match_records_per_second": 194923,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -15098,8 +15098,8 @@
       "records": 5144,
       "transactions": 3085,
       "settlements": 2059,
-      "match_seconds": 0.043522,
-      "match_records_per_second": 118192,
+      "match_seconds": 0.036895,
+      "match_records_per_second": 139423,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -15207,8 +15207,8 @@
       "records": 4676,
       "transactions": 3085,
       "settlements": 1591,
-      "match_seconds": 0.038732,
-      "match_records_per_second": 120727,
+      "match_seconds": 0.030671,
+      "match_records_per_second": 152457,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -15281,7 +15281,7 @@
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
-        "seconds": 0.001,
+        "seconds": 0.0,
         "avg_seconds_per_case": 0.0,
         "by_kind": {
           "AMOUNT_MISMATCH": {
@@ -15316,8 +15316,8 @@
       "records": 4199,
       "transactions": 3050,
       "settlements": 1149,
-      "match_seconds": 0.029688,
-      "match_records_per_second": 141437,
+      "match_seconds": 0.02637,
+      "match_records_per_second": 159235,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -15425,8 +15425,8 @@
       "records": 5163,
       "transactions": 3150,
       "settlements": 2013,
-      "match_seconds": 0.043431,
-      "match_records_per_second": 118879,
+      "match_seconds": 0.040113,
+      "match_records_per_second": 128712,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -15534,8 +15534,8 @@
       "records": 4645,
       "transactions": 3050,
       "settlements": 1595,
-      "match_seconds": 0.036661,
-      "match_records_per_second": 126703,
+      "match_seconds": 0.031893,
+      "match_records_per_second": 145643,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -15608,7 +15608,7 @@
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
-        "seconds": 0.0,
+        "seconds": 0.001,
         "avg_seconds_per_case": 0.0,
         "by_kind": {
           "AMOUNT_MISMATCH": {
@@ -15643,8 +15643,8 @@
       "records": 5949,
       "transactions": 3085,
       "settlements": 2864,
-      "match_seconds": 0.053151,
-      "match_records_per_second": 111926,
+      "match_seconds": 0.047331,
+      "match_records_per_second": 125689,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -15717,7 +15717,7 @@
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
-        "seconds": 0.0,
+        "seconds": 0.001,
         "avg_seconds_per_case": 0.0,
         "by_kind": {
           "AMOUNT_MISMATCH": {
@@ -15752,8 +15752,8 @@
       "records": 5891,
       "transactions": 3050,
       "settlements": 2841,
-      "match_seconds": 0.058446,
-      "match_records_per_second": 100795,
+      "match_seconds": 0.048478,
+      "match_records_per_second": 121519,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -15861,8 +15861,8 @@
       "records": 5118,
       "transactions": 3050,
       "settlements": 2068,
-      "match_seconds": 0.042994,
-      "match_records_per_second": 119040,
+      "match_seconds": 0.036586,
+      "match_records_per_second": 139890,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -15970,8 +15970,8 @@
       "records": 4447,
       "transactions": 3300,
       "settlements": 1147,
-      "match_seconds": 0.03126,
-      "match_records_per_second": 142259,
+      "match_seconds": 0.026592,
+      "match_records_per_second": 167229,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -16079,8 +16079,8 @@
       "records": 4450,
       "transactions": 3300,
       "settlements": 1150,
-      "match_seconds": 0.032553,
-      "match_records_per_second": 136698,
+      "match_seconds": 0.027562,
+      "match_records_per_second": 161456,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -16188,8 +16188,8 @@
       "records": 5226,
       "transactions": 3150,
       "settlements": 2076,
-      "match_seconds": 0.043577,
-      "match_records_per_second": 119926,
+      "match_seconds": 0.038342,
+      "match_records_per_second": 136299,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -16296,8 +16296,8 @@
       "records": 4260,
       "transactions": 3150,
       "settlements": 1110,
-      "match_seconds": 0.029564,
-      "match_records_per_second": 144095,
+      "match_seconds": 0.024437,
+      "match_records_per_second": 174327,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -16405,8 +16405,8 @@
       "records": 3764,
       "transactions": 3050,
       "settlements": 714,
-      "match_seconds": 0.026307,
-      "match_records_per_second": 143081,
+      "match_seconds": 0.020576,
+      "match_records_per_second": 182931,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -16514,8 +16514,8 @@
       "records": 5154,
       "transactions": 3085,
       "settlements": 2069,
-      "match_seconds": 0.04228,
-      "match_records_per_second": 121901,
+      "match_seconds": 0.037474,
+      "match_records_per_second": 137536,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -16588,7 +16588,7 @@
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
-        "seconds": 0.0,
+        "seconds": 0.001,
         "avg_seconds_per_case": 0.0,
         "by_kind": {
           "AMOUNT_MISMATCH": {
@@ -16623,8 +16623,8 @@
       "records": 4596,
       "transactions": 3050,
       "settlements": 1546,
-      "match_seconds": 0.036284,
-      "match_records_per_second": 126667,
+      "match_seconds": 0.031499,
+      "match_records_per_second": 145908,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -16732,8 +16732,8 @@
       "records": 4152,
       "transactions": 3085,
       "settlements": 1067,
-      "match_seconds": 0.030555,
-      "match_records_per_second": 135885,
+      "match_seconds": 0.0249,
+      "match_records_per_second": 166748,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -16806,7 +16806,7 @@
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
-        "seconds": 0.0,
+        "seconds": 0.001,
         "avg_seconds_per_case": 0.0,
         "by_kind": {
           "AMOUNT_MISMATCH": {
@@ -16841,8 +16841,8 @@
       "records": 5836,
       "transactions": 3085,
       "settlements": 2751,
-      "match_seconds": 0.054338,
-      "match_records_per_second": 107402,
+      "match_seconds": 0.048723,
+      "match_records_per_second": 119779,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -16950,8 +16950,8 @@
       "records": 3769,
       "transactions": 3050,
       "settlements": 719,
-      "match_seconds": 0.023679,
-      "match_records_per_second": 159174,
+      "match_seconds": 0.021208,
+      "match_records_per_second": 177713,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -17059,8 +17059,8 @@
       "records": 6051,
       "transactions": 3300,
       "settlements": 2751,
-      "match_seconds": 0.055319,
-      "match_records_per_second": 109384,
+      "match_seconds": 0.045531,
+      "match_records_per_second": 132899,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -17168,8 +17168,8 @@
       "records": 4398,
       "transactions": 3300,
       "settlements": 1098,
-      "match_seconds": 0.030144,
-      "match_records_per_second": 145899,
+      "match_seconds": 0.02614,
+      "match_records_per_second": 168246,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -17277,8 +17277,8 @@
       "records": 4013,
       "transactions": 3300,
       "settlements": 713,
-      "match_seconds": 0.024629,
-      "match_records_per_second": 162937,
+      "match_seconds": 0.021701,
+      "match_records_per_second": 184921,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {

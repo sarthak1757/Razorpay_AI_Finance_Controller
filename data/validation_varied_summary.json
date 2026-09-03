@@ -11,14 +11,26 @@
       "recall": 1.0
     },
     "match_records_per_second": {
-      "min": 64102,
-      "max": 180958
+      "min": 91537,
+      "max": 225889
     },
     "baseline": {
       "reasoner": "rule_baseline",
       "cases_scored": 25294,
-      "cases_correct": 24528,
-      "attribution_accuracy": 0.9697,
+      "cases_correct": 24538,
+      "attribution_accuracy": 0.9701,
+      "novel_detection": {
+        "novel_cases": 0,
+        "novel_caught": 0,
+        "times_called_unknown": 409,
+        "correctly_called_unknown": 0,
+        "known_cause_cases": 25294,
+        "known_cause_correct": 24538,
+        "recall": null,
+        "precision": 0.0,
+        "accuracy_on_known_causes": 0.9701,
+        "novel_missed_as": {}
+      },
       "by_confidence": {
         "high": {
           "total": 16544,
@@ -27,8 +39,8 @@
         },
         "medium": {
           "total": 8750,
-          "correct": 7984,
-          "accuracy": 0.9125
+          "correct": 7994,
+          "accuracy": 0.9136
         }
       }
     }
@@ -41,8 +53,8 @@
       "records": 79,
       "transactions": 63,
       "settlements": 16,
-      "match_seconds": 0.001232,
-      "match_records_per_second": 64102,
+      "match_seconds": 0.000863,
+      "match_records_per_second": 91537,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -97,6 +109,18 @@
         "cases_scored": 8,
         "cases_correct": 8,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 8,
+          "known_cause_correct": 8,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -135,8 +159,8 @@
       "records": 120,
       "transactions": 63,
       "settlements": 57,
-      "match_seconds": 0.001378,
-      "match_records_per_second": 87070,
+      "match_seconds": 0.000896,
+      "match_records_per_second": 133966,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -191,6 +215,18 @@
         "cases_scored": 11,
         "cases_correct": 11,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 11,
+          "known_cause_correct": 11,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -229,8 +265,8 @@
       "records": 82,
       "transactions": 66,
       "settlements": 16,
-      "match_seconds": 0.000599,
-      "match_records_per_second": 136914,
+      "match_seconds": 0.000414,
+      "match_records_per_second": 197948,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -285,6 +321,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -323,8 +371,8 @@
       "records": 86,
       "transactions": 61,
       "settlements": 25,
-      "match_seconds": 0.000729,
-      "match_records_per_second": 117963,
+      "match_seconds": 0.000528,
+      "match_records_per_second": 162789,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -379,6 +427,18 @@
         "cases_scored": 10,
         "cases_correct": 10,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 10,
+          "known_cause_correct": 10,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -417,8 +477,8 @@
       "records": 91,
       "transactions": 61,
       "settlements": 30,
-      "match_seconds": 0.000788,
-      "match_records_per_second": 115452,
+      "match_seconds": 0.000524,
+      "match_records_per_second": 173733,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -473,6 +533,18 @@
         "cases_scored": 8,
         "cases_correct": 8,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 8,
+          "known_cause_correct": 8,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -511,8 +583,8 @@
       "records": 102,
       "transactions": 66,
       "settlements": 36,
-      "match_seconds": 0.00088,
-      "match_records_per_second": 115904,
+      "match_seconds": 0.000676,
+      "match_records_per_second": 150804,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -567,6 +639,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -605,8 +689,8 @@
       "records": 78,
       "transactions": 61,
       "settlements": 17,
-      "match_seconds": 0.000575,
-      "match_records_per_second": 135691,
+      "match_seconds": 0.000412,
+      "match_records_per_second": 189416,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -661,6 +745,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -699,8 +795,8 @@
       "records": 84,
       "transactions": 61,
       "settlements": 23,
-      "match_seconds": 0.000653,
-      "match_records_per_second": 128695,
+      "match_seconds": 0.000483,
+      "match_records_per_second": 173763,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -755,6 +851,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -793,8 +901,8 @@
       "records": 84,
       "transactions": 61,
       "settlements": 23,
-      "match_seconds": 0.000645,
-      "match_records_per_second": 130182,
+      "match_seconds": 0.000496,
+      "match_records_per_second": 169426,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -849,6 +957,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -887,8 +1007,8 @@
       "records": 82,
       "transactions": 66,
       "settlements": 16,
-      "match_seconds": 0.000546,
-      "match_records_per_second": 150218,
+      "match_seconds": 0.000413,
+      "match_records_per_second": 198688,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -943,6 +1063,18 @@
         "cases_scored": 9,
         "cases_correct": 9,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 9,
+          "known_cause_correct": 9,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -981,8 +1113,8 @@
       "records": 85,
       "transactions": 61,
       "settlements": 24,
-      "match_seconds": 0.000702,
-      "match_records_per_second": 121119,
+      "match_seconds": 0.000492,
+      "match_records_per_second": 172779,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1037,6 +1169,18 @@
         "cases_scored": 10,
         "cases_correct": 8,
         "attribution_accuracy": 0.8,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 10,
+          "known_cause_correct": 8,
+          "accuracy_on_known_causes": 0.8,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -1075,8 +1219,8 @@
       "records": 90,
       "transactions": 66,
       "settlements": 24,
-      "match_seconds": 0.000678,
-      "match_records_per_second": 132646,
+      "match_seconds": 0.000485,
+      "match_records_per_second": 185583,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1131,6 +1275,18 @@
         "cases_scored": 8,
         "cases_correct": 8,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 8,
+          "known_cause_correct": 8,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -1169,8 +1325,8 @@
       "records": 77,
       "transactions": 61,
       "settlements": 16,
-      "match_seconds": 0.000555,
-      "match_records_per_second": 138687,
+      "match_seconds": 0.000412,
+      "match_records_per_second": 186950,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1225,6 +1381,18 @@
         "cases_scored": 9,
         "cases_correct": 9,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 9,
+          "known_cause_correct": 9,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -1263,8 +1431,8 @@
       "records": 79,
       "transactions": 61,
       "settlements": 18,
-      "match_seconds": 0.000635,
-      "match_records_per_second": 124336,
+      "match_seconds": 0.000444,
+      "match_records_per_second": 178012,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1319,6 +1487,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -1357,8 +1537,8 @@
       "records": 93,
       "transactions": 61,
       "settlements": 32,
-      "match_seconds": 0.000746,
-      "match_records_per_second": 124616,
+      "match_seconds": 0.000611,
+      "match_records_per_second": 152116,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1413,6 +1593,18 @@
         "cases_scored": 10,
         "cases_correct": 9,
         "attribution_accuracy": 0.9,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 10,
+          "known_cause_correct": 9,
+          "accuracy_on_known_causes": 0.9,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -1451,8 +1643,8 @@
       "records": 74,
       "transactions": 61,
       "settlements": 13,
-      "match_seconds": 0.000478,
-      "match_records_per_second": 154906,
+      "match_seconds": 0.000369,
+      "match_records_per_second": 200497,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1507,6 +1699,18 @@
         "cases_scored": 7,
         "cases_correct": 6,
         "attribution_accuracy": 0.8571,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 6,
+          "accuracy_on_known_causes": 0.8571,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -1545,8 +1749,8 @@
       "records": 93,
       "transactions": 61,
       "settlements": 32,
-      "match_seconds": 0.000726,
-      "match_records_per_second": 128055,
+      "match_seconds": 0.000593,
+      "match_records_per_second": 156764,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1601,6 +1805,18 @@
         "cases_scored": 15,
         "cases_correct": 15,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 15,
+          "known_cause_correct": 15,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -1639,8 +1855,8 @@
       "records": 78,
       "transactions": 63,
       "settlements": 15,
-      "match_seconds": 0.000506,
-      "match_records_per_second": 154036,
+      "match_seconds": 0.000409,
+      "match_records_per_second": 190670,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1695,6 +1911,18 @@
         "cases_scored": 10,
         "cases_correct": 9,
         "attribution_accuracy": 0.9,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 10,
+          "known_cause_correct": 9,
+          "accuracy_on_known_causes": 0.9,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -1733,8 +1961,8 @@
       "records": 79,
       "transactions": 63,
       "settlements": 16,
-      "match_seconds": 0.000504,
-      "match_records_per_second": 156643,
+      "match_seconds": 0.000423,
+      "match_records_per_second": 186577,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1789,6 +2017,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -1827,8 +2067,8 @@
       "records": 105,
       "transactions": 61,
       "settlements": 44,
-      "match_seconds": 0.000894,
-      "match_records_per_second": 117461,
+      "match_seconds": 0.000721,
+      "match_records_per_second": 145715,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1883,6 +2123,18 @@
         "cases_scored": 14,
         "cases_correct": 14,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 14,
+          "known_cause_correct": 14,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -1921,8 +2173,8 @@
       "records": 91,
       "transactions": 61,
       "settlements": 30,
-      "match_seconds": 0.000683,
-      "match_records_per_second": 133220,
+      "match_seconds": 0.000551,
+      "match_records_per_second": 165304,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -1977,6 +2229,18 @@
         "cases_scored": 9,
         "cases_correct": 9,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 9,
+          "known_cause_correct": 9,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -2015,8 +2279,8 @@
       "records": 86,
       "transactions": 61,
       "settlements": 25,
-      "match_seconds": 0.0006,
-      "match_records_per_second": 143303,
+      "match_seconds": 0.000473,
+      "match_records_per_second": 181994,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2071,6 +2335,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -2109,8 +2385,8 @@
       "records": 103,
       "transactions": 63,
       "settlements": 40,
-      "match_seconds": 0.000844,
-      "match_records_per_second": 122002,
+      "match_seconds": 0.000655,
+      "match_records_per_second": 157272,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2165,6 +2441,18 @@
         "cases_scored": 15,
         "cases_correct": 15,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 15,
+          "known_cause_correct": 15,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -2203,8 +2491,8 @@
       "records": 93,
       "transactions": 61,
       "settlements": 32,
-      "match_seconds": 0.00069,
-      "match_records_per_second": 134831,
+      "match_seconds": 0.000563,
+      "match_records_per_second": 165248,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2259,6 +2547,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -2297,8 +2597,8 @@
       "records": 119,
       "transactions": 61,
       "settlements": 58,
-      "match_seconds": 0.001066,
-      "match_records_per_second": 111624,
+      "match_seconds": 0.000863,
+      "match_records_per_second": 137944,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2353,6 +2653,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -2391,8 +2703,8 @@
       "records": 119,
       "transactions": 61,
       "settlements": 58,
-      "match_seconds": 0.001052,
-      "match_records_per_second": 113078,
+      "match_seconds": 0.000886,
+      "match_records_per_second": 134312,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2447,6 +2759,18 @@
         "cases_scored": 15,
         "cases_correct": 15,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 15,
+          "known_cause_correct": 15,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -2485,8 +2809,8 @@
       "records": 103,
       "transactions": 61,
       "settlements": 42,
-      "match_seconds": 0.00085,
-      "match_records_per_second": 121224,
+      "match_seconds": 0.000693,
+      "match_records_per_second": 148602,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2541,6 +2865,18 @@
         "cases_scored": 16,
         "cases_correct": 16,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 16,
+          "known_cause_correct": 16,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -2579,8 +2915,8 @@
       "records": 90,
       "transactions": 66,
       "settlements": 24,
-      "match_seconds": 0.00059,
-      "match_records_per_second": 152661,
+      "match_seconds": 0.000498,
+      "match_records_per_second": 180678,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2635,6 +2971,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -2673,8 +3021,8 @@
       "records": 90,
       "transactions": 66,
       "settlements": 24,
-      "match_seconds": 0.000607,
-      "match_records_per_second": 148291,
+      "match_seconds": 0.000488,
+      "match_records_per_second": 184253,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2729,6 +3077,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -2767,8 +3127,8 @@
       "records": 103,
       "transactions": 63,
       "settlements": 40,
-      "match_seconds": 0.000819,
-      "match_records_per_second": 125757,
+      "match_seconds": 0.00069,
+      "match_records_per_second": 149384,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2823,6 +3183,18 @@
         "cases_scored": 14,
         "cases_correct": 14,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 14,
+          "known_cause_correct": 14,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -2861,8 +3233,8 @@
       "records": 82,
       "transactions": 63,
       "settlements": 19,
-      "match_seconds": 0.000533,
-      "match_records_per_second": 153738,
+      "match_seconds": 0.00044,
+      "match_records_per_second": 186346,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -2917,6 +3289,18 @@
         "cases_scored": 9,
         "cases_correct": 8,
         "attribution_accuracy": 0.8889,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 9,
+          "known_cause_correct": 8,
+          "accuracy_on_known_causes": 0.8889,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -2955,8 +3339,8 @@
       "records": 77,
       "transactions": 61,
       "settlements": 16,
-      "match_seconds": 0.000491,
-      "match_records_per_second": 156916,
+      "match_seconds": 0.000667,
+      "match_records_per_second": 115450,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3011,6 +3395,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -3049,8 +3445,8 @@
       "records": 105,
       "transactions": 61,
       "settlements": 44,
-      "match_seconds": 0.000876,
-      "match_records_per_second": 119874,
+      "match_seconds": 0.000722,
+      "match_records_per_second": 145513,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3105,6 +3501,18 @@
         "cases_scored": 8,
         "cases_correct": 8,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 8,
+          "known_cause_correct": 8,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -3143,8 +3551,8 @@
       "records": 90,
       "transactions": 61,
       "settlements": 29,
-      "match_seconds": 0.000669,
-      "match_records_per_second": 134470,
+      "match_seconds": 0.000612,
+      "match_records_per_second": 147029,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3199,6 +3607,18 @@
         "cases_scored": 12,
         "cases_correct": 11,
         "attribution_accuracy": 0.9167,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 12,
+          "known_cause_correct": 11,
+          "accuracy_on_known_causes": 0.9167,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -3237,8 +3657,8 @@
       "records": 86,
       "transactions": 61,
       "settlements": 25,
-      "match_seconds": 0.000606,
-      "match_records_per_second": 141846,
+      "match_seconds": 0.000481,
+      "match_records_per_second": 178918,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3293,6 +3713,18 @@
         "cases_scored": 9,
         "cases_correct": 9,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 9,
+          "known_cause_correct": 9,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -3331,8 +3763,8 @@
       "records": 117,
       "transactions": 61,
       "settlements": 56,
-      "match_seconds": 0.00103,
-      "match_records_per_second": 113615,
+      "match_seconds": 0.00083,
+      "match_records_per_second": 140914,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3387,6 +3819,18 @@
         "cases_scored": 15,
         "cases_correct": 14,
         "attribution_accuracy": 0.9333,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 15,
+          "known_cause_correct": 14,
+          "accuracy_on_known_causes": 0.9333,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -3425,8 +3869,8 @@
       "records": 77,
       "transactions": 61,
       "settlements": 16,
-      "match_seconds": 0.000484,
-      "match_records_per_second": 159146,
+      "match_seconds": 0.000378,
+      "match_records_per_second": 203974,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3481,6 +3925,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -3519,8 +3975,8 @@
       "records": 122,
       "transactions": 66,
       "settlements": 56,
-      "match_seconds": 0.001059,
-      "match_records_per_second": 115226,
+      "match_seconds": 0.000835,
+      "match_records_per_second": 146159,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3575,6 +4031,18 @@
         "cases_scored": 12,
         "cases_correct": 12,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 12,
+          "known_cause_correct": 12,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -3613,8 +4081,8 @@
       "records": 91,
       "transactions": 66,
       "settlements": 25,
-      "match_seconds": 0.000615,
-      "match_records_per_second": 147887,
+      "match_seconds": 0.00048,
+      "match_records_per_second": 189583,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3669,6 +4137,18 @@
         "cases_scored": 10,
         "cases_correct": 10,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 10,
+          "known_cause_correct": 10,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -3707,8 +4187,8 @@
       "records": 81,
       "transactions": 66,
       "settlements": 15,
-      "match_seconds": 0.000476,
-      "match_records_per_second": 170317,
+      "match_seconds": 0.00038,
+      "match_records_per_second": 212971,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3763,6 +4243,18 @@
         "cases_scored": 7,
         "cases_correct": 7,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 7,
+          "known_cause_correct": 7,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -3801,8 +4293,8 @@
       "records": 385,
       "transactions": 315,
       "settlements": 70,
-      "match_seconds": 0.002504,
-      "match_records_per_second": 153757,
+      "match_seconds": 0.001865,
+      "match_records_per_second": 206434,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3857,6 +4349,18 @@
         "cases_scored": 24,
         "cases_correct": 24,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 24,
+          "known_cause_correct": 24,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -3895,8 +4399,8 @@
       "records": 596,
       "transactions": 315,
       "settlements": 281,
-      "match_seconds": 0.005254,
-      "match_records_per_second": 113442,
+      "match_seconds": 0.004246,
+      "match_records_per_second": 140378,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -3951,6 +4455,18 @@
         "cases_scored": 57,
         "cases_correct": 57,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 57,
+          "known_cause_correct": 57,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -3989,8 +4505,8 @@
       "records": 402,
       "transactions": 330,
       "settlements": 72,
-      "match_seconds": 0.002363,
-      "match_records_per_second": 170138,
+      "match_seconds": 0.001926,
+      "match_records_per_second": 208741,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4045,6 +4561,18 @@
         "cases_scored": 34,
         "cases_correct": 33,
         "attribution_accuracy": 0.9706,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 34,
+          "known_cause_correct": 33,
+          "accuracy_on_known_causes": 0.9706,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -4083,8 +4611,8 @@
       "records": 415,
       "transactions": 305,
       "settlements": 110,
-      "match_seconds": 0.002878,
-      "match_records_per_second": 144206,
+      "match_seconds": 0.002381,
+      "match_records_per_second": 174290,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4139,6 +4667,18 @@
         "cases_scored": 46,
         "cases_correct": 41,
         "attribution_accuracy": 0.8913,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 46,
+          "known_cause_correct": 41,
+          "accuracy_on_known_causes": 0.8913,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -4177,8 +4717,8 @@
       "records": 456,
       "transactions": 305,
       "settlements": 151,
-      "match_seconds": 0.003398,
-      "match_records_per_second": 134190,
+      "match_seconds": 0.002729,
+      "match_records_per_second": 167092,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4233,6 +4773,18 @@
         "cases_scored": 33,
         "cases_correct": 33,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 33,
+          "known_cause_correct": 33,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -4271,8 +4823,8 @@
       "records": 495,
       "transactions": 330,
       "settlements": 165,
-      "match_seconds": 0.003595,
-      "match_records_per_second": 137685,
+      "match_seconds": 0.002925,
+      "match_records_per_second": 169245,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4327,6 +4879,18 @@
         "cases_scored": 29,
         "cases_correct": 28,
         "attribution_accuracy": 0.9655,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 29,
+          "known_cause_correct": 28,
+          "accuracy_on_known_causes": 0.9655,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -4365,8 +4929,8 @@
       "records": 382,
       "transactions": 308,
       "settlements": 74,
-      "match_seconds": 0.002349,
-      "match_records_per_second": 162619,
+      "match_seconds": 0.001923,
+      "match_records_per_second": 198695,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4421,6 +4985,18 @@
         "cases_scored": 27,
         "cases_correct": 26,
         "attribution_accuracy": 0.963,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 27,
+          "known_cause_correct": 26,
+          "accuracy_on_known_causes": 0.963,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -4459,8 +5035,8 @@
       "records": 425,
       "transactions": 308,
       "settlements": 117,
-      "match_seconds": 0.002851,
-      "match_records_per_second": 149092,
+      "match_seconds": 0.002394,
+      "match_records_per_second": 177493,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4515,6 +5091,18 @@
         "cases_scored": 29,
         "cases_correct": 29,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 29,
+          "known_cause_correct": 29,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -4553,8 +5141,8 @@
       "records": 426,
       "transactions": 308,
       "settlements": 118,
-      "match_seconds": 0.002901,
-      "match_records_per_second": 146867,
+      "match_seconds": 0.002302,
+      "match_records_per_second": 185023,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4609,6 +5197,18 @@
         "cases_scored": 35,
         "cases_correct": 34,
         "attribution_accuracy": 0.9714,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 35,
+          "known_cause_correct": 34,
+          "accuracy_on_known_causes": 0.9714,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -4647,8 +5247,8 @@
       "records": 397,
       "transactions": 330,
       "settlements": 67,
-      "match_seconds": 0.002205,
-      "match_records_per_second": 180059,
+      "match_seconds": 0.001757,
+      "match_records_per_second": 225889,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4703,6 +5303,18 @@
         "cases_scored": 33,
         "cases_correct": 33,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 33,
+          "known_cause_correct": 33,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -4741,8 +5353,8 @@
       "records": 412,
       "transactions": 305,
       "settlements": 107,
-      "match_seconds": 0.002848,
-      "match_records_per_second": 144667,
+      "match_seconds": 0.00237,
+      "match_records_per_second": 173809,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4797,6 +5409,18 @@
         "cases_scored": 47,
         "cases_correct": 44,
         "attribution_accuracy": 0.9362,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 47,
+          "known_cause_correct": 44,
+          "accuracy_on_known_causes": 0.9362,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -4835,8 +5459,8 @@
       "records": 445,
       "transactions": 330,
       "settlements": 115,
-      "match_seconds": 0.002896,
-      "match_records_per_second": 153658,
+      "match_seconds": 0.002298,
+      "match_records_per_second": 193612,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4891,6 +5515,18 @@
         "cases_scored": 30,
         "cases_correct": 30,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 30,
+          "known_cause_correct": 30,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -4929,8 +5565,8 @@
       "records": 370,
       "transactions": 305,
       "settlements": 65,
-      "match_seconds": 0.002249,
-      "match_records_per_second": 164487,
+      "match_seconds": 0.00182,
+      "match_records_per_second": 203329,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -4985,6 +5621,18 @@
         "cases_scored": 35,
         "cases_correct": 33,
         "attribution_accuracy": 0.9429,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 35,
+          "known_cause_correct": 33,
+          "accuracy_on_known_causes": 0.9429,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -5023,8 +5671,8 @@
       "records": 382,
       "transactions": 305,
       "settlements": 77,
-      "match_seconds": 0.00241,
-      "match_records_per_second": 158476,
+      "match_seconds": 0.001921,
+      "match_records_per_second": 198872,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5079,6 +5727,18 @@
         "cases_scored": 30,
         "cases_correct": 29,
         "attribution_accuracy": 0.9667,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 30,
+          "known_cause_correct": 29,
+          "accuracy_on_known_causes": 0.9667,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -5117,8 +5777,8 @@
       "records": 471,
       "transactions": 305,
       "settlements": 166,
-      "match_seconds": 0.003634,
-      "match_records_per_second": 129609,
+      "match_seconds": 0.00299,
+      "match_records_per_second": 157505,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5171,8 +5831,20 @@
       "baseline": {
         "reasoner": "rule_baseline",
         "cases_scored": 54,
-        "cases_correct": 50,
-        "attribution_accuracy": 0.9259,
+        "cases_correct": 51,
+        "attribution_accuracy": 0.9444,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 54,
+          "known_cause_correct": 51,
+          "accuracy_on_known_causes": 0.9444,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -5181,8 +5853,8 @@
         "by_kind": {
           "AMOUNT_MISMATCH": {
             "total": 38,
-            "correct": 34,
-            "accuracy": 0.8947
+            "correct": 35,
+            "accuracy": 0.9211
           },
           "MISSING_SETTLEMENT": {
             "total": 16,
@@ -5193,8 +5865,8 @@
         "by_confidence": {
           "medium": {
             "total": 29,
-            "correct": 25,
-            "accuracy": 0.8621
+            "correct": 26,
+            "accuracy": 0.8966
           },
           "high": {
             "total": 25,
@@ -5211,8 +5883,8 @@
       "records": 383,
       "transactions": 308,
       "settlements": 75,
-      "match_seconds": 0.002327,
-      "match_records_per_second": 164616,
+      "match_seconds": 0.001911,
+      "match_records_per_second": 200410,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5267,6 +5939,18 @@
         "cases_scored": 29,
         "cases_correct": 28,
         "attribution_accuracy": 0.9655,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 29,
+          "known_cause_correct": 28,
+          "accuracy_on_known_causes": 0.9655,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -5305,8 +5989,8 @@
       "records": 463,
       "transactions": 308,
       "settlements": 155,
-      "match_seconds": 0.003543,
-      "match_records_per_second": 130683,
+      "match_seconds": 0.002885,
+      "match_records_per_second": 160469,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5361,6 +6045,18 @@
         "cases_scored": 74,
         "cases_correct": 74,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 74,
+          "known_cause_correct": 74,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -5399,8 +6095,8 @@
       "records": 385,
       "transactions": 315,
       "settlements": 70,
-      "match_seconds": 0.002311,
-      "match_records_per_second": 166586,
+      "match_seconds": 0.001922,
+      "match_records_per_second": 200330,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5455,6 +6151,18 @@
         "cases_scored": 47,
         "cases_correct": 47,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 47,
+          "known_cause_correct": 47,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -5493,8 +6201,8 @@
       "records": 389,
       "transactions": 315,
       "settlements": 74,
-      "match_seconds": 0.002384,
-      "match_records_per_second": 163174,
+      "match_seconds": 0.001886,
+      "match_records_per_second": 206275,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5549,6 +6257,18 @@
         "cases_scored": 22,
         "cases_correct": 22,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 22,
+          "known_cause_correct": 22,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -5587,8 +6307,8 @@
       "records": 516,
       "transactions": 308,
       "settlements": 208,
-      "match_seconds": 0.004189,
-      "match_records_per_second": 123182,
+      "match_seconds": 0.003452,
+      "match_records_per_second": 149486,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5643,6 +6363,18 @@
         "cases_scored": 66,
         "cases_correct": 63,
         "attribution_accuracy": 0.9545,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 66,
+          "known_cause_correct": 63,
+          "accuracy_on_known_causes": 0.9545,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -5681,8 +6413,8 @@
       "records": 471,
       "transactions": 308,
       "settlements": 163,
-      "match_seconds": 0.003553,
-      "match_records_per_second": 132569,
+      "match_seconds": 0.002898,
+      "match_records_per_second": 162507,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5737,6 +6469,18 @@
         "cases_scored": 49,
         "cases_correct": 48,
         "attribution_accuracy": 0.9796,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 49,
+          "known_cause_correct": 48,
+          "accuracy_on_known_causes": 0.9796,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -5775,8 +6519,8 @@
       "records": 418,
       "transactions": 305,
       "settlements": 113,
-      "match_seconds": 0.002835,
-      "match_records_per_second": 147440,
+      "match_seconds": 0.002279,
+      "match_records_per_second": 183390,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5831,6 +6575,18 @@
         "cases_scored": 34,
         "cases_correct": 32,
         "attribution_accuracy": 0.9412,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 34,
+          "known_cause_correct": 32,
+          "accuracy_on_known_causes": 0.9412,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -5869,8 +6625,8 @@
       "records": 518,
       "transactions": 315,
       "settlements": 203,
-      "match_seconds": 0.004222,
-      "match_records_per_second": 122699,
+      "match_seconds": 0.003367,
+      "match_records_per_second": 153827,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -5925,6 +6681,18 @@
         "cases_scored": 79,
         "cases_correct": 78,
         "attribution_accuracy": 0.9873,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 79,
+          "known_cause_correct": 78,
+          "accuracy_on_known_causes": 0.9873,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -5963,8 +6731,8 @@
       "records": 452,
       "transactions": 305,
       "settlements": 147,
-      "match_seconds": 0.003359,
-      "match_records_per_second": 134572,
+      "match_seconds": 0.002766,
+      "match_records_per_second": 163386,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6019,6 +6787,18 @@
         "cases_scored": 33,
         "cases_correct": 33,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 33,
+          "known_cause_correct": 33,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -6057,8 +6837,8 @@
       "records": 596,
       "transactions": 308,
       "settlements": 288,
-      "match_seconds": 0.005277,
-      "match_records_per_second": 112932,
+      "match_seconds": 0.004216,
+      "match_records_per_second": 141375,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6113,6 +6893,18 @@
         "cases_scored": 33,
         "cases_correct": 32,
         "attribution_accuracy": 0.9697,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 33,
+          "known_cause_correct": 32,
+          "accuracy_on_known_causes": 0.9697,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -6151,8 +6943,8 @@
       "records": 590,
       "transactions": 305,
       "settlements": 285,
-      "match_seconds": 0.005361,
-      "match_records_per_second": 110044,
+      "match_seconds": 0.004379,
+      "match_records_per_second": 134725,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6207,6 +6999,18 @@
         "cases_scored": 75,
         "cases_correct": 71,
         "attribution_accuracy": 0.9467,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 4,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 75,
+          "known_cause_correct": 71,
+          "accuracy_on_known_causes": 0.9467,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -6245,8 +7049,8 @@
       "records": 509,
       "transactions": 305,
       "settlements": 204,
-      "match_seconds": 0.004236,
-      "match_records_per_second": 120150,
+      "match_seconds": 0.003511,
+      "match_records_per_second": 144966,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6301,6 +7105,18 @@
         "cases_scored": 79,
         "cases_correct": 77,
         "attribution_accuracy": 0.9747,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 79,
+          "known_cause_correct": 77,
+          "accuracy_on_known_causes": 0.9747,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -6339,8 +7155,8 @@
       "records": 454,
       "transactions": 330,
       "settlements": 124,
-      "match_seconds": 0.003067,
-      "match_records_per_second": 148049,
+      "match_seconds": 0.002512,
+      "match_records_per_second": 180732,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6395,6 +7211,18 @@
         "cases_scored": 31,
         "cases_correct": 31,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 31,
+          "known_cause_correct": 31,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -6433,8 +7261,8 @@
       "records": 441,
       "transactions": 330,
       "settlements": 111,
-      "match_seconds": 0.002874,
-      "match_records_per_second": 153422,
+      "match_seconds": 0.002349,
+      "match_records_per_second": 187729,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6489,6 +7317,18 @@
         "cases_scored": 31,
         "cases_correct": 30,
         "attribution_accuracy": 0.9677,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 31,
+          "known_cause_correct": 30,
+          "accuracy_on_known_causes": 0.9677,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -6527,8 +7367,8 @@
       "records": 519,
       "transactions": 315,
       "settlements": 204,
-      "match_seconds": 0.004158,
-      "match_records_per_second": 124810,
+      "match_seconds": 0.003435,
+      "match_records_per_second": 151099,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6583,6 +7423,18 @@
         "cases_scored": 70,
         "cases_correct": 69,
         "attribution_accuracy": 0.9857,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 70,
+          "known_cause_correct": 69,
+          "accuracy_on_known_causes": 0.9857,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -6621,8 +7473,8 @@
       "records": 424,
       "transactions": 315,
       "settlements": 109,
-      "match_seconds": 0.002791,
-      "match_records_per_second": 151921,
+      "match_seconds": 0.002284,
+      "match_records_per_second": 185670,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6677,6 +7529,18 @@
         "cases_scored": 33,
         "cases_correct": 32,
         "attribution_accuracy": 0.9697,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 33,
+          "known_cause_correct": 32,
+          "accuracy_on_known_causes": 0.9697,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -6715,8 +7579,8 @@
       "records": 376,
       "transactions": 305,
       "settlements": 71,
-      "match_seconds": 0.002363,
-      "match_records_per_second": 159111,
+      "match_seconds": 0.00197,
+      "match_records_per_second": 190895,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6771,6 +7635,18 @@
         "cases_scored": 34,
         "cases_correct": 30,
         "attribution_accuracy": 0.8824,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 34,
+          "known_cause_correct": 30,
+          "accuracy_on_known_causes": 0.8824,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -6809,8 +7685,8 @@
       "records": 521,
       "transactions": 308,
       "settlements": 213,
-      "match_seconds": 0.004251,
-      "match_records_per_second": 122573,
+      "match_seconds": 0.003462,
+      "match_records_per_second": 150493,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6865,6 +7741,18 @@
         "cases_scored": 29,
         "cases_correct": 29,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 29,
+          "known_cause_correct": 29,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -6903,8 +7791,8 @@
       "records": 460,
       "transactions": 305,
       "settlements": 155,
-      "match_seconds": 0.00354,
-      "match_records_per_second": 129944,
+      "match_seconds": 0.002908,
+      "match_records_per_second": 158191,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -6959,6 +7847,18 @@
         "cases_scored": 62,
         "cases_correct": 62,
         "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 62,
+          "known_cause_correct": 62,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -6997,8 +7897,8 @@
       "records": 425,
       "transactions": 308,
       "settlements": 117,
-      "match_seconds": 0.003004,
-      "match_records_per_second": 141460,
+      "match_seconds": 0.00246,
+      "match_records_per_second": 172758,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7053,6 +7953,18 @@
         "cases_scored": 46,
         "cases_correct": 44,
         "attribution_accuracy": 0.9565,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 46,
+          "known_cause_correct": 44,
+          "accuracy_on_known_causes": 0.9565,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -7091,8 +8003,8 @@
       "records": 584,
       "transactions": 308,
       "settlements": 276,
-      "match_seconds": 0.005223,
-      "match_records_per_second": 111820,
+      "match_seconds": 0.004218,
+      "match_records_per_second": 138465,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7147,6 +8059,18 @@
         "cases_scored": 75,
         "cases_correct": 72,
         "attribution_accuracy": 0.96,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 75,
+          "known_cause_correct": 72,
+          "accuracy_on_known_causes": 0.96,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -7185,8 +8109,8 @@
       "records": 377,
       "transactions": 305,
       "settlements": 72,
-      "match_seconds": 0.002356,
-      "match_records_per_second": 160014,
+      "match_seconds": 0.001937,
+      "match_records_per_second": 194610,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7241,6 +8165,18 @@
         "cases_scored": 30,
         "cases_correct": 29,
         "attribution_accuracy": 0.9667,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 30,
+          "known_cause_correct": 29,
+          "accuracy_on_known_causes": 0.9667,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -7279,8 +8215,8 @@
       "records": 606,
       "transactions": 330,
       "settlements": 276,
-      "match_seconds": 0.005215,
-      "match_records_per_second": 116204,
+      "match_seconds": 0.004251,
+      "match_records_per_second": 142563,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7333,8 +8269,20 @@
       "baseline": {
         "reasoner": "rule_baseline",
         "cases_scored": 58,
-        "cases_correct": 57,
-        "attribution_accuracy": 0.9828,
+        "cases_correct": 58,
+        "attribution_accuracy": 1.0,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 58,
+          "known_cause_correct": 58,
+          "accuracy_on_known_causes": 1.0,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -7343,8 +8291,8 @@
         "by_kind": {
           "AMOUNT_MISMATCH": {
             "total": 33,
-            "correct": 32,
-            "accuracy": 0.9697
+            "correct": 33,
+            "accuracy": 1.0
           },
           "MISSING_SETTLEMENT": {
             "total": 25,
@@ -7355,8 +8303,8 @@
         "by_confidence": {
           "medium": {
             "total": 25,
-            "correct": 24,
-            "accuracy": 0.96
+            "correct": 25,
+            "accuracy": 1.0
           },
           "high": {
             "total": 33,
@@ -7373,8 +8321,8 @@
       "records": 452,
       "transactions": 330,
       "settlements": 122,
-      "match_seconds": 0.003074,
-      "match_records_per_second": 147042,
+      "match_seconds": 0.002509,
+      "match_records_per_second": 180163,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7429,6 +8377,18 @@
         "cases_scored": 49,
         "cases_correct": 46,
         "attribution_accuracy": 0.9388,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 49,
+          "known_cause_correct": 46,
+          "accuracy_on_known_causes": 0.9388,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -7467,8 +8427,8 @@
       "records": 398,
       "transactions": 330,
       "settlements": 68,
-      "match_seconds": 0.002362,
-      "match_records_per_second": 168507,
+      "match_seconds": 0.001883,
+      "match_records_per_second": 211393,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7523,6 +8483,18 @@
         "cases_scored": 27,
         "cases_correct": 25,
         "attribution_accuracy": 0.9259,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 27,
+          "known_cause_correct": 25,
+          "accuracy_on_known_causes": 0.9259,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -7561,8 +8533,8 @@
       "records": 1279,
       "transactions": 1050,
       "settlements": 229,
-      "match_seconds": 0.00757,
-      "match_records_per_second": 168968,
+      "match_seconds": 0.005895,
+      "match_records_per_second": 216954,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7617,6 +8589,18 @@
         "cases_scored": 77,
         "cases_correct": 76,
         "attribution_accuracy": 0.987,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 77,
+          "known_cause_correct": 76,
+          "accuracy_on_known_causes": 0.987,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -7655,8 +8639,8 @@
       "records": 1985,
       "transactions": 1050,
       "settlements": 935,
-      "match_seconds": 0.017567,
-      "match_records_per_second": 112995,
+      "match_seconds": 0.013855,
+      "match_records_per_second": 143274,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7711,6 +8695,18 @@
         "cases_scored": 191,
         "cases_correct": 189,
         "attribution_accuracy": 0.9895,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 191,
+          "known_cause_correct": 189,
+          "accuracy_on_known_causes": 0.9895,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -7749,8 +8745,8 @@
       "records": 1349,
       "transactions": 1100,
       "settlements": 249,
-      "match_seconds": 0.008117,
-      "match_records_per_second": 166204,
+      "match_seconds": 0.00635,
+      "match_records_per_second": 212426,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7805,6 +8801,18 @@
         "cases_scored": 116,
         "cases_correct": 108,
         "attribution_accuracy": 0.931,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 116,
+          "known_cause_correct": 108,
+          "accuracy_on_known_causes": 0.931,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -7843,8 +8851,8 @@
       "records": 1387,
       "transactions": 1016,
       "settlements": 371,
-      "match_seconds": 0.009599,
-      "match_records_per_second": 144489,
+      "match_seconds": 0.008819,
+      "match_records_per_second": 157275,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7899,6 +8907,18 @@
         "cases_scored": 155,
         "cases_correct": 151,
         "attribution_accuracy": 0.9742,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 155,
+          "known_cause_correct": 151,
+          "accuracy_on_known_causes": 0.9742,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -7937,8 +8957,8 @@
       "records": 1534,
       "transactions": 1016,
       "settlements": 518,
-      "match_seconds": 0.012288,
-      "match_records_per_second": 124834,
+      "match_seconds": 0.009247,
+      "match_records_per_second": 165901,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -7993,6 +9013,18 @@
         "cases_scored": 111,
         "cases_correct": 110,
         "attribution_accuracy": 0.991,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 111,
+          "known_cause_correct": 110,
+          "accuracy_on_known_causes": 0.991,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -8031,8 +9063,8 @@
       "records": 1638,
       "transactions": 1100,
       "settlements": 538,
-      "match_seconds": 0.011763,
-      "match_records_per_second": 139249,
+      "match_seconds": 0.009654,
+      "match_records_per_second": 169679,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8087,6 +9119,18 @@
         "cases_scored": 97,
         "cases_correct": 94,
         "attribution_accuracy": 0.9691,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 97,
+          "known_cause_correct": 94,
+          "accuracy_on_known_causes": 0.9691,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -8125,8 +9169,8 @@
       "records": 1279,
       "transactions": 1028,
       "settlements": 251,
-      "match_seconds": 0.007873,
-      "match_records_per_second": 162453,
+      "match_seconds": 0.00644,
+      "match_records_per_second": 198605,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8181,6 +9225,18 @@
         "cases_scored": 90,
         "cases_correct": 87,
         "attribution_accuracy": 0.9667,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 90,
+          "known_cause_correct": 87,
+          "accuracy_on_known_causes": 0.9667,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -8219,8 +9275,8 @@
       "records": 1419,
       "transactions": 1028,
       "settlements": 391,
-      "match_seconds": 0.009688,
-      "match_records_per_second": 146466,
+      "match_seconds": 0.007982,
+      "match_records_per_second": 177776,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8275,6 +9331,18 @@
         "cases_scored": 98,
         "cases_correct": 97,
         "attribution_accuracy": 0.9898,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 98,
+          "known_cause_correct": 97,
+          "accuracy_on_known_causes": 0.9898,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -8313,8 +9381,8 @@
       "records": 1411,
       "transactions": 1028,
       "settlements": 383,
-      "match_seconds": 0.009661,
-      "match_records_per_second": 146058,
+      "match_seconds": 0.007966,
+      "match_records_per_second": 177120,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8369,6 +9437,18 @@
         "cases_scored": 116,
         "cases_correct": 113,
         "attribution_accuracy": 0.9741,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 116,
+          "known_cause_correct": 113,
+          "accuracy_on_known_causes": 0.9741,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -8407,8 +9487,8 @@
       "records": 1321,
       "transactions": 1100,
       "settlements": 221,
-      "match_seconds": 0.0073,
-      "match_records_per_second": 180958,
+      "match_seconds": 0.006226,
+      "match_records_per_second": 212179,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8463,6 +9543,18 @@
         "cases_scored": 108,
         "cases_correct": 103,
         "attribution_accuracy": 0.9537,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 108,
+          "known_cause_correct": 103,
+          "accuracy_on_known_causes": 0.9537,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -8501,8 +9593,8 @@
       "records": 1386,
       "transactions": 1016,
       "settlements": 370,
-      "match_seconds": 0.009624,
-      "match_records_per_second": 144021,
+      "match_seconds": 0.00794,
+      "match_records_per_second": 174565,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8557,6 +9649,18 @@
         "cases_scored": 160,
         "cases_correct": 156,
         "attribution_accuracy": 0.975,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 160,
+          "known_cause_correct": 156,
+          "accuracy_on_known_causes": 0.975,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -8595,8 +9699,8 @@
       "records": 1468,
       "transactions": 1100,
       "settlements": 368,
-      "match_seconds": 0.009508,
-      "match_records_per_second": 154391,
+      "match_seconds": 0.007379,
+      "match_records_per_second": 198938,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8651,6 +9755,18 @@
         "cases_scored": 99,
         "cases_correct": 98,
         "attribution_accuracy": 0.9899,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 99,
+          "known_cause_correct": 98,
+          "accuracy_on_known_causes": 0.9899,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -8689,8 +9805,8 @@
       "records": 1251,
       "transactions": 1016,
       "settlements": 235,
-      "match_seconds": 0.007885,
-      "match_records_per_second": 158647,
+      "match_seconds": 0.006288,
+      "match_records_per_second": 198956,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8745,6 +9861,18 @@
         "cases_scored": 118,
         "cases_correct": 115,
         "attribution_accuracy": 0.9746,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 118,
+          "known_cause_correct": 115,
+          "accuracy_on_known_causes": 0.9746,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -8783,8 +9911,8 @@
       "records": 1251,
       "transactions": 1016,
       "settlements": 235,
-      "match_seconds": 0.007415,
-      "match_records_per_second": 168703,
+      "match_seconds": 0.006254,
+      "match_records_per_second": 200019,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8839,6 +9967,18 @@
         "cases_scored": 96,
         "cases_correct": 91,
         "attribution_accuracy": 0.9479,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 96,
+          "known_cause_correct": 91,
+          "accuracy_on_known_causes": 0.9479,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -8877,8 +10017,8 @@
       "records": 1548,
       "transactions": 1016,
       "settlements": 532,
-      "match_seconds": 0.01188,
-      "match_records_per_second": 130298,
+      "match_seconds": 0.009657,
+      "match_records_per_second": 160301,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -8933,6 +10073,18 @@
         "cases_scored": 176,
         "cases_correct": 173,
         "attribution_accuracy": 0.983,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 176,
+          "known_cause_correct": 173,
+          "accuracy_on_known_causes": 0.983,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -8971,8 +10123,8 @@
       "records": 1265,
       "transactions": 1028,
       "settlements": 237,
-      "match_seconds": 0.007651,
-      "match_records_per_second": 165347,
+      "match_seconds": 0.006055,
+      "match_records_per_second": 208928,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9027,6 +10179,18 @@
         "cases_scored": 95,
         "cases_correct": 89,
         "attribution_accuracy": 0.9368,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 95,
+          "known_cause_correct": 89,
+          "accuracy_on_known_causes": 0.9368,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -9065,8 +10229,8 @@
       "records": 1523,
       "transactions": 1028,
       "settlements": 495,
-      "match_seconds": 0.011583,
-      "match_records_per_second": 131490,
+      "match_seconds": 0.009518,
+      "match_records_per_second": 160019,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9121,6 +10285,18 @@
         "cases_scored": 240,
         "cases_correct": 229,
         "attribution_accuracy": 0.9542,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 5,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 240,
+          "known_cause_correct": 229,
+          "accuracy_on_known_causes": 0.9542,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -9159,8 +10335,8 @@
       "records": 1285,
       "transactions": 1050,
       "settlements": 235,
-      "match_seconds": 0.007867,
-      "match_records_per_second": 163334,
+      "match_seconds": 0.006466,
+      "match_records_per_second": 198746,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9215,6 +10391,18 @@
         "cases_scored": 157,
         "cases_correct": 154,
         "attribution_accuracy": 0.9809,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 157,
+          "known_cause_correct": 154,
+          "accuracy_on_known_causes": 0.9809,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -9253,8 +10441,8 @@
       "records": 1285,
       "transactions": 1050,
       "settlements": 235,
-      "match_seconds": 0.007466,
-      "match_records_per_second": 172115,
+      "match_seconds": 0.006299,
+      "match_records_per_second": 203987,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9309,6 +10497,18 @@
         "cases_scored": 73,
         "cases_correct": 71,
         "attribution_accuracy": 0.9726,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 73,
+          "known_cause_correct": 71,
+          "accuracy_on_known_causes": 0.9726,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -9347,8 +10547,8 @@
       "records": 1689,
       "transactions": 1028,
       "settlements": 661,
-      "match_seconds": 0.013888,
-      "match_records_per_second": 121614,
+      "match_seconds": 0.011189,
+      "match_records_per_second": 150954,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9403,6 +10603,18 @@
         "cases_scored": 215,
         "cases_correct": 213,
         "attribution_accuracy": 0.9907,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 215,
+          "known_cause_correct": 213,
+          "accuracy_on_known_causes": 0.9907,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -9441,8 +10653,8 @@
       "records": 1562,
       "transactions": 1028,
       "settlements": 534,
-      "match_seconds": 0.013071,
-      "match_records_per_second": 119497,
+      "match_seconds": 0.009524,
+      "match_records_per_second": 164012,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9497,6 +10709,18 @@
         "cases_scored": 163,
         "cases_correct": 162,
         "attribution_accuracy": 0.9939,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 163,
+          "known_cause_correct": 162,
+          "accuracy_on_known_causes": 0.9939,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -9535,8 +10759,8 @@
       "records": 1408,
       "transactions": 1016,
       "settlements": 392,
-      "match_seconds": 0.009902,
-      "match_records_per_second": 142189,
+      "match_seconds": 0.008065,
+      "match_records_per_second": 174590,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9591,6 +10815,18 @@
         "cases_scored": 117,
         "cases_correct": 115,
         "attribution_accuracy": 0.9829,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 117,
+          "known_cause_correct": 115,
+          "accuracy_on_known_causes": 0.9829,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -9629,8 +10865,8 @@
       "records": 1729,
       "transactions": 1050,
       "settlements": 679,
-      "match_seconds": 0.014132,
-      "match_records_per_second": 122342,
+      "match_seconds": 0.011737,
+      "match_records_per_second": 147312,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9685,6 +10921,18 @@
         "cases_scored": 264,
         "cases_correct": 258,
         "attribution_accuracy": 0.9773,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 5,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 264,
+          "known_cause_correct": 258,
+          "accuracy_on_known_causes": 0.9773,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -9723,8 +10971,8 @@
       "records": 1558,
       "transactions": 1016,
       "settlements": 542,
-      "match_seconds": 0.011723,
-      "match_records_per_second": 132905,
+      "match_seconds": 0.009676,
+      "match_records_per_second": 161010,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9779,6 +11027,18 @@
         "cases_scored": 120,
         "cases_correct": 116,
         "attribution_accuracy": 0.9667,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 120,
+          "known_cause_correct": 116,
+          "accuracy_on_known_causes": 0.9667,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -9817,8 +11077,8 @@
       "records": 1984,
       "transactions": 1028,
       "settlements": 956,
-      "match_seconds": 0.017401,
-      "match_records_per_second": 114015,
+      "match_seconds": 0.013877,
+      "match_records_per_second": 142973,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9873,6 +11133,18 @@
         "cases_scored": 110,
         "cases_correct": 109,
         "attribution_accuracy": 0.9909,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 110,
+          "known_cause_correct": 109,
+          "accuracy_on_known_causes": 0.9909,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -9911,8 +11183,8 @@
       "records": 1964,
       "transactions": 1016,
       "settlements": 948,
-      "match_seconds": 0.01791,
-      "match_records_per_second": 109659,
+      "match_seconds": 0.014446,
+      "match_records_per_second": 135951,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -9967,6 +11239,18 @@
         "cases_scored": 249,
         "cases_correct": 241,
         "attribution_accuracy": 0.9679,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 8,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 249,
+          "known_cause_correct": 241,
+          "accuracy_on_known_causes": 0.9679,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -10005,8 +11289,8 @@
       "records": 1716,
       "transactions": 1016,
       "settlements": 700,
-      "match_seconds": 0.014473,
-      "match_records_per_second": 118568,
+      "match_seconds": 0.011809,
+      "match_records_per_second": 145309,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10061,6 +11345,18 @@
         "cases_scored": 267,
         "cases_correct": 259,
         "attribution_accuracy": 0.97,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 8,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 267,
+          "known_cause_correct": 259,
+          "accuracy_on_known_causes": 0.97,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -10099,8 +11395,8 @@
       "records": 1474,
       "transactions": 1100,
       "settlements": 374,
-      "match_seconds": 0.009626,
-      "match_records_per_second": 153126,
+      "match_seconds": 0.007907,
+      "match_records_per_second": 186421,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10155,6 +11451,18 @@
         "cases_scored": 99,
         "cases_correct": 95,
         "attribution_accuracy": 0.9596,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 99,
+          "known_cause_correct": 95,
+          "accuracy_on_known_causes": 0.9596,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -10193,8 +11501,8 @@
       "records": 1476,
       "transactions": 1100,
       "settlements": 376,
-      "match_seconds": 0.009766,
-      "match_records_per_second": 151131,
+      "match_seconds": 0.007928,
+      "match_records_per_second": 186177,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10249,6 +11557,18 @@
         "cases_scored": 105,
         "cases_correct": 99,
         "attribution_accuracy": 0.9429,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 105,
+          "known_cause_correct": 99,
+          "accuracy_on_known_causes": 0.9429,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -10287,8 +11607,8 @@
       "records": 1741,
       "transactions": 1050,
       "settlements": 691,
-      "match_seconds": 0.01417,
-      "match_records_per_second": 122863,
+      "match_seconds": 0.011533,
+      "match_records_per_second": 150956,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10343,6 +11663,18 @@
         "cases_scored": 237,
         "cases_correct": 230,
         "attribution_accuracy": 0.9705,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 6,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 237,
+          "known_cause_correct": 230,
+          "accuracy_on_known_causes": 0.9705,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -10381,8 +11713,8 @@
       "records": 1414,
       "transactions": 1050,
       "settlements": 364,
-      "match_seconds": 0.009512,
-      "match_records_per_second": 148661,
+      "match_seconds": 0.007783,
+      "match_records_per_second": 181671,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10435,8 +11767,20 @@
       "baseline": {
         "reasoner": "rule_baseline",
         "cases_scored": 110,
-        "cases_correct": 108,
-        "attribution_accuracy": 0.9818,
+        "cases_correct": 109,
+        "attribution_accuracy": 0.9909,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 110,
+          "known_cause_correct": 109,
+          "accuracy_on_known_causes": 0.9909,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -10445,8 +11789,8 @@
         "by_kind": {
           "AMOUNT_MISMATCH": {
             "total": 27,
-            "correct": 25,
-            "accuracy": 0.9259
+            "correct": 26,
+            "accuracy": 0.963
           },
           "MISSING_SETTLEMENT": {
             "total": 83,
@@ -10457,8 +11801,8 @@
         "by_confidence": {
           "medium": {
             "total": 17,
-            "correct": 15,
-            "accuracy": 0.8824
+            "correct": 16,
+            "accuracy": 0.9412
           },
           "high": {
             "total": 93,
@@ -10475,8 +11819,8 @@
       "records": 1261,
       "transactions": 1016,
       "settlements": 245,
-      "match_seconds": 0.007994,
-      "match_records_per_second": 157741,
+      "match_seconds": 0.006538,
+      "match_records_per_second": 192872,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10531,6 +11875,18 @@
         "cases_scored": 117,
         "cases_correct": 110,
         "attribution_accuracy": 0.9402,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 117,
+          "known_cause_correct": 110,
+          "accuracy_on_known_causes": 0.9402,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -10569,8 +11925,8 @@
       "records": 1736,
       "transactions": 1028,
       "settlements": 708,
-      "match_seconds": 0.013733,
-      "match_records_per_second": 126413,
+      "match_seconds": 0.011317,
+      "match_records_per_second": 153393,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10625,6 +11981,18 @@
         "cases_scored": 95,
         "cases_correct": 94,
         "attribution_accuracy": 0.9895,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 95,
+          "known_cause_correct": 94,
+          "accuracy_on_known_causes": 0.9895,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -10663,8 +12031,8 @@
       "records": 1533,
       "transactions": 1016,
       "settlements": 517,
-      "match_seconds": 0.012573,
-      "match_records_per_second": 121930,
+      "match_seconds": 0.009452,
+      "match_records_per_second": 162195,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10719,6 +12087,18 @@
         "cases_scored": 208,
         "cases_correct": 204,
         "attribution_accuracy": 0.9808,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 208,
+          "known_cause_correct": 204,
+          "accuracy_on_known_causes": 0.9808,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -10757,8 +12137,8 @@
       "records": 1403,
       "transactions": 1028,
       "settlements": 375,
-      "match_seconds": 0.010861,
-      "match_records_per_second": 129183,
+      "match_seconds": 0.008097,
+      "match_records_per_second": 173279,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10813,6 +12193,18 @@
         "cases_scored": 151,
         "cases_correct": 145,
         "attribution_accuracy": 0.9603,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 151,
+          "known_cause_correct": 145,
+          "accuracy_on_known_causes": 0.9603,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -10851,8 +12243,8 @@
       "records": 1946,
       "transactions": 1028,
       "settlements": 918,
-      "match_seconds": 0.017543,
-      "match_records_per_second": 110926,
+      "match_seconds": 0.014345,
+      "match_records_per_second": 135654,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -10907,6 +12299,18 @@
         "cases_scored": 248,
         "cases_correct": 239,
         "attribution_accuracy": 0.9637,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 9,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 248,
+          "known_cause_correct": 239,
+          "accuracy_on_known_causes": 0.9637,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -10945,8 +12349,8 @@
       "records": 1250,
       "transactions": 1016,
       "settlements": 234,
-      "match_seconds": 0.007641,
-      "match_records_per_second": 163594,
+      "match_seconds": 0.006462,
+      "match_records_per_second": 193435,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11001,6 +12405,18 @@
         "cases_scored": 101,
         "cases_correct": 100,
         "attribution_accuracy": 0.9901,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 101,
+          "known_cause_correct": 100,
+          "accuracy_on_known_causes": 0.9901,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -11039,8 +12455,8 @@
       "records": 2018,
       "transactions": 1100,
       "settlements": 918,
-      "match_seconds": 0.017485,
-      "match_records_per_second": 115416,
+      "match_seconds": 0.013729,
+      "match_records_per_second": 146992,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11095,6 +12511,18 @@
         "cases_scored": 193,
         "cases_correct": 191,
         "attribution_accuracy": 0.9896,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 193,
+          "known_cause_correct": 191,
+          "accuracy_on_known_causes": 0.9896,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -11133,8 +12561,8 @@
       "records": 1463,
       "transactions": 1100,
       "settlements": 363,
-      "match_seconds": 0.00973,
-      "match_records_per_second": 150361,
+      "match_seconds": 0.007931,
+      "match_records_per_second": 184470,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11189,6 +12617,18 @@
         "cases_scored": 153,
         "cases_correct": 145,
         "attribution_accuracy": 0.9477,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 5,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 153,
+          "known_cause_correct": 145,
+          "accuracy_on_known_causes": 0.9477,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -11227,8 +12667,8 @@
       "records": 1343,
       "transactions": 1100,
       "settlements": 243,
-      "match_seconds": 0.007973,
-      "match_records_per_second": 168452,
+      "match_seconds": 0.006474,
+      "match_records_per_second": 207429,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11283,6 +12723,18 @@
         "cases_scored": 93,
         "cases_correct": 86,
         "attribution_accuracy": 0.9247,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 93,
+          "known_cause_correct": 86,
+          "accuracy_on_known_causes": 0.9247,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -11321,8 +12773,8 @@
       "records": 3835,
       "transactions": 3150,
       "settlements": 685,
-      "match_seconds": 0.023159,
-      "match_records_per_second": 165595,
+      "match_seconds": 0.018338,
+      "match_records_per_second": 209130,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11377,6 +12829,18 @@
         "cases_scored": 233,
         "cases_correct": 227,
         "attribution_accuracy": 0.9742,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 233,
+          "known_cause_correct": 227,
+          "accuracy_on_known_causes": 0.9742,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -11415,8 +12879,8 @@
       "records": 5951,
       "transactions": 3150,
       "settlements": 2801,
-      "match_seconds": 0.052778,
-      "match_records_per_second": 112755,
+      "match_seconds": 0.043413,
+      "match_records_per_second": 137079,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11471,10 +12935,22 @@
         "cases_scored": 575,
         "cases_correct": 559,
         "attribution_accuracy": 0.9722,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 16,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 575,
+          "known_cause_correct": 559,
+          "accuracy_on_known_causes": 0.9722,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
-        "seconds": 0.0,
+        "seconds": 0.001,
         "avg_seconds_per_case": 0.0,
         "by_kind": {
           "AMOUNT_MISMATCH": {
@@ -11509,8 +12985,8 @@
       "records": 4015,
       "transactions": 3300,
       "settlements": 715,
-      "match_seconds": 0.024671,
-      "match_records_per_second": 162739,
+      "match_seconds": 0.02105,
+      "match_records_per_second": 190735,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11565,6 +13041,18 @@
         "cases_scored": 342,
         "cases_correct": 329,
         "attribution_accuracy": 0.962,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 342,
+          "known_cause_correct": 329,
+          "accuracy_on_known_causes": 0.962,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -11603,8 +13091,8 @@
       "records": 4160,
       "transactions": 3050,
       "settlements": 1110,
-      "match_seconds": 0.029547,
-      "match_records_per_second": 140792,
+      "match_seconds": 0.023626,
+      "match_records_per_second": 176077,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11659,6 +13147,18 @@
         "cases_scored": 465,
         "cases_correct": 450,
         "attribution_accuracy": 0.9677,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 8,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 465,
+          "known_cause_correct": 450,
+          "accuracy_on_known_causes": 0.9677,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -11697,8 +13197,8 @@
       "records": 4598,
       "transactions": 3050,
       "settlements": 1548,
-      "match_seconds": 0.034371,
-      "match_records_per_second": 133776,
+      "match_seconds": 0.028309,
+      "match_records_per_second": 162422,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11753,6 +13253,18 @@
         "cases_scored": 335,
         "cases_correct": 332,
         "attribution_accuracy": 0.991,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 335,
+          "known_cause_correct": 332,
+          "accuracy_on_known_causes": 0.991,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -11791,8 +13303,8 @@
       "records": 4870,
       "transactions": 3300,
       "settlements": 1570,
-      "match_seconds": 0.035385,
-      "match_records_per_second": 137630,
+      "match_seconds": 0.028714,
+      "match_records_per_second": 169602,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11845,8 +13357,20 @@
       "baseline": {
         "reasoner": "rule_baseline",
         "cases_scored": 290,
-        "cases_correct": 284,
-        "attribution_accuracy": 0.9793,
+        "cases_correct": 285,
+        "attribution_accuracy": 0.9828,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 4,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 290,
+          "known_cause_correct": 285,
+          "accuracy_on_known_causes": 0.9828,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -11855,8 +13379,8 @@
         "by_kind": {
           "AMOUNT_MISMATCH": {
             "total": 153,
-            "correct": 147,
-            "accuracy": 0.9608
+            "correct": 148,
+            "accuracy": 0.9673
           },
           "MISSING_SETTLEMENT": {
             "total": 137,
@@ -11872,8 +13396,8 @@
           },
           "medium": {
             "total": 94,
-            "correct": 88,
-            "accuracy": 0.9362
+            "correct": 89,
+            "accuracy": 0.9468
           }
         }
       }
@@ -11885,8 +13409,8 @@
       "records": 3793,
       "transactions": 3085,
       "settlements": 708,
-      "match_seconds": 0.02363,
-      "match_records_per_second": 160514,
+      "match_seconds": 0.018938,
+      "match_records_per_second": 200285,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -11941,6 +13465,18 @@
         "cases_scored": 265,
         "cases_correct": 252,
         "attribution_accuracy": 0.9509,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 265,
+          "known_cause_correct": 252,
+          "accuracy_on_known_causes": 0.9509,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -11979,8 +13515,8 @@
       "records": 4226,
       "transactions": 3085,
       "settlements": 1141,
-      "match_seconds": 0.02915,
-      "match_records_per_second": 144974,
+      "match_seconds": 0.023833,
+      "match_records_per_second": 177321,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12035,6 +13571,18 @@
         "cases_scored": 290,
         "cases_correct": 278,
         "attribution_accuracy": 0.9586,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 4,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 290,
+          "known_cause_correct": 278,
+          "accuracy_on_known_causes": 0.9586,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -12073,8 +13621,8 @@
       "records": 4224,
       "transactions": 3085,
       "settlements": 1139,
-      "match_seconds": 0.029259,
-      "match_records_per_second": 144365,
+      "match_seconds": 0.025549,
+      "match_records_per_second": 165327,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12129,6 +13677,18 @@
         "cases_scored": 347,
         "cases_correct": 337,
         "attribution_accuracy": 0.9712,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 347,
+          "known_cause_correct": 337,
+          "accuracy_on_known_causes": 0.9712,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -12167,8 +13727,8 @@
       "records": 3975,
       "transactions": 3300,
       "settlements": 675,
-      "match_seconds": 0.022939,
-      "match_records_per_second": 173287,
+      "match_seconds": 0.018314,
+      "match_records_per_second": 217052,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12223,6 +13783,18 @@
         "cases_scored": 328,
         "cases_correct": 321,
         "attribution_accuracy": 0.9787,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 328,
+          "known_cause_correct": 321,
+          "accuracy_on_known_causes": 0.9787,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -12261,8 +13833,8 @@
       "records": 4183,
       "transactions": 3050,
       "settlements": 1133,
-      "match_seconds": 0.032689,
-      "match_records_per_second": 127962,
+      "match_seconds": 0.024619,
+      "match_records_per_second": 169907,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12317,6 +13889,18 @@
         "cases_scored": 488,
         "cases_correct": 474,
         "attribution_accuracy": 0.9713,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 7,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 488,
+          "known_cause_correct": 474,
+          "accuracy_on_known_causes": 0.9713,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -12355,8 +13939,8 @@
       "records": 4417,
       "transactions": 3300,
       "settlements": 1117,
-      "match_seconds": 0.028931,
-      "match_records_per_second": 152674,
+      "match_seconds": 0.02305,
+      "match_records_per_second": 191630,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12411,6 +13995,18 @@
         "cases_scored": 300,
         "cases_correct": 293,
         "attribution_accuracy": 0.9767,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 6,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 300,
+          "known_cause_correct": 293,
+          "accuracy_on_known_causes": 0.9767,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -12449,8 +14045,8 @@
       "records": 3738,
       "transactions": 3050,
       "settlements": 688,
-      "match_seconds": 0.023087,
-      "match_records_per_second": 161908,
+      "match_seconds": 0.018397,
+      "match_records_per_second": 203182,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12505,6 +14101,18 @@
         "cases_scored": 352,
         "cases_correct": 340,
         "attribution_accuracy": 0.9659,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 0,
+          "correctly_called_unknown": 0,
+          "precision": null,
+          "known_cause_cases": 352,
+          "known_cause_correct": 340,
+          "accuracy_on_known_causes": 0.9659,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -12543,8 +14151,8 @@
       "records": 3745,
       "transactions": 3050,
       "settlements": 695,
-      "match_seconds": 0.022816,
-      "match_records_per_second": 164137,
+      "match_seconds": 0.018846,
+      "match_records_per_second": 198718,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12599,6 +14207,18 @@
         "cases_scored": 287,
         "cases_correct": 272,
         "attribution_accuracy": 0.9477,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 4,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 287,
+          "known_cause_correct": 272,
+          "accuracy_on_known_causes": 0.9477,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -12637,8 +14257,8 @@
       "records": 4603,
       "transactions": 3050,
       "settlements": 1553,
-      "match_seconds": 0.035592,
-      "match_records_per_second": 129327,
+      "match_seconds": 0.029836,
+      "match_records_per_second": 154276,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12693,6 +14313,18 @@
         "cases_scored": 521,
         "cases_correct": 497,
         "attribution_accuracy": 0.9539,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 17,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 521,
+          "known_cause_correct": 497,
+          "accuracy_on_known_causes": 0.9539,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -12731,8 +14363,8 @@
       "records": 3794,
       "transactions": 3085,
       "settlements": 709,
-      "match_seconds": 0.023189,
-      "match_records_per_second": 163611,
+      "match_seconds": 0.019458,
+      "match_records_per_second": 194989,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12787,6 +14419,18 @@
         "cases_scored": 285,
         "cases_correct": 273,
         "attribution_accuracy": 0.9579,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 285,
+          "known_cause_correct": 273,
+          "accuracy_on_known_causes": 0.9579,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -12825,8 +14469,8 @@
       "records": 4599,
       "transactions": 3085,
       "settlements": 1514,
-      "match_seconds": 0.035932,
-      "match_records_per_second": 127993,
+      "match_seconds": 0.028929,
+      "match_records_per_second": 158973,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12881,10 +14525,22 @@
         "cases_scored": 732,
         "cases_correct": 713,
         "attribution_accuracy": 0.974,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 10,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 732,
+          "known_cause_correct": 713,
+          "accuracy_on_known_causes": 0.974,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
-        "seconds": 0.001,
+        "seconds": 0.0,
         "avg_seconds_per_case": 0.0,
         "by_kind": {
           "AMOUNT_MISMATCH": {
@@ -12919,8 +14575,8 @@
       "records": 3813,
       "transactions": 3150,
       "settlements": 663,
-      "match_seconds": 0.02305,
-      "match_records_per_second": 165426,
+      "match_seconds": 0.018961,
+      "match_records_per_second": 201098,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -12975,6 +14631,18 @@
         "cases_scored": 465,
         "cases_correct": 443,
         "attribution_accuracy": 0.9527,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 465,
+          "known_cause_correct": 443,
+          "accuracy_on_known_causes": 0.9527,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -13013,8 +14681,8 @@
       "records": 3849,
       "transactions": 3150,
       "settlements": 699,
-      "match_seconds": 0.022104,
-      "match_records_per_second": 174127,
+      "match_seconds": 0.018747,
+      "match_records_per_second": 205308,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13069,6 +14737,18 @@
         "cases_scored": 220,
         "cases_correct": 214,
         "attribution_accuracy": 0.9727,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 1,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 220,
+          "known_cause_correct": 214,
+          "accuracy_on_known_causes": 0.9727,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -13107,8 +14787,8 @@
       "records": 5144,
       "transactions": 3085,
       "settlements": 2059,
-      "match_seconds": 0.042856,
-      "match_records_per_second": 120029,
+      "match_seconds": 0.035088,
+      "match_records_per_second": 146602,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13163,10 +14843,22 @@
         "cases_scored": 662,
         "cases_correct": 644,
         "attribution_accuracy": 0.9728,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 17,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 662,
+          "known_cause_correct": 644,
+          "accuracy_on_known_causes": 0.9728,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
-        "seconds": 0.001,
+        "seconds": 0.0,
         "avg_seconds_per_case": 0.0,
         "by_kind": {
           "AMOUNT_MISMATCH": {
@@ -13201,8 +14893,8 @@
       "records": 4676,
       "transactions": 3085,
       "settlements": 1591,
-      "match_seconds": 0.035972,
-      "match_records_per_second": 129989,
+      "match_seconds": 0.031873,
+      "match_records_per_second": 146708,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13257,6 +14949,18 @@
         "cases_scored": 489,
         "cases_correct": 466,
         "attribution_accuracy": 0.953,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 13,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 489,
+          "known_cause_correct": 466,
+          "accuracy_on_known_causes": 0.953,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -13295,8 +14999,8 @@
       "records": 4199,
       "transactions": 3050,
       "settlements": 1149,
-      "match_seconds": 0.03104,
-      "match_records_per_second": 135277,
+      "match_seconds": 0.025859,
+      "match_records_per_second": 162382,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13351,6 +15055,18 @@
         "cases_scored": 349,
         "cases_correct": 343,
         "attribution_accuracy": 0.9828,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 349,
+          "known_cause_correct": 343,
+          "accuracy_on_known_causes": 0.9828,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -13389,8 +15105,8 @@
       "records": 5163,
       "transactions": 3150,
       "settlements": 2013,
-      "match_seconds": 0.042332,
-      "match_records_per_second": 121965,
+      "match_seconds": 0.035595,
+      "match_records_per_second": 145048,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13443,8 +15159,20 @@
       "baseline": {
         "reasoner": "rule_baseline",
         "cases_scored": 789,
-        "cases_correct": 770,
-        "attribution_accuracy": 0.9759,
+        "cases_correct": 771,
+        "attribution_accuracy": 0.9772,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 12,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 789,
+          "known_cause_correct": 771,
+          "accuracy_on_known_causes": 0.9772,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -13453,8 +15181,8 @@
         "by_kind": {
           "AMOUNT_MISMATCH": {
             "total": 489,
-            "correct": 470,
-            "accuracy": 0.9611
+            "correct": 471,
+            "accuracy": 0.9632
           },
           "MISSING_SETTLEMENT": {
             "total": 300,
@@ -13465,8 +15193,8 @@
         "by_confidence": {
           "medium": {
             "total": 328,
-            "correct": 309,
-            "accuracy": 0.9421
+            "correct": 310,
+            "accuracy": 0.9451
           },
           "high": {
             "total": 461,
@@ -13483,8 +15211,8 @@
       "records": 4645,
       "transactions": 3050,
       "settlements": 1595,
-      "match_seconds": 0.035255,
-      "match_records_per_second": 131754,
+      "match_seconds": 0.02996,
+      "match_records_per_second": 155038,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13539,6 +15267,18 @@
         "cases_scored": 359,
         "cases_correct": 349,
         "attribution_accuracy": 0.9721,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 7,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 359,
+          "known_cause_correct": 349,
+          "accuracy_on_known_causes": 0.9721,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -13577,8 +15317,8 @@
       "records": 5949,
       "transactions": 3085,
       "settlements": 2864,
-      "match_seconds": 0.053315,
-      "match_records_per_second": 111581,
+      "match_seconds": 0.043866,
+      "match_records_per_second": 135617,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13633,6 +15373,18 @@
         "cases_scored": 333,
         "cases_correct": 327,
         "attribution_accuracy": 0.982,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 6,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 333,
+          "known_cause_correct": 327,
+          "accuracy_on_known_causes": 0.982,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -13671,8 +15423,8 @@
       "records": 5891,
       "transactions": 3050,
       "settlements": 2841,
-      "match_seconds": 0.053984,
-      "match_records_per_second": 109126,
+      "match_seconds": 0.043304,
+      "match_records_per_second": 136039,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13725,8 +15477,20 @@
       "baseline": {
         "reasoner": "rule_baseline",
         "cases_scored": 747,
-        "cases_correct": 715,
-        "attribution_accuracy": 0.9572,
+        "cases_correct": 717,
+        "attribution_accuracy": 0.9598,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 30,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 747,
+          "known_cause_correct": 717,
+          "accuracy_on_known_causes": 0.9598,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -13735,8 +15499,8 @@
         "by_kind": {
           "AMOUNT_MISMATCH": {
             "total": 587,
-            "correct": 555,
-            "accuracy": 0.9455
+            "correct": 557,
+            "accuracy": 0.9489
           },
           "MISSING_SETTLEMENT": {
             "total": 160,
@@ -13747,8 +15511,8 @@
         "by_confidence": {
           "medium": {
             "total": 441,
-            "correct": 409,
-            "accuracy": 0.9274
+            "correct": 411,
+            "accuracy": 0.932
           },
           "high": {
             "total": 306,
@@ -13765,8 +15529,8 @@
       "records": 5118,
       "transactions": 3050,
       "settlements": 2068,
-      "match_seconds": 0.043384,
-      "match_records_per_second": 117970,
+      "match_seconds": 0.035428,
+      "match_records_per_second": 144460,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13819,8 +15583,20 @@
       "baseline": {
         "reasoner": "rule_baseline",
         "cases_scored": 795,
-        "cases_correct": 770,
-        "attribution_accuracy": 0.9686,
+        "cases_correct": 772,
+        "attribution_accuracy": 0.9711,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 20,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 795,
+          "known_cause_correct": 772,
+          "accuracy_on_known_causes": 0.9711,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -13829,8 +15605,8 @@
         "by_kind": {
           "AMOUNT_MISMATCH": {
             "total": 545,
-            "correct": 520,
-            "accuracy": 0.9541
+            "correct": 522,
+            "accuracy": 0.9578
           },
           "MISSING_SETTLEMENT": {
             "total": 250,
@@ -13841,8 +15617,8 @@
         "by_confidence": {
           "medium": {
             "total": 370,
-            "correct": 345,
-            "accuracy": 0.9324
+            "correct": 347,
+            "accuracy": 0.9378
           },
           "high": {
             "total": 425,
@@ -13859,8 +15635,8 @@
       "records": 4447,
       "transactions": 3300,
       "settlements": 1147,
-      "match_seconds": 0.029695,
-      "match_records_per_second": 149755,
+      "match_seconds": 0.024319,
+      "match_records_per_second": 182859,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -13915,6 +15691,18 @@
         "cases_scored": 304,
         "cases_correct": 296,
         "attribution_accuracy": 0.9737,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 304,
+          "known_cause_correct": 296,
+          "accuracy_on_known_causes": 0.9737,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -13953,8 +15741,8 @@
       "records": 4450,
       "transactions": 3300,
       "settlements": 1150,
-      "match_seconds": 0.029432,
-      "match_records_per_second": 151197,
+      "match_seconds": 0.023793,
+      "match_records_per_second": 187027,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14009,6 +15797,18 @@
         "cases_scored": 322,
         "cases_correct": 313,
         "attribution_accuracy": 0.972,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 4,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 322,
+          "known_cause_correct": 313,
+          "accuracy_on_known_causes": 0.972,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -14047,8 +15847,8 @@
       "records": 5226,
       "transactions": 3150,
       "settlements": 2076,
-      "match_seconds": 0.043478,
-      "match_records_per_second": 120198,
+      "match_seconds": 0.034691,
+      "match_records_per_second": 150646,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14103,6 +15903,18 @@
         "cases_scored": 714,
         "cases_correct": 698,
         "attribution_accuracy": 0.9776,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 13,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 714,
+          "known_cause_correct": 698,
+          "accuracy_on_known_causes": 0.9776,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -14141,8 +15953,8 @@
       "records": 4260,
       "transactions": 3150,
       "settlements": 1110,
-      "match_seconds": 0.0285,
-      "match_records_per_second": 149471,
+      "match_seconds": 0.023562,
+      "match_records_per_second": 180802,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14197,6 +16009,18 @@
         "cases_scored": 333,
         "cases_correct": 327,
         "attribution_accuracy": 0.982,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 333,
+          "known_cause_correct": 327,
+          "accuracy_on_known_causes": 0.982,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -14235,8 +16059,8 @@
       "records": 3764,
       "transactions": 3050,
       "settlements": 714,
-      "match_seconds": 0.023663,
-      "match_records_per_second": 159067,
+      "match_seconds": 0.020157,
+      "match_records_per_second": 186735,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14291,6 +16115,18 @@
         "cases_scored": 348,
         "cases_correct": 328,
         "attribution_accuracy": 0.9425,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 5,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 348,
+          "known_cause_correct": 328,
+          "accuracy_on_known_causes": 0.9425,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -14329,8 +16165,8 @@
       "records": 5154,
       "transactions": 3085,
       "settlements": 2069,
-      "match_seconds": 0.041631,
-      "match_records_per_second": 123803,
+      "match_seconds": 0.034662,
+      "match_records_per_second": 148691,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14385,6 +16221,18 @@
         "cases_scored": 284,
         "cases_correct": 280,
         "attribution_accuracy": 0.9859,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 284,
+          "known_cause_correct": 280,
+          "accuracy_on_known_causes": 0.9859,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -14423,8 +16271,8 @@
       "records": 4596,
       "transactions": 3050,
       "settlements": 1546,
-      "match_seconds": 0.037046,
-      "match_records_per_second": 124062,
+      "match_seconds": 0.031345,
+      "match_records_per_second": 146628,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14477,8 +16325,20 @@
       "baseline": {
         "reasoner": "rule_baseline",
         "cases_scored": 624,
-        "cases_correct": 611,
-        "attribution_accuracy": 0.9792,
+        "cases_correct": 612,
+        "attribution_accuracy": 0.9808,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 6,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 624,
+          "known_cause_correct": 612,
+          "accuracy_on_known_causes": 0.9808,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -14487,8 +16347,8 @@
         "by_kind": {
           "AMOUNT_MISMATCH": {
             "total": 374,
-            "correct": 361,
-            "accuracy": 0.9652
+            "correct": 362,
+            "accuracy": 0.9679
           },
           "MISSING_SETTLEMENT": {
             "total": 250,
@@ -14499,8 +16359,8 @@
         "by_confidence": {
           "medium": {
             "total": 234,
-            "correct": 221,
-            "accuracy": 0.9444
+            "correct": 222,
+            "accuracy": 0.9487
           },
           "high": {
             "total": 390,
@@ -14517,8 +16377,8 @@
       "records": 4152,
       "transactions": 3085,
       "settlements": 1067,
-      "match_seconds": 0.028991,
-      "match_records_per_second": 143217,
+      "match_seconds": 0.023673,
+      "match_records_per_second": 175389,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14573,6 +16433,18 @@
         "cases_scored": 443,
         "cases_correct": 428,
         "attribution_accuracy": 0.9661,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 10,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 443,
+          "known_cause_correct": 428,
+          "accuracy_on_known_causes": 0.9661,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -14611,8 +16483,8 @@
       "records": 5836,
       "transactions": 3085,
       "settlements": 2751,
-      "match_seconds": 0.053475,
-      "match_records_per_second": 109134,
+      "match_seconds": 0.043207,
+      "match_records_per_second": 135071,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14667,6 +16539,18 @@
         "cases_scored": 745,
         "cases_correct": 718,
         "attribution_accuracy": 0.9638,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 27,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 745,
+          "known_cause_correct": 718,
+          "accuracy_on_known_causes": 0.9638,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -14705,8 +16589,8 @@
       "records": 3769,
       "transactions": 3050,
       "settlements": 719,
-      "match_seconds": 0.023031,
-      "match_records_per_second": 163647,
+      "match_seconds": 0.019299,
+      "match_records_per_second": 195299,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14761,6 +16645,18 @@
         "cases_scored": 309,
         "cases_correct": 296,
         "attribution_accuracy": 0.9579,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 2,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 309,
+          "known_cause_correct": 296,
+          "accuracy_on_known_causes": 0.9579,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -14799,8 +16695,8 @@
       "records": 6051,
       "transactions": 3300,
       "settlements": 2751,
-      "match_seconds": 0.054255,
-      "match_records_per_second": 111529,
+      "match_seconds": 0.04526,
+      "match_records_per_second": 133695,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14855,6 +16751,18 @@
         "cases_scored": 581,
         "cases_correct": 575,
         "attribution_accuracy": 0.9897,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 6,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 581,
+          "known_cause_correct": 575,
+          "accuracy_on_known_causes": 0.9897,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -14893,8 +16801,8 @@
       "records": 4398,
       "transactions": 3300,
       "settlements": 1098,
-      "match_seconds": 0.029791,
-      "match_records_per_second": 147628,
+      "match_seconds": 0.023816,
+      "match_records_per_second": 184670,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -14949,6 +16857,18 @@
         "cases_scored": 463,
         "cases_correct": 443,
         "attribution_accuracy": 0.9568,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 10,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 463,
+          "known_cause_correct": 443,
+          "accuracy_on_known_causes": 0.9568,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
@@ -14987,8 +16907,8 @@
       "records": 4013,
       "transactions": 3300,
       "settlements": 713,
-      "match_seconds": 0.023849,
-      "match_records_per_second": 168267,
+      "match_seconds": 0.019687,
+      "match_records_per_second": 203845,
       "structural": {
         "per_category": {
           "AMOUNT_MISMATCH": {
@@ -15043,6 +16963,18 @@
         "cases_scored": 277,
         "cases_correct": 265,
         "attribution_accuracy": 0.9567,
+        "novel_detection": {
+          "novel_cases": 0,
+          "novel_caught": 0,
+          "recall": null,
+          "times_called_unknown": 3,
+          "correctly_called_unknown": 0,
+          "precision": 0.0,
+          "known_cause_cases": 277,
+          "known_cause_correct": 265,
+          "accuracy_on_known_causes": 0.9567,
+          "novel_missed_as": {}
+        },
         "orphan_cases_excluded": 1,
         "interrupted": false,
         "api_errors": 0,
