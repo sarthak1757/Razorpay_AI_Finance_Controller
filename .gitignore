@@ -10,3 +10,4 @@ venv/
 # carry every number the docs actually cite and ARE committed.
 data/validation.json
 data/validation_varied.json
+data/validation_novel.json
