@@ -58,6 +58,7 @@ from causes import (  # noqa: E402
     CAUSE_ORPHAN,
     CAUSE_STUCK,
     CAUSE_NOT_YET_DUE,
+    CAUSE_UNKNOWN,
     MISMATCH_CAUSES,
     ALL_CAUSES,
 )
@@ -89,7 +90,7 @@ def make_transaction(rng, i, txn_date):
 
 
 def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=True,
-             vary=False):
+             vary=False, novel_rate=0.0):
     """Generate one complete dataset + its ground truth.
 
     Uses a local RNG instance rather than seeding the global `random` module,
@@ -149,6 +150,7 @@ def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=
         "refund_divisor": refund_divisor,
         "duplicate_divisor": duplicate_divisor,
         "batch_size_weights": batch_size_weights,
+        "novel_rate": round(novel_rate, 4),
     }
 
     # window_end is the "report pull date" - the last date this dataset can
@@ -194,6 +196,10 @@ def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=
         "duplicate_entry": [],        # duplicate txn_ids that shouldn't exist
         # The graded part: every injected exception and its TRUE cause.
         "true_causes": {},            # settlement_id | txn_id -> cause label
+        # For novel cases the graded answer is "unknown_anomaly"; THIS records
+        # what was actually done, for diagnostics only. Never graded against -
+        # the system was never told these mechanisms exist.
+        "novel_mechanisms": {},
     }
 
     # --- pick exception victims -------------------------------------------
@@ -331,7 +337,18 @@ def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=
             if len(batch) < 2:
                 # Needs >=2 transactions to be distinguishable from "nothing
                 # settled at all"; fall back to a fee error on singletons.
-                error = round(rng.uniform(5, 40), 2)
+                #
+                # The error must be a MIS-RATE, not a flat 5-40 rupees. A flat
+                # error on a small payment can exceed the entire fee that was
+                # charged on it - and a gap bigger than the whole fee cannot
+                # be a fee miscalculation, whatever we label it. That made the
+                # ground truth contradict its own arithmetic, and any reasoner
+                # correctly refusing to call it a fee error got marked wrong
+                # for being right. Same failure mode as the "not_yet_due"
+                # labels that an earlier version asserted instead of
+                # constructing - see the note above the transaction split.
+                mis_rate = rng.uniform(0.002, 0.01)
+                error = round(expected_total * mis_rate, 2)
                 settlement["settled_amount"] = round(expected_total - error, 2)
                 cause = CAUSE_FEE_OR_GST
             else:
@@ -356,6 +373,77 @@ def generate(seed=42, n_transactions=60, out_dir="data", window_days=7, verbose=
             settlement["settled_amount"] = round(expected_total + contribution, 2)
 
         ground_truth["true_causes"][sid] = cause
+
+    # --- inject NOVEL mechanisms, deliberately outside the taxonomy --------
+    # Everything above is a cause the system has been told about. These are
+    # not: they are mechanisms a real ledger contains and this taxonomy never
+    # enumerated. The correct answer for every one of them is therefore
+    # CAUSE_UNKNOWN - "the numbers are wrong in a way I don't recognise" -
+    # NOT the known label they least resemble.
+    #
+    # This is the only way to measure the thing a closed taxonomy is bad at.
+    # Grading a classifier solely on causes you told it about cannot reveal
+    # that it files every surprise under "fee error" with high confidence,
+    # because you never showed it a surprise.
+    #
+    # Each mechanism is chosen to be genuinely distinguishable from the four
+    # known ones IF you reason about the numbers, and genuinely NOT matched by
+    # any of the matcher's fixed-threshold signals. The real mechanism is
+    # recorded separately for diagnostics; it is never the graded answer.
+    if novel_rate > 0:
+        used = {s["settlement_id"] for s, _, _ in eligible[:n_mismatch]}
+        novel_pool = [b for b in eligible if b[0]["settlement_id"] not in used]
+        n_novel = round(len(batches) * novel_rate)
+
+        for settlement, batch, expected_total in novel_pool[:n_novel]:
+            sid = settlement["settlement_id"]
+            refunded = [
+                (t, r) for t in batch
+                for r in refunds if r["transaction_id"] == t["transaction_id"]
+            ]
+            choices = ["chargeback_with_penalty", "partial_round_payout"]
+            if refunded:
+                choices.append("double_deducted_refund")
+            mechanism = rng.choice(choices)
+
+            if mechanism == "chargeback_with_penalty":
+                # A disputed payment is clawed back AND the bank charges a flat
+                # penalty on top. Looks superficially like a dropped
+                # transaction, but the gap is that transaction's contribution
+                # PLUS a few hundred rupees - so it matches nothing exactly,
+                # and it is far too large to be a fee error.
+                victim = rng.choice(batch)
+                penalty = round(rng.uniform(250, 1500), 2)
+                settlement["settled_amount"] = round(
+                    expected_total - victim["net_amount"] - penalty, 2)
+
+            elif mechanism == "partial_round_payout":
+                # The bank pays a round figure and holds the remainder for the
+                # next cycle. The tell is that settled_amount is exactly
+                # divisible by 10,000 - a pattern no known cause produces.
+                floored = (int(expected_total) // 10000) * 10000
+                if floored <= 0 or expected_total - floored < 100:
+                    # Too small to round down meaningfully - fall back to the
+                    # chargeback so the dataset still gets a novel case here.
+                    victim = rng.choice(batch)
+                    penalty = round(rng.uniform(250, 1500), 2)
+                    settlement["settled_amount"] = round(
+                        expected_total - victim["net_amount"] - penalty, 2)
+                    mechanism = "chargeback_with_penalty"
+                else:
+                    settlement["settled_amount"] = float(floored)
+
+            else:  # double_deducted_refund
+                # A refund that IS correctly recorded gets subtracted a second
+                # time. The gap is refund-shaped, which is the trap - but the
+                # refund is present in refunds.csv, so "unrecorded refund" is
+                # precisely the wrong answer.
+                _, refund_row = rng.choice(refunded)
+                settlement["settled_amount"] = round(
+                    expected_total - refund_row["refund_amount"], 2)
+
+            ground_truth["true_causes"][sid] = CAUSE_UNKNOWN
+            ground_truth["novel_mechanisms"][sid] = mechanism
 
     ground_truth["clean_settlements"] = sorted(
         s["settlement_id"] for s in settlements
@@ -436,6 +524,12 @@ def main():
     p.add_argument("--n", type=int, default=60, dest="n_transactions")
     p.add_argument("--out-dir", default="data")
     p.add_argument("--window-days", type=int, default=7)
+    p.add_argument("--novel-rate", type=float, default=0.0,
+                   help="Fraction of settlements given a mechanism that is NOT in the "
+                        "taxonomy (chargeback+penalty, round-number partial payout, "
+                        "double-deducted refund). Their true cause is recorded as "
+                        "'unknown_anomaly' - the correct answer is to admit the numbers "
+                        "match nothing known, not to guess the nearest label.")
     p.add_argument("--vary", action="store_true",
                    help="Draw the dataset's REGIME from the seed too - exception rate, "
                         "batch sizes, refund/duplicate frequency, window length - not "
@@ -448,6 +542,7 @@ def main():
         out_dir=args.out_dir,
         window_days=args.window_days,
         vary=args.vary,
+        novel_rate=args.novel_rate,
     )
 
 
