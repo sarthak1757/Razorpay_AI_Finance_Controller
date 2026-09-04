@@ -389,7 +389,7 @@ deterministic rules at classification. The answer was consistent:
 | Evaluation | LLM | Control | Outcome |
 |---|---|---|---|
 | Random sample (`validation_ai.json`) | 40 / 40 | rule baseline 40 / 40 | tied — exam too easy to discriminate |
-| Adversarial sample (`validation_hard.json`) | 0.500 | majority-class guess 0.864 | did not clear the control; quota-truncated |
+| Adversarial sample (`validation_hard.json`) | 0.500 | majority-class guess 0.864 | did not clear the control; quota-truncated, superseded by the balanced run below |
 | Novel detection, balanced (`validation_novel_eval_groq.json`) | 0.42 recall | rule baseline 0.44 | tied |
 | Known-cause accuracy, same sample | **0.68** | rule baseline **0.98** | **materially worse** |
 

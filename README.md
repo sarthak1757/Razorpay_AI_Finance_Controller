@@ -206,8 +206,11 @@ Two caveats, both pointing the same way:
   was exhausted partway through, so 12 of 34 cases returned no usable answer.
   Those are excluded from the denominator — a call that never returned is our
   infrastructure failing, not the model being wrong — which leaves a thin
-  22-case sample. `reasoning_effort=low` now cuts token spend enough for a
-  full run to fit the budget; **this needs re-running.**
+  22-case sample. **That run has since been superseded** rather than left
+  outstanding: the class-balanced novel-cause evaluation
+  (`data/validation_novel_eval_groq.json`) completed cleanly — 100 cases
+  attempted, 100 answered, zero infrastructure failures — and reached the
+  same conclusion this truncated run pointed at.
 - **22 cases is small.** The honest reading is "not demonstrated", not
   "disproven".
 
