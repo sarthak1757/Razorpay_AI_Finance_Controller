@@ -1,18 +1,59 @@
-# AI Finance Controller — reconciliation with measured accuracy
+# AI Finance Controller — settlement reconciliation with measured accuracy
 
-**Razorpay AI Buildathon — Track 4.**
+[![tests](https://github.com/sarthak1757/Razorpay_AI_Finance_Controller/actions/workflows/tests.yml/badge.svg)](https://github.com/sarthak1757/Razorpay_AI_Finance_Controller/actions/workflows/tests.yml)
+![python](https://img.shields.io/badge/python-3.10%2B-blue)
+![license](https://img.shields.io/badge/license-MIT-green)
 
-Reconciles a Razorpay transaction ledger against a bank settlement feed.
-Deterministic arithmetic resolves everything a calculator can resolve — fees,
-GST, batching, recorded refunds, T+2 timing. An LLM is used only for the ~8%
-that survives, to attribute a root cause to each remaining exception.
+> Built for the **Razorpay AI Buildathon — Track 4 (AI Finance Controller)**.
 
-The track's bar is *"throughput plus measured accuracy plus an honest
-exception list. One cherry-picked match proves nothing."* So every number
-below is measured against a ground truth the system cannot see, across
-hundreds of independently generated datasets — **including the AI layer**,
-which is graded against a rule-based control so that "the LLM scored X%" can
-be read next to "and a handful of if-statements scored Y%".
+**The problem.** A merchant has two records of the same money that never line
+up 1:1. Razorpay logs one row per payment (gross, fee, GST, net); the bank logs
+one credit per payout batch, two days later, with no breakdown. Finance teams
+spend hours working out which differences are normal and which are real money
+going missing.
+
+**What this does.** Reconciles a Razorpay transaction ledger against a bank
+settlement feed. Deterministic arithmetic resolves everything a calculator can
+— fees, GST, batching, recorded refunds, T+2 timing. Only the ~8% that survives
+goes to an LLM, which explains each exception in plain English and recommends
+an action. Every accuracy claim is graded against a hidden ground truth.
+
+![Reconciliation report](docs/report.png)
+
+## At a glance
+
+| | |
+|---|---|
+| **Matcher accuracy** | Precision **1.0000**, recall **1.0000** across 160 varied datasets (263,673 records), zero false positives |
+| **Throughput** | 156,725 records reconciled in **1.4 s** (~111k records/sec) |
+| **AI share** | Only **8.2%** of records ever reach a model, flat at every scale |
+| **Root-cause attribution** | Rule baseline **97.01%**; every one of 16,544 "high confidence" calls correct |
+| **Honesty layer** | LLM graded against a rule-based control and a "guess the commonest label" control, and the results are reported even where the LLM lost |
+
+```
+3 CSVs ──▶ matcher.py (pure arithmetic, no AI) ──▶ ~92% resolved
+                     │
+                     └──▶ ~8% flagged, with evidence ──▶ reasoner.py (LLM or rule baseline)
+                                                              │
+                                    report.html ◀── root cause + explanation + action
+                                    qa_agent.py ◀── "why was stl_0008 short?"
+```
+
+**Try it in 60 seconds, no API key needed:**
+
+```bash
+git clone https://github.com/sarthak1757/Razorpay_AI_Finance_Controller.git
+cd Razorpay_AI_Finance_Controller
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+python3 data/generate_data.py && python3 src/report.py --html   # writes data/report.html
+```
+
+**Stack:** Python 3.10 · Groq / Gemini / Anthropic (pluggable) · no frameworks
+in the matching path · ~2,800 lines across 8 modules.
+
+The rest of this README is the full evidence: how each number was measured,
+and where the system falls short.
 
 ---
 
@@ -345,11 +386,12 @@ attribution accuracy figure a real measurement rather than a formality.
 - **The taxonomy is closed**, but it now has an escape hatch. A cause nobody
   enumerated should come back as `unknown_anomaly` rather than the nearest
   label — measured at 0.573 recall / 0.901 precision for the rule baseline.
-  That still means **43% of novel problems get a confident wrong label**, and
-  the LLM has not yet been measured on this.
+  That still means **43% of novel problems get a confident wrong label**. The
+  LLM was measured on a balanced sample and did no better (0.42 vs 0.44 recall).
 - **The rule baseline knows the answers exist.** Its thresholds were written
   by someone who knew which four causes were injected. On genuinely unseen
-  data it would degrade in a way the LLM plausibly would not — which is
-  exactly what the adversarial evaluation probes.
+  data it could degrade in a way the LLM plausibly would not. The adversarial
+  and novel-cause evaluations probed this; so far the LLM has not been shown
+  to recover what the rules miss.
 - **T+2 is hardcoded** as the settlement SLA, and duplicate detection assumes
   `order_id` is meaningful.
